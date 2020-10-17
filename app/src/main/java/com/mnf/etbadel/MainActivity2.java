@@ -11,6 +11,7 @@ import com.akexorcist.roundcornerprogressbar.common.BaseRoundCornerProgressBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.mnf.etbadel.ui.login.LoginActivity;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -49,7 +50,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onProgressChanged(View view, float progress, boolean isPrimaryProgress, boolean isSecondaryProgress) {
                 if(progress==100){
-                    Intent intent=new Intent(MainActivity2.this,MainActivity.class);
+                    Intent intent=new Intent(MainActivity2.this, LoginActivity.class);
                     startActivity(intent);
                 }
             }

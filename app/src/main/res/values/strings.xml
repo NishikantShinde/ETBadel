@@ -17,6 +17,12 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_title">Login Page</string>
+    <string name="login_button">Login</string>
+    <string name="login_using_fb">Login through facebook</string>
+    <string name="login_using_google">Login through google</string>
+    <string name="string_or">Or</string>
+    <string name="create_new_user_button">Create new account</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string-array name="menuList">
         <item>Dashboard</item>
@@ -28,4 +34,23 @@
         <item>Logout</item>
 
     </string-array>
+    <string name="title_activity_register">RegisterActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="registration_title">Registration</string>
+    <string name="user_name">user name</string>
+    <string name="password">password</string>
+    <string name="confirm_password">confirm password</string>
+    <string name="first_name">first name</string>
+    <string name="last_name">last name</string>
+    <string name="register_button">Register</string>
+    <string name="acceptance">"By submitting the information you are "</string>
+    <string name="acceptance2">accepting</string>
+    <string name="tandc">Terms and Conditions</string>
 </resources>
