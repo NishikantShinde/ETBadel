@@ -25,13 +25,13 @@
     <string name="create_new_user_button">Create new account</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string-array name="menuList">
-        <item>Dashboard</item>
-        <item>Notification</item>
-        <item>Ads</item>
-        <item>Profile</item>
-        <item>Service Agreement</item>
-        <item>Privacy Agreement</item>
-        <item>Logout</item>
+        <item>لوحة القيادة</item>
+        <item>تنبيه</item>
+        <item>إعلانات</item>
+        <item>الملف الشخصي</item>
+        <item>اتفاقية خدمات</item>
+        <item>اتفاقية الخصوصية</item>
+        <item>تسجيل خروج</item>
 
     </string-array>
     <string name="title_activity_register">RegisterActivity</string>
