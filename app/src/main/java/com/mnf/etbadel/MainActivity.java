@@ -22,7 +22,10 @@ import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
+import com.mnf.etbadel.ui.profile.ProfileFragment;
+import com.mnf.etbadel.ui.profile.ProfileSenderFragment;
 import com.mnf.etbadel.util.AppConstants;
+import com.mnf.etbadel.util.ReplaceFragmentInterface;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -40,9 +43,10 @@ import java.util.List;
 
 import ru.nikartm.support.ImageBadgeView;
 
+import static com.mnf.etbadel.util.AppConstants.FRAGMENT_ADDPRODUCT;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_NOTIFICATION_LIST;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ReplaceFragmentInterface {
 
     Drawable drawableNotification;
     Drawable drawableChat;
@@ -185,14 +189,10 @@ public class MainActivity extends AppCompatActivity {
                     fragmentTag = "dashboardFragment";
 //                title.setText(G7Constants.DASHBOARD_TITLE);
                     break;
-//            case AppConstants.FRAGMENT_LOGOUT:
-//                FirebaseAuth.getInstance().signOut();
-//                SharedPreferences sharedPreferences = getSharedPreferences(AppConstants.sharedPreferences, MODE_PRIVATE);
-//                sharedPreferences.edit().clear().apply();
-//                Intent intentLogout = new Intent(DashboardActivity.this, LoginActivity.class);
-//                startActivity(intentLogout);
-//                finish();
-//                break;
+            case AppConstants.FRAGMENT_PROFILE:
+                fragment = new ProfileFragment();
+                fragmentTag = "profileFragment";
+                break;
 
             }
         }else {
@@ -200,10 +200,20 @@ public class MainActivity extends AppCompatActivity {
                 fragment=new NotificationsFragment();
                fragmentTag="notification list";
             }
+
+            if(index==AppConstants.FRAGMENT_ADDPRODUCT){
+                fragment=new ProfileSenderFragment();
+               fragmentTag="notification list";
+            }
         }
         if (fragment != null) {
             fragmentTransaction.replace(R.id.frame_container, fragment, fragmentTag);
             fragmentTransaction.commit();
         }
+    }
+
+    @Override
+    public void performCLick() {
+        setFragmentToDisplay(FRAGMENT_ADDPRODUCT,null,true);
     }
 }

@@ -44,4 +44,5 @@ dependencies {
     implementation 'com.mikepenz:actionitembadge:3.3.2@aar'
     implementation 'com.github.nikartm:image-support:1.0.5'
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.1'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
