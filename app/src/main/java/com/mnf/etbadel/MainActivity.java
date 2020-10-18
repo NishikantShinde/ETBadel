@@ -24,6 +24,7 @@ import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
+import com.mnf.etbadel.ui.profile.MyProfileActivity;
 import com.mnf.etbadel.ui.profile.ProfileFragment;
 import com.mnf.etbadel.ui.profile.ProfileSenderFragment;
 import com.mnf.etbadel.util.AppConstants;
@@ -196,6 +197,9 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 fragment = new ProfileFragment();
                 fragmentTag = "profileFragment";
                 break;
+            case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
+                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
+                startActivity(i);
 
             }
         }else {

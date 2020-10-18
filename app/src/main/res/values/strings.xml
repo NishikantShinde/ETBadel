@@ -53,4 +53,8 @@
     <string name="acceptance">"By submitting the information you are "</string>
     <string name="acceptance2">accepting</string>
     <string name="tandc">Terms and Conditions</string>
+    <string name="my_profile_title">Profile</string>
+    <string name="edit_email">email</string>
+    <string name="submit_txt">Submit</string>
+    <string name="profile_image">Profile Image</string>
 </resources>
