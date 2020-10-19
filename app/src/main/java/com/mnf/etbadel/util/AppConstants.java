@@ -10,6 +10,7 @@ public class AppConstants {
     public static final int FRAGMENT_PRIVACY_AGREEMENT =6;
     public static final int FRAGMENT_LOGOUT=7;
     public static final int FRAGMENT_NOTIFICATION_LIST=8;
-    public static final int FRAGMENT_ADDPRODUCT=9;
+    public static final int FRAGMENT_PRODUCTS =9;
+    public static final int FRAGMENT_ADD_PRODUCTS =10;
 
 }

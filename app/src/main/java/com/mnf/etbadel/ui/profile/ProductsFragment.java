@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.ui.profile.adapter.ProfileAdapter;
 import com.mnf.etbadel.util.EqualSpacingItemDecoration;
@@ -19,10 +18,10 @@ import com.mnf.etbadel.util.ReplaceFragmentInterface;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
+ * Use the {@link ProductsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileFragment extends Fragment {
+public class ProductsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,7 +35,7 @@ public class ProfileFragment extends Fragment {
     RecyclerView itemViewRecyclerview;
     ProfileAdapter profileAdapter;
 
-    public ProfileFragment() {
+    public ProductsFragment() {
         // Required empty public constructor
     }
 
@@ -49,8 +48,8 @@ public class ProfileFragment extends Fragment {
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
+    public static ProductsFragment newInstance(String param1, String param2) {
+        ProductsFragment fragment = new ProductsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

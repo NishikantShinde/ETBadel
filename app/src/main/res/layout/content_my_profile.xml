@@ -7,16 +7,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="@layout/activity_my_profile">
 
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
+    <LinearLayout
         android:layout_width="96dp"
         android:layout_height="96dp"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_camera_alt_24px"
-        app:civ_circle_background_color="#AAA8A8"/>
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/circular_view_profile">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_camera_alt_24px"/>
+
+    </LinearLayout>
+
+<!--    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        android:id="@+id/profile_image"-->
+<!--        android:layout_width="96dp"-->
+<!--        android:layout_height="96dp"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:background="#e2e2e2"-->
+<!--        android:scaleType="center"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        android:src="@drawable/ic_camera_alt_24px"-->
+<!--        app:civ_circle_background_color="#e2e2e2"/>-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,7 +47,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
         android:gravity="end"
-        android:padding="10dp"
+        android:padding="5dp"
         android:drawablePadding="10dp"
         android:background="@drawable/edittext_border"
         android:drawableEnd="@drawable/ic_person_outline_24px"
@@ -44,7 +60,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
         android:gravity="end"
-        android:padding="10dp"
+        android:padding="5dp"
         android:drawablePadding="10dp"
         android:background="@drawable/edittext_border"
         android:drawableEnd="@drawable/ic_person_outline_24px"
@@ -56,7 +72,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
         android:gravity="end"
-        android:padding="10dp"
+        android:padding="5dp"
         android:drawablePadding="10dp"
         android:background="@drawable/edittext_border"
         android:drawableEnd="@drawable/ic_email"
@@ -69,7 +85,7 @@
         android:layout_marginEnd="40dp"
         android:gravity="end"
         android:inputType="textPassword"
-        android:padding="10dp"
+        android:padding="5dp"
         android:drawablePadding="10dp"
         android:background="@drawable/edittext_border"
         android:drawableEnd="@drawable/ic_lock_24px"

@@ -1,31 +1,26 @@
 package com.mnf.etbadel;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.mikepenz.actionitembadge.library.ActionItemBadge;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikepenz.actionitembadge.library.utils.BadgeStyle;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
 import com.mnf.etbadel.ui.profile.MyProfileActivity;
-import com.mnf.etbadel.ui.profile.ProfileFragment;
+import com.mnf.etbadel.ui.profile.ProductsFragment;
 import com.mnf.etbadel.ui.profile.ProfileSenderFragment;
 import com.mnf.etbadel.util.AppConstants;
 import com.mnf.etbadel.util.ReplaceFragmentInterface;
@@ -37,17 +32,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.nikartm.support.ImageBadgeView;
 
-import static com.mnf.etbadel.util.AppConstants.FRAGMENT_ADDPRODUCT;
+import static com.mnf.etbadel.util.AppConstants.FRAGMENT_ADD_PRODUCTS;
+import static com.mnf.etbadel.util.AppConstants.FRAGMENT_PRODUCTS;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_NOTIFICATION_LIST;
 
 public class MainActivity extends AppCompatActivity implements ReplaceFragmentInterface {
@@ -59,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     Toolbar toolbar;
     BadgeStyle style;
     ImageBadgeView ibvIconNotification;
+    FloatingActionButton floatingActionButton;
 //    DrawerHeaderView drawerHeaderView;
 
     @Override
@@ -76,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 //        NavigationUI.setupWithNavController(navView, navController);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        floatingActionButton=findViewById(R.id.floating_button);
         setSupportActionBar(toolbar);
         setNavigationView(toolbar, savedInstanceState);
         drawableNotification = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null);
@@ -86,6 +80,13 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             @Override
             public void onClick(View v) {
                 setFragmentToDisplay(FRAGMENT_NOTIFICATION_LIST,null,true);
+            }
+        });
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFragmentToDisplay(FRAGMENT_ADD_PRODUCTS,null,true);
             }
         });
     }
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         result.setSelection(1, false);
 //        result.getDrawerLayout().getChildAt(0).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
-//        result.setSelectionAtPosition(0);
+        result.setSelectionAtPosition(0);
 //        if (savedInstanceState == null) {
 //            // set the selection to the item with the identifier 11
 //            result.setSelection(1, false);
@@ -194,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 //                title.setText(G7Constants.DASHBOARD_TITLE);
                     break;
             case AppConstants.FRAGMENT_PROFILE:
-                fragment = new ProfileFragment();
+                fragment = new ProductsFragment();
                 fragmentTag = "profileFragment";
                 break;
             case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
@@ -208,9 +209,14 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                fragmentTag="notification list";
             }
 
-            if(index==AppConstants.FRAGMENT_ADDPRODUCT){
+            if(index==AppConstants.FRAGMENT_PRODUCTS){
                 fragment=new ProfileSenderFragment();
-               fragmentTag="notification list";
+               fragmentTag="profile sender frahment";
+            }
+
+            if(index==AppConstants.FRAGMENT_ADD_PRODUCTS){
+                fragment=new AddItemFragment();
+               fragmentTag="Add Item fragment";
             }
         }
         if (fragment != null) {
@@ -221,6 +227,6 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 
     @Override
     public void performCLick() {
-        setFragmentToDisplay(FRAGMENT_ADDPRODUCT,null,true);
+        setFragmentToDisplay(FRAGMENT_PRODUCTS,null,true);
     }
 }

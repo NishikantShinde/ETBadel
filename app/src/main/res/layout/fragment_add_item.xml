@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.additem.AddItemFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="10dp"
+            android:drawableRight="@drawable/ic_baseline_search_24"
+            android:paddingRight="5dp"
+            android:hint="@string/string_search"
+            android:textColorHint="#e3e3e3"
+            android:background="@drawable/rounded_edttxt"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:id="@+id/prev_img_view"
+                android:src="@drawable/ic_outline_play_arrow_24"
+                android:rotation="180"
+                android:layout_height="wrap_content"/>
+
+    <!--        <androidx.viewpager.widget.ViewPager-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:layout_height="350dp"-->
+    <!--            android:id="@+id/view_pager"/>-->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="350dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:id="@+id/nxt_img_view"
+                android:src="@drawable/ic_outline_play_arrow_24"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_neighbor"
+                    android:textDirection="rtl"
+                    android:textColor="#000000"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/rounded_transprant_view"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:id="@+id/spinner_neighbor"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignBottom="@+id/dropdown_arrow_neighbor"
+                        android:layout_height="wrap_content"/>
+
+                    <RelativeLayout
+                        android:id="@+id/dropdown_arrow_neighbor"
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_solid_primary_color_view">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_play_arrow_24"
+                            android:rotation="90"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_city"
+                    android:textDirection="rtl"
+                    android:textColor="#000000"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/rounded_transprant_view"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:id="@+id/spinner_city"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignBottom="@+id/dropdown_arrow_city"
+                        android:layout_height="wrap_content"/>
+
+                    <RelativeLayout
+                        android:id="@+id/dropdown_arrow_city"
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_solid_primary_color_view">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_play_arrow_24"
+                            android:rotation="90"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/string_category"
+                android:textDirection="rtl"
+                android:textColor="#000000"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/rounded_transprant_view"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:id="@+id/spinner_category"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@+id/dropdown_arrow_category"
+                    android:layout_height="wrap_content"/>
+
+                <RelativeLayout
+                    android:id="@+id/dropdown_arrow_category"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_solid_primary_color_view">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_play_arrow_24"
+                        android:rotation="90"/>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/string_item_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#000000"
+            android:textDirection="rtl"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textDirection="rtl"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingRight="5dp"
+            android:hint="@string/string_item_name_hint"
+            android:background="@drawable/rounded_edttxt"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/string_condition"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#000000"
+            android:textDirection="rtl"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layoutDirection="rtl">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:background="@drawable/rounded_view_condition_notselected"
+                android:id="@+id/condition1_layout"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_condition1"
+                    android:textDirection="rtl"
+                    android:textColor="#000000"
+                    android:maxLines="2"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/condition2_layout"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/rounded_view_condition_selected"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_condition2"
+                    android:textDirection="rtl"
+                    android:textColor="#000000"
+                    android:maxLines="2"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/condition3_layout"
+                android:background="@drawable/rounded_view_condition_notselected"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_condition3"
+                    android:textDirection="rtl"
+                    android:textColor="#000000"
+                    android:maxLines="2"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/string_desctription"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#000000"
+            android:textDirection="rtl"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="3"
+            android:maxLines="3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textDirection="rtl"
+            android:paddingRight="5dp"
+            android:background="@drawable/rounded_edttxt"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:textDirection="rtl"
+                android:checked="true"
+                android:layoutDirection="rtl"
+                app:switchPadding="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/string_free"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="@string/string_done"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_solid_primary_color_view_button"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

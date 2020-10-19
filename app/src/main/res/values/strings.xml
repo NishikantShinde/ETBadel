@@ -57,4 +57,21 @@
     <string name="edit_email">email</string>
     <string name="submit_txt">Submit</string>
     <string name="profile_image">Profile Image</string>
+    <string name="string_search">"        Search"</string>
+    <string name="string_neighbor">Neighbor</string>
+    <string name="string_city">City</string>
+    <string name="string_category">Category</string>
+    <string name="string_item_name">Item Name</string>
+    <string name="string_item_name_hint">Enter Item Name</string>
+    <string name="string_condition">Condition</string>
+    <string name="string_condition1">Condition 1</string>
+    <string name="string_condition2">Condition 2</string>
+    <string name="string_condition3">Condition 3</string>
+    <string name="string_desctription">Description</string>
+    <string name="string_free">Free</string>
+    <string name="string_done">Done</string>
+    <string name="string_name">"Name "</string>
+    <string name="string_location">"Location "</string>
+    <string name="string_condition_dashboard">"Condition "</string>
+    <string name="string_send">Send</string>
 </resources>

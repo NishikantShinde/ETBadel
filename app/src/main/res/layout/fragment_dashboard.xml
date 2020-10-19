@@ -11,10 +11,11 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:paddingLeft="10dp"
         android:layout_margin="10dp"
         android:drawableRight="@drawable/ic_baseline_search_24"
         android:paddingRight="5dp"
-        android:hint="        Search"
+        android:hint="@string/string_search"
         android:textColorHint="#e3e3e3"
         android:background="@drawable/rounded_edttxt"/>
 
@@ -145,7 +146,7 @@
             android:textSize="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name "
+            android:text="@string/string_name"
             android:textColor="#ffffff"/>
 
         <TextView
@@ -165,7 +166,7 @@
                 android:textSize="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Location "
+                android:text="@string/string_location"
                 android:textColor="#ffffff"/>
 
             <TextView
@@ -185,7 +186,7 @@
                 android:textSize="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Condition "
+                android:text="@string/string_condition_dashboard"
                 android:textColor="#ffffff"/>
 
             <TextView
@@ -203,6 +204,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_solid_primary_color_view"
         android:layout_marginBottom="10dp"
-        android:text="Send"/>
+        android:text="@string/string_send"/>
 
 </LinearLayout>
