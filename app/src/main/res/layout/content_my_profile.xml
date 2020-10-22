@@ -40,57 +40,104 @@
         android:layout_marginTop="10dp"
         android:text="@string/profile_image"
         android:layout_height="wrap_content"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:hint="@string/first_name"
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:gravity="end"
-        android:padding="5dp"
-        android:drawablePadding="10dp"
-        android:background="@drawable/edittext_border"
-        android:drawableEnd="@drawable/ic_person_outline_24px"
-        android:layout_height="wrap_content"/>
+        android:layout_marginEnd="40dp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:hint="@string/last_name"
+        <EditText
+            android:layout_width="match_parent"
+            android:hint="@string/first_name"
+            android:paddingLeft="35dp"
+            android:paddingTop="5dp"
+            android:includeFontPadding="false"
+            android:paddingBottom="8dp"
+            android:inputType="textCapSentences|textPersonName"
+            android:background="@drawable/edittext_border"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="7dp"
+            android:src="@drawable/ic_person_outline_24px"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:gravity="end"
-        android:padding="5dp"
-        android:drawablePadding="10dp"
-        android:background="@drawable/edittext_border"
-        android:drawableEnd="@drawable/ic_person_outline_24px"
-        android:layout_height="wrap_content"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:hint="@string/edit_email"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="match_parent"
+            android:hint="@string/last_name"
+            android:paddingLeft="35dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="8dp"
+            android:includeFontPadding="false"
+            android:background="@drawable/edittext_border"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="7dp"
+            android:src="@drawable/ic_person_outline_24px"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:gravity="end"
-        android:padding="5dp"
-        android:drawablePadding="10dp"
-        android:background="@drawable/edittext_border"
-        android:drawableEnd="@drawable/ic_email"
-        android:layout_height="wrap_content"/>
+        android:layout_marginEnd="40dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:hint="@string/edit_email"
+            android:paddingLeft="35dp"
+            android:includeFontPadding="false"
+            android:paddingTop="5dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/edittext_border"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_email"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="7dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp">
     <EditText
         android:layout_width="match_parent"
         android:hint="@string/password"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:gravity="end"
+        android:paddingLeft="35dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="8dp"
         android:inputType="textPassword"
-        android:padding="5dp"
-        android:drawablePadding="10dp"
+        android:includeFontPadding="false"
         android:background="@drawable/edittext_border"
-        android:drawableEnd="@drawable/ic_lock_24px"
         android:layout_height="wrap_content"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_lock_24px"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="7dp"/>
 
+    </RelativeLayout>
 
 
     <Button

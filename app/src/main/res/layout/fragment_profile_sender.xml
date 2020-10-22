@@ -36,24 +36,26 @@
             android:padding="3dp"
             android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
-            android:gravity="center|right"
+            android:gravity="center|left"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/sample"
+                app:civ_border_width="0dp"
+                app:civ_border_color="#FF000000"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="FirstName LastName"
                 android:textColor="#000000"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
-                android:layout_marginLeft="5dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/sample"
-                app:civ_border_width="0dp"
-                app:civ_border_color="#FF000000"/>
 
         </LinearLayout>
 
@@ -145,7 +147,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:layout_height="wrap_content"
-        android:textDirection="rtl"
+
         android:text="@string/item_decription"/>
 
     <LinearLayout
@@ -198,6 +200,27 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <TextView
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/string_area"
+                android:textColor="#ffffff"/>
+
+            <TextView
+                android:textSize="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text=":Area1"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_weight="1">
@@ -223,6 +246,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_solid_primary_color_view"
         android:layout_marginBottom="10dp"
-        android:text="Send"/>
+        android:text="Trade"/>
 
 </LinearLayout>

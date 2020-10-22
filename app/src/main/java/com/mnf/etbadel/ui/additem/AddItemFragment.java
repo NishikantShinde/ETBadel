@@ -35,7 +35,7 @@ public class AddItemFragment extends Fragment {
 
     String[] neighbor = {"neighbor","neighbor1", "neighbor2", "neighbor3"};
     String[] city = {"city","city1", "city2", "city3"};
-    String[] categories = {"category","category1", "category2", "category3"};
+    String[] categories = {};
     Spinner spinnerNeighbor;
     Spinner spinnerCity;
     Spinner spinnerCategory;
@@ -90,6 +90,8 @@ public class AddItemFragment extends Fragment {
 
         viewPager2.setAdapter(new ViewPagerAdapter(getContext()));
 
+        categories=getResources().getStringArray(R.array.categoryList);
+        city=getResources().getStringArray(R.array.cityList);
         spinnerNeighbor=view.findViewById(R.id.spinner_neighbor);
         dropdownArrowNeighbor=view.findViewById(R.id.dropdown_arrow_neighbor);
         spinnerCity=view.findViewById(R.id.spinner_city);

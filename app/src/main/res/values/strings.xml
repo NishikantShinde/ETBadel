@@ -21,19 +21,55 @@
     <string name="login_button">Login</string>
     <string name="login_using_fb">Login through facebook</string>
     <string name="login_using_google">Login through google</string>
-    <string name="string_or">Or</string>
+    <string name="string_or">OR</string>
     <string name="create_new_user_button">Create new account</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string-array name="menuList">
-        <item>لوحة القيادة</item>
-        <item>تنبيه</item>
-        <item>إعلانات</item>
-        <item>الملف الشخصي</item>
-        <item>اتفاقية خدمات</item>
-        <item>اتفاقية الخصوصية</item>
-        <item>تسجيل خروج</item>
+        <item>Home</item>
+        <item>Mute Notification</item>
+        <item>Edit or Delete Ads</item>
+        <item>Edit Name or Picture</item>
+        <item>Service Agreement</item>
+        <item>Privacy Agreement</item>
+        <item>Logout</item>
+        <item>Switch to Arabic</item>
 
     </string-array>
+
+    <string-array name="categoryList">
+        <item>Free Stuff</item>
+        <item>Others</item>
+        <item>Sports equipment</item>
+        <item>Houseware</item>
+        <item>Furniture</item>
+        <item>Books</item>
+        <item>Electronics</item>
+        <item>Women fashion</item>
+        <item>Mens fashion</item>
+        <item>Music instruments</item>
+        <item>Mobile and Tablet</item>
+        <item>Mother and children stuff</item>
+<!--        <item>Games, Consoles, Accessories</item>-->
+    </string-array>
+
+    <string-array name="cityList">
+        <item>Amman</item>
+        <item>Irbid</item>
+        <item>Zarqa</item>
+        <item>Balqa</item>
+        <item>Jerash</item>
+        <item>Ajloun</item>
+        <item>Tafilah</item>
+        <item>Aqaba</item>
+        <item>Karak</item>
+        <item>Badaba</item>
+<!--        <item>ma'an</item>-->
+        <item>marfaq</item>
+        <item>ghoor</item>
+        <item>dead sea</item>
+        <item>ramtha</item>
+    </string-array>
+
     <string name="title_activity_register">RegisterActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -44,17 +80,17 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="registration_title">Registration</string>
-    <string name="user_name">user name</string>
-    <string name="password">password</string>
-    <string name="confirm_password">confirm password</string>
-    <string name="first_name">first name</string>
-    <string name="last_name">last name</string>
+    <string name="user_name">User name</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
     <string name="register_button">Register</string>
     <string name="acceptance">"By submitting the information you are "</string>
     <string name="acceptance2">accepting</string>
     <string name="tandc">Terms and Conditions</string>
     <string name="my_profile_title">Profile</string>
-    <string name="edit_email">email</string>
+    <string name="edit_email">Email</string>
     <string name="submit_txt">Submit</string>
     <string name="profile_image">Profile Image</string>
     <string name="string_search">"        Search"</string>
@@ -62,7 +98,7 @@
     <string name="string_city">City</string>
     <string name="string_category">Category</string>
     <string name="string_item_name">Item Name</string>
-    <string name="string_item_name_hint">Enter Item Name</string>
+    <string name="string_item_name_hint">Enter item name</string>
     <string name="string_condition">Condition</string>
     <string name="string_condition1">Condition 1</string>
     <string name="string_condition2">Condition 2</string>
@@ -72,6 +108,7 @@
     <string name="string_done">Done</string>
     <string name="string_name">"Name "</string>
     <string name="string_location">"Location "</string>
+    <string name="string_area">"Area "</string>
     <string name="string_condition_dashboard">"Condition "</string>
-    <string name="string_send">Send</string>
+    <string name="string_send">Trade</string>
 </resources>

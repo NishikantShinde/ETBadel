@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment;
 
 import com.mnf.etbadel.R;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.Inflater;
 
 import butterknife.BindView;
@@ -34,8 +36,12 @@ public class DashboardFragment extends Fragment {
     }
 
     private void setCategories() {
-        for(int i=0;i<9;i++){
-            CategoriesLayoutClass categoriesLayoutClass=new CategoriesLayoutClass(getContext(),"Categories "+i,i);
+        String[] categories=getResources().getStringArray(R.array.categoryList);
+        ArrayList<String> categoriesList= new ArrayList<String>(Arrays.asList(categories));
+        categoriesList.add("All");
+//        categoriesList[categoriesList.length]="All";
+        for(int i=0;i<categoriesList.size();i++){
+            CategoriesLayoutClass categoriesLayoutClass=new CategoriesLayoutClass(getContext(),categoriesList.get(i),i);
             categoriesLayoutClasses.add(categoriesLayoutClass);
             categoriesMainLayout.addView(categoriesLayoutClass);
         }

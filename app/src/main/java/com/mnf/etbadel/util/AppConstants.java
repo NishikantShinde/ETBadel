@@ -12,5 +12,6 @@ public class AppConstants {
     public static final int FRAGMENT_NOTIFICATION_LIST=8;
     public static final int FRAGMENT_PRODUCTS =9;
     public static final int FRAGMENT_ADD_PRODUCTS =10;
+    public static final int SWITCH_TO_ARABIC =11;
 
 }

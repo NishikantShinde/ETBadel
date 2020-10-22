@@ -126,19 +126,20 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 
         List<IDrawerItem> primaryDrawerItems = new ArrayList<>();
 //        .withIcon(R.drawable.ic_home_black_24dp)
-        primaryDrawerItems.add(new PrimaryDrawerItem().withSelectable(true).withName(menus[0]).withIcon(R.drawable.ic_home_black_24dp).withIdentifier(AppConstants.FRAGMENT_DASHBOARD));
-        primaryDrawerItems.add(new SwitchDrawerItem().withName(menus[1]).withIcon(R.drawable.ic_notifications_black_24dp).withIdentifier(AppConstants.FRAGMENT_NOTIFICATION));
-        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[2]).withIcon(R.drawable.ic_loud_speaker).withIdentifier(AppConstants.FRAGMENT_ADS));
-        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[3]).withIcon(R.drawable.ic_baseline_person_24).withIdentifier(AppConstants.FRAGMENT_PROFILE));
-        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[4]).withIcon(R.drawable.ic_icons8_document).withIdentifier(AppConstants.FRAGMENT_SERVICE_AGREEMENT));
-        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[5]).withIcon(R.drawable.ic_shield).withIdentifier(AppConstants.FRAGMENT_PRIVACY_AGREEMENT));
+        primaryDrawerItems.add(new PrimaryDrawerItem().withSelectable(true).withName(menus[0]).withIcon(R.drawable.ic_icon05_home).withIdentifier(AppConstants.FRAGMENT_DASHBOARD));
+        primaryDrawerItems.add(new SwitchDrawerItem().withName(menus[1]).withIcon(R.drawable.ic_icon05_notification).withIdentifier(AppConstants.FRAGMENT_NOTIFICATION));
+        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[2]).withIcon(R.drawable.ic_icon05_my_ads).withIdentifier(AppConstants.FRAGMENT_ADS));
+        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[3]).withIcon(R.drawable.ic_icon05_my_profile).withIdentifier(AppConstants.FRAGMENT_PROFILE));
+        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[4]).withIcon(R.drawable.ic_icon05_terms).withIdentifier(AppConstants.FRAGMENT_SERVICE_AGREEMENT));
+        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[5]).withIcon(R.drawable.ic_icon05_privacy).withIdentifier(AppConstants.FRAGMENT_PRIVACY_AGREEMENT));
 //        primaryDrawerItems.add(new DividerDrawerItem());
-        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[6]).withIcon(R.drawable.ic_logout).withIdentifier(AppConstants.FRAGMENT_LOGOUT));
+        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[6]).withIcon(R.drawable.ic_icon05_logout).withIdentifier(AppConstants.FRAGMENT_LOGOUT));
+        primaryDrawerItems.add(new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC));
 
         drawerBuilder.withDrawerItems(primaryDrawerItems);
         result = drawerBuilder.build();
 //        result.setGravity(View.LAYOUT_DIRECTION_RTL);
-        result.getRecyclerView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+//        result.getRecyclerView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 
 
 //        new RecyclerViewCacheUtil<IDrawerItem>().withCacheSize(2).apply(result.getRecyclerView(), result.getDrawerItems());

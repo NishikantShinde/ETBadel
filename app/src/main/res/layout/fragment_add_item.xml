@@ -62,8 +62,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_height="wrap_content">
@@ -72,14 +72,56 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="1">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/string_city"
+
+                    android:textColor="#000000"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/rounded_transprant_view"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:id="@+id/spinner_city"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignBottom="@+id/dropdown_arrow_city"
+                        android:layout_height="wrap_content"/>
+
+                    <RelativeLayout
+                        android:id="@+id/dropdown_arrow_city"
+                        android:layout_width="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_solid_primary_color_view">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_play_arrow_24"
+                            android:rotation="90"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/string_neighbor"
-                    android:textDirection="rtl"
                     android:textColor="#000000"/>
 
                 <RelativeLayout
@@ -109,46 +151,7 @@
                     </RelativeLayout>
                 </RelativeLayout>
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/string_city"
-                    android:textDirection="rtl"
-                    android:textColor="#000000"/>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="3dp"
-                    android:background="@drawable/rounded_transprant_view"
-                    android:layout_height="wrap_content">
-
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:id="@+id/spinner_city"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignBottom="@+id/dropdown_arrow_city"
-                        android:layout_height="wrap_content"/>
-
-                    <RelativeLayout
-                        android:id="@+id/dropdown_arrow_city"
-                        android:layout_width="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_solid_primary_color_view">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_baseline_play_arrow_24"
-                            android:rotation="90"/>
-                    </RelativeLayout>
-                </RelativeLayout>
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -163,7 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/string_category"
-                android:textDirection="rtl"
+
                 android:textColor="#000000"/>
 
             <RelativeLayout
@@ -203,14 +206,15 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
             android:textColor="#000000"
-            android:textDirection="rtl"/>
+            />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textDirection="rtl"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:inputType="textCapSentences"
             android:hint="@string/string_item_name_hint"
             android:background="@drawable/rounded_edttxt"/>
         <TextView
@@ -222,17 +226,18 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:textColor="#000000"
-            android:textDirection="rtl"/>
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layoutDirection="rtl">
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/rounded_view_condition_notselected"
                 android:id="@+id/condition1_layout"
                 android:layout_height="wrap_content">
@@ -241,7 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/string_condition1"
-                    android:textDirection="rtl"
+
                     android:textColor="#000000"
                     android:maxLines="2"/>
 
@@ -250,7 +255,8 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:id="@+id/condition2_layout"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:background="@drawable/rounded_view_condition_selected"
                 android:layout_height="wrap_content">
 
@@ -258,7 +264,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/string_condition2"
-                    android:textDirection="rtl"
+
                     android:textColor="#000000"
                     android:maxLines="2"/>
 
@@ -267,14 +273,15 @@
                 android:layout_width="wrap_content"
                 android:id="@+id/condition3_layout"
                 android:background="@drawable/rounded_view_condition_notselected"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/string_condition3"
-                    android:textDirection="rtl"
+
                     android:textColor="#000000"
                     android:maxLines="2"/>
 
@@ -290,16 +297,18 @@
             android:layout_marginBottom="5dp"
             android:layout_marginTop="10dp"
             android:textColor="#000000"
-            android:textDirection="rtl"/>
+            />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minLines="3"
             android:maxLines="3"
+            android:gravity="start"
+            android:hint="Please enter item description"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:textDirection="rtl"
+            android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:background="@drawable/rounded_edttxt"/>
 
@@ -307,9 +316,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:textDirection="rtl"
                 android:checked="true"
-                android:layoutDirection="rtl"
                 app:switchPadding="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
