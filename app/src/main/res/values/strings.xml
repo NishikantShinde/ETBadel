@@ -27,8 +27,8 @@
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>
-        <item>Edit or Delete Ads</item>
-        <item>Edit Name or Picture</item>
+        <item>My Ads</item>
+        <item>My Profile</item>
         <item>Service Agreement</item>
         <item>Privacy Agreement</item>
         <item>Logout</item>
@@ -97,18 +97,19 @@
     <string name="string_neighbor">Neighbor</string>
     <string name="string_city">City</string>
     <string name="string_category">Category</string>
-    <string name="string_item_name">Item Name</string>
-    <string name="string_item_name_hint">Enter item name</string>
+    <string name="string_item_name">What Are You Trading?</string>
+    <string name="string_item_name_hint">Example: Casio Men Hand Watch</string>
     <string name="string_condition">Condition</string>
-    <string name="string_condition1">Condition 1</string>
-    <string name="string_condition2">Condition 2</string>
-    <string name="string_condition3">Condition 3</string>
-    <string name="string_desctription">Description</string>
-    <string name="string_free">Free</string>
-    <string name="string_done">Done</string>
+    <string name="string_condition1">New</string>
+    <string name="string_condition2">Barely Used</string>
+    <string name="string_condition3">Used</string>
+    <string name="string_desctription">Describe the item</string>
+    <string name="string_free">Give it for free</string>
+    <string name="string_done">Post</string>
     <string name="string_name">"Name "</string>
     <string name="string_location">"Location "</string>
     <string name="string_area">"Area "</string>
     <string name="string_condition_dashboard">"Condition "</string>
     <string name="string_send">Trade</string>
+    <string name="string_desctription_hint">Example: Used for 2 months, with no scratches</string>
 </resources>

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     Toolbar toolbar;
     BadgeStyle style;
     ImageBadgeView ibvIconNotification;
-    FloatingActionButton floatingActionButton;
+    LinearLayout floatingActionButton;
 //    DrawerHeaderView drawerHeaderView;
 
     @Override
