@@ -112,4 +112,8 @@
     <string name="string_condition_dashboard">"Condition "</string>
     <string name="string_send">Trade</string>
     <string name="string_desctription_hint">Example: Used for 2 months, with no scratches</string>
+
+    <string name="facebook_app_id">769384030578964</string>
+    <string name="fb_login_protocol_scheme">fb769384030578964</string>
+
 </resources>
