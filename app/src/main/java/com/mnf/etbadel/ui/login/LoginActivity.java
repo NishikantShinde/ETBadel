@@ -1,6 +1,8 @@
 package com.mnf.etbadel.ui.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -53,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText etUserName;
     @BindView(R.id.et_password)
     EditText etPassword;
-
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         Button login = findViewById(R.id.login);
         Button register = findViewById(R.id.register);
         LinearLayout fbLogin = findViewById(R.id.fb_login);
-
+        sharedPreferences= getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.mnf.etbadel",
@@ -85,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
                 if(validData()) {
                     loginWithCredentials();
                 }
@@ -210,12 +211,13 @@ public class LoginActivity extends AppCompatActivity {
                             Gson gson = new Gson();
                             UserModel userModel= gson.fromJson(model.toString(), UserModel.class);
                             Log.e("status","success");
+                            sharedPreferences.edit().putInt(AppConstants.SF_USER_ID,userModel.getId()).apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         }else {
                             String error= jsonObject.getString("Message");
                             Log.e("status","error "+error);
-                            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
+                            AppConstants.showErroDIalog(error,getSupportFragmentManager());
                         }
 
                     } catch (JSONException e) {

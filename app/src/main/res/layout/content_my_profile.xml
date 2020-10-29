@@ -8,6 +8,7 @@
     tools:showIn="@layout/activity_my_profile">
 
     <LinearLayout
+        android:id="@+id/profile_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_gravity="center"
@@ -16,23 +17,11 @@
         android:background="@drawable/circular_view_profile">
 
         <ImageView
+            android:id="@+id/profileview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_camera_alt_24px"/>
-
     </LinearLayout>
-
-<!--    <de.hdodenhof.circleimageview.CircleImageView-->
-<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--        android:id="@+id/profile_image"-->
-<!--        android:layout_width="96dp"-->
-<!--        android:layout_height="96dp"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        android:background="#e2e2e2"-->
-<!--        android:scaleType="center"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:src="@drawable/ic_camera_alt_24px"-->
-<!--        app:civ_circle_background_color="#e2e2e2"/>-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -145,6 +134,7 @@
 
 
     <Button
+        android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_height="wrap_content"

@@ -6,9 +6,12 @@ import com.mnf.etbadel.controller.services.AreaCityService;
 import com.mnf.etbadel.controller.services.CategoryService;
 import com.mnf.etbadel.controller.services.ItemService;
 import com.mnf.etbadel.controller.services.LoginService;
+import com.mnf.etbadel.controller.services.ProfileService;
 import com.mnf.etbadel.controller.services.RegisterService;
 import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.util.AppConstants;
+
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -66,6 +69,20 @@ public class Controller {
         Retrofit retrofit = AppConstants.buildRetrofit(false);
         ItemService itemService= retrofit.create(ItemService.class);
         Call<ResponseBody> serviceResponse= itemService.getItems(cnd,cat_id);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void updateProfile(Map<String,String> params, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ProfileService profileService= retrofit.create(ProfileService.class);
+        Call<ResponseBody> serviceResponse= profileService.update(params);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void getProfile(int id, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ProfileService profileService= retrofit.create(ProfileService.class);
+        Call<ResponseBody> serviceResponse= profileService.getById(id);
         serviceResponse.enqueue(callback);
     }
 }

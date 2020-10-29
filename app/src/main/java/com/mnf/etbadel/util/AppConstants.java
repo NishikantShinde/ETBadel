@@ -33,6 +33,11 @@ public class AppConstants {
     public static final String CITIES_ALL="City/getall";
     public static final String AREAS_ALL="Area/getall";
     public static final String ITEMS_ALL="Item/getlist";
+    public static final String PROFILE_UPDATE="User/update";
+    public static final String PROFILE_GETBYID="User/getbyid";
+
+    public static final String SHAREDPREFERENCES_NAME="EtBadel_SF";
+    public static final String SF_USER_ID="user_id_sf";
 
     public static final String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
