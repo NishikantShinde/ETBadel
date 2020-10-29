@@ -1,5 +1,12 @@
 package com.mnf.etbadel.util;
 
+import android.app.Activity;
+import android.content.Context;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -26,6 +33,8 @@ public class AppConstants {
     public static final String CITIES_ALL="City/getall";
     public static final String AREAS_ALL="Area/getall";
     public static final String ITEMS_ALL="Item/getlist";
+
+    public static final String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     public static final int FRAGMENT_DASHBOARD=1;
     public static final int FRAGMENT_NOTIFICATION=2;
@@ -112,5 +121,14 @@ public class AppConstants {
             e.printStackTrace();
         }
         return sb.toString();
+    }
+
+    public static void showErroDIalog(String error, FragmentManager fm) {
+        ErrorAlertDialogDialogFragment alertDialog = ErrorAlertDialogDialogFragment.newInstance(error,"");
+        alertDialog.show(fm, "fragment_alert");
+    }
+
+    public static boolean isValidEmail(String emailId){
+        return emailId.matches(EMAIL_PATTERN);
     }
 }

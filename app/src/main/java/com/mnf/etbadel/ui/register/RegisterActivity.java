@@ -68,10 +68,48 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(isValidData())
                 register();
             }
         });
 
+    }
+
+    private boolean isValidData() {
+        boolean isValidData=true;
+
+        if(etFirstName.getText().toString().trim().isEmpty()){
+            etFirstName.setError(getResources().getString(R.string.first_name_string_error));
+            isValidData=false;
+        }
+
+        if(etLastName.getText().toString().trim().isEmpty()){
+            etLastName.setError(getResources().getString(R.string.last_name_string_error));
+            isValidData=false;
+        }
+
+        if(etPassword.getText().toString().trim().isEmpty()){
+            etPassword.setError(getResources().getString(R.string.password_string_error));
+            isValidData=false;
+        }
+
+        if(etConfirmPassword.getText().toString().trim().isEmpty()){
+            etConfirmPassword.setError(getResources().getString(R.string.password_string_error));
+            isValidData=false;
+        }else if (!etConfirmPassword.getText().toString().equals(etPassword.getText().toString())){
+            etConfirmPassword.setError(getResources().getString(R.string.same_password_string_error));
+            isValidData=false;
+        }
+
+        if(etUserName.getText().toString().trim().isEmpty()){
+            etUserName.setError(getResources().getString(R.string.empty_emailid_error));
+            isValidData=false;
+        }else if(!AppConstants.isValidEmail(etUserName.getText().toString())){
+            etUserName.setError(getResources().getString(R.string.valid_emailid_error));
+            isValidData=false;
+        }
+
+        return isValidData;
     }
 
     private void register(){
@@ -101,6 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }else {
                             String error= jsonObject.getString("Message");
                             Log.e("status","error "+error);
+                            AppConstants.showErroDIalog(error,getSupportFragmentManager());
                         }
 
                     } catch (JSONException e) {
@@ -113,6 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("status","failed");
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
         }
     }
 }

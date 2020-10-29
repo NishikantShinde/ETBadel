@@ -24,62 +24,19 @@
     <string name="string_or">OR</string>
     <string name="create_new_user_button">Create new account</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string-array name="menuList">
-        <item>Home</item>
-        <item>Mute Notification</item>
-        <item>My Ads</item>
-        <item>My Profile</item>
-        <item>Service Agreement</item>
-        <item>Privacy Agreement</item>
-        <item>Logout</item>
-        <item>Switch to Arabic</item>
-
-    </string-array>
-
-    <string-array name="categoryList">
-        <item>Free Stuff</item>
-        <item>Others</item>
-        <item>Sports equipment</item>
-        <item>Houseware</item>
-        <item>Furniture</item>
-        <item>Books</item>
-        <item>Electronics</item>
-        <item>Women fashion</item>
-        <item>Mens fashion</item>
-        <item>Music instruments</item>
-        <item>Mobile and Tablet</item>
-        <item>Mother and children stuff</item>
-<!--        <item>Games, Consoles, Accessories</item>-->
-    </string-array>
-
-    <string-array name="cityList">
-        <item>Amman</item>
-        <item>Irbid</item>
-        <item>Zarqa</item>
-        <item>Balqa</item>
-        <item>Jerash</item>
-        <item>Ajloun</item>
-        <item>Tafilah</item>
-        <item>Aqaba</item>
-        <item>Karak</item>
-        <item>Badaba</item>
-<!--        <item>ma'an</item>-->
-        <item>marfaq</item>
-        <item>ghoor</item>
-        <item>dead sea</item>
-        <item>ramtha</item>
-    </string-array>
-
     <string name="title_activity_register">RegisterActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
+    <string name="first_fragment_label">First Fragment</string>
+
+    <string name="second_fragment_label">Second Fragment</string>
+
+    <string name="next">Next</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="previous">Previous</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="registration_title">Registration</string>
+
     <string name="user_name">User name</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
@@ -112,8 +69,61 @@
     <string name="string_condition_dashboard">"Condition "</string>
     <string name="string_send">Trade</string>
     <string name="string_desctription_hint">Example: Used for 2 months, with no scratches</string>
-
     <string name="facebook_app_id">769384030578964</string>
     <string name="fb_login_protocol_scheme">fb769384030578964</string>
+    <string name="username_error_string">"Please enter user name "</string>
+
+    <string name="password_error_string">Please enter password</string>
+    <string name="check_internet_error">Please check internet connection</string>
+    <string name="server_unreachable_error">Server not reachable</string>
+    <string name="first_name_string_error">Please enter first name</string>
+    <string name="last_name_string_error">Please enter last name</string>
+    <string name="empty_emailid_error">Please enter email ID</string>
+    <string name="valid_emailid_error">Please enter valid email ID</string>
+    <string name="password_string_error">Please enter password</string>
+    <string name="same_password_string_error">Please make sure your passwords match</string>
+    <string-array name="menuList">
+        <item>Home</item>
+        <item>Mute Notification</item>
+        <item>My Ads</item>
+        <item>My Profile</item>
+        <item>Service Agreement</item>
+        <item>Privacy Agreement</item>
+        <item>Logout</item>
+        <item>Switch to Arabic</item>
+
+    </string-array>
+    <string-array name="categoryList">
+        <item>Free Stuff</item>
+        <item>Others</item>
+        <item>Sports equipment</item>
+        <item>Houseware</item>
+        <item>Furniture</item>
+        <item>Books</item>
+        <item>Electronics</item>
+        <item>Women fashion</item>
+        <item>Mens fashion</item>
+        <item>Music instruments</item>
+        <item>Mobile and Tablet</item>
+        <item>Mother and children stuff</item>
+        <!--        <item>Games, Consoles, Accessories</item>-->
+    </string-array>
+    <string-array name="cityList">
+        <item>Amman</item>
+        <item>Irbid</item>
+        <item>Zarqa</item>
+        <item>Balqa</item>
+        <item>Jerash</item>
+        <item>Ajloun</item>
+        <item>Tafilah</item>
+        <item>Aqaba</item>
+        <item>Karak</item>
+        <item>Badaba</item>
+        <!--        <item>ma'an</item>-->
+        <item>marfaq</item>
+        <item>ghoor</item>
+        <item>dead sea</item>
+        <item>ramtha</item>
+    </string-array>
 
 </resources>

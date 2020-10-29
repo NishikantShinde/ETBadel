@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -30,6 +31,7 @@ import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.ui.register.RegisterActivity;
 import com.mnf.etbadel.util.AppConstants;
+import com.mnf.etbadel.util.ErrorAlertDialogDialogFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+//        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         Button login = findViewById(R.id.login);
@@ -83,7 +85,10 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginWithCredentials();
+                AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
+                if(validData()) {
+                    loginWithCredentials();
+                }
 
             }
         });
@@ -102,6 +107,22 @@ public class LoginActivity extends AppCompatActivity {
                 Fblogin();
             }
         });
+    }
+
+    private boolean validData() {
+
+        boolean isValid=true;
+
+        if(etUserName.getText().toString().trim().isEmpty()){
+            etUserName.setError(getResources().getString(R.string.username_error_string));
+            isValid=false;
+        }
+
+        if(etPassword.getText().toString().trim().isEmpty()){
+            etPassword.setError(getResources().getString(R.string.password_error_string));
+            isValid=false;
+        }
+        return isValid;
     }
 
     private void loginWithCredentials() {
@@ -138,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
                                     public void onCompleted(JSONObject json, GraphResponse response) {
                                         if (response.getError() != null) {
                                             // handle error
+                                            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
                                             System.out.println("ERROR");
                                         } else {
                                             System.out.println("Success");
@@ -169,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onError(FacebookException error) {
                         Log.d("TAG_ERROR", error.toString());
+                        AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
                     }
                 });
     }
@@ -192,6 +215,7 @@ public class LoginActivity extends AppCompatActivity {
                         }else {
                             String error= jsonObject.getString("Message");
                             Log.e("status","error "+error);
+                            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
                         }
 
                     } catch (JSONException e) {
@@ -205,6 +229,13 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("status","failed");
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
         }
     }
+
+//    private void showErroDIalog(String error) {
+//        FragmentManager fm = getSupportFragmentManager();
+//        ErrorAlertDialogDialogFragment alertDialog = ErrorAlertDialogDialogFragment.newInstance(error,"");
+//        alertDialog.show(fm, "fragment_alert");
+//    }
 }
