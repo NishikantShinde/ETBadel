@@ -85,4 +85,32 @@ public class Controller {
         Call<ResponseBody> serviceResponse= profileService.getById(id);
         serviceResponse.enqueue(callback);
     }
+
+    public void getCategoriesDropdown(int lang,Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        CategoryService categoryService= retrofit.create(CategoryService.class);
+        Call<ResponseBody> serviceResponse= categoryService.getCategoriesDropdown(lang);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void getCitiesDropdown(int lang,Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        AreaCityService areaCityService= retrofit.create(AreaCityService.class);
+        Call<ResponseBody> serviceResponse= areaCityService.getCitiesDropdown(lang);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void getAreasDropdown(int lang,Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        AreaCityService areaCityService= retrofit.create(AreaCityService.class);
+        Call<ResponseBody> serviceResponse= areaCityService.getAreasDropdown(lang);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void itemSave(Map<String,String> params, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ItemService itemService= retrofit.create(ItemService.class);
+        Call<ResponseBody> serviceResponse= itemService.save(params);
+        serviceResponse.enqueue(callback);
+    }
 }

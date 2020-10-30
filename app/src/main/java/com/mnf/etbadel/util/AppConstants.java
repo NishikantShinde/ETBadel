@@ -30,9 +30,13 @@ public class AppConstants {
     public static final String LOGIN_URL="User/login";
     public static final String REGISTER_URL="User/save";
     public static final String CATEGORIES_ALL="Category/getall";
+    public static final String CATEGORIES_DROPDOWN_ALL="Category/dropdownlist";
     public static final String CITIES_ALL="City/getall";
+    public static final String CITIES_DROPDOWN_ALL="City/dropdownlist";
     public static final String AREAS_ALL="Area/getall";
+    public static final String AREAS_DROPDOWN_ALL="Area/dropdownlist";
     public static final String ITEMS_ALL="Item/getlist";
+    public static final String ITEM_SAVE="Item/save";
     public static final String PROFILE_UPDATE="User/update";
     public static final String PROFILE_GETBYID="User/getbyid";
 

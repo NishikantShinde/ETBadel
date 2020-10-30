@@ -218,7 +218,6 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
     @Override
     public void onPermissionsGranted(int requestCode, ArrayList<String> acceptedPermissionList) {
         isGranted = true;
-
     }
 
     @Override
