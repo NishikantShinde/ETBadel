@@ -1,23 +1,21 @@
 package com.mnf.etbadel.ui.register;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.gson.Gson;
-import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.UserModel;
-import com.mnf.etbadel.ui.login.LoginActivity;
 import com.mnf.etbadel.util.AppConstants;
 
 import org.json.JSONException;
@@ -56,8 +54,11 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout fbRegister;
     @BindView(R.id.google_register)
     LinearLayout googleRegister;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     private UserModel userModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,78 +69,80 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isValidData())
-                register();
+                if (isValidData())
+                    register();
             }
         });
 
     }
 
     private boolean isValidData() {
-        boolean isValidData=true;
+        boolean isValidData = true;
 
-        if(etFirstName.getText().toString().trim().isEmpty()){
+        if (etFirstName.getText().toString().trim().isEmpty()) {
             etFirstName.setError(getResources().getString(R.string.first_name_string_error));
-            isValidData=false;
+            isValidData = false;
         }
 
-        if(etLastName.getText().toString().trim().isEmpty()){
+        if (etLastName.getText().toString().trim().isEmpty()) {
             etLastName.setError(getResources().getString(R.string.last_name_string_error));
-            isValidData=false;
+            isValidData = false;
         }
 
-        if(etPassword.getText().toString().trim().isEmpty()){
+        if (etPassword.getText().toString().trim().isEmpty()) {
             etPassword.setError(getResources().getString(R.string.password_string_error));
-            isValidData=false;
+            isValidData = false;
         }
 
-        if(etConfirmPassword.getText().toString().trim().isEmpty()){
+        if (etConfirmPassword.getText().toString().trim().isEmpty()) {
             etConfirmPassword.setError(getResources().getString(R.string.password_string_error));
-            isValidData=false;
-        }else if (!etConfirmPassword.getText().toString().equals(etPassword.getText().toString())){
+            isValidData = false;
+        } else if (!etConfirmPassword.getText().toString().equals(etPassword.getText().toString())) {
             etConfirmPassword.setError(getResources().getString(R.string.same_password_string_error));
-            isValidData=false;
+            isValidData = false;
         }
 
-        if(etUserName.getText().toString().trim().isEmpty()){
+        if (etUserName.getText().toString().trim().isEmpty()) {
             etUserName.setError(getResources().getString(R.string.empty_emailid_error));
-            isValidData=false;
-        }else if(!AppConstants.isValidEmail(etUserName.getText().toString())){
+            isValidData = false;
+        } else if (!AppConstants.isValidEmail(etUserName.getText().toString())) {
             etUserName.setError(getResources().getString(R.string.valid_emailid_error));
-            isValidData=false;
+            isValidData = false;
         }
 
         return isValidData;
     }
 
-    private void register(){
-        userModel= new UserModel();
+    private void register() {
+        progressBar.setVisibility(View.VISIBLE);
+        userModel = new UserModel();
         userModel.setF_Name(etFirstName.getText().toString());
         userModel.setL_Name(etLastName.getText().toString());
         userModel.setEmail(etUserName.getText().toString());
         userModel.setPassword(etPassword.getText().toString());
-        Controller controller= Controller.getInstance(this);
+        Controller controller = Controller.getInstance(this);
         controller.registerUser(userModel, new RegisterCallBack());
     }
 
     private class RegisterCallBack implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-            if (response.isSuccessful()){
-                if (response.body()!=null){
-                    Log.e("status","success");
+            progressBar.setVisibility(View.GONE);
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    Log.e("status", "success");
                     try {
-                        JSONObject jsonObject= AppConstants.getJsonResponseFromRaw(response);
-                        String modelStr=jsonObject.getString("Model");
-                        if (!modelStr.equals("null")){
-                            JSONObject model= jsonObject.getJSONObject("Model");
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        String modelStr = jsonObject.getString("Model");
+                        if (!modelStr.equals("null")) {
+                            JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
-                            UserModel userModel= gson.fromJson(model.toString(), UserModel.class);
-                            Log.e("status","success");
-                        }else {
-                            String error= jsonObject.getString("Message");
-                            Log.e("status","error "+error);
-                            AppConstants.showErroDIalog(error,getSupportFragmentManager());
+                            UserModel userModel = gson.fromJson(model.toString(), UserModel.class);
+                            Log.e("status", "success");
+                        } else {
+                            String error = jsonObject.getString("Message");
+                            Log.e("status", "error " + error);
+                            AppConstants.showErroDIalog(error, getSupportFragmentManager());
                         }
 
                     } catch (JSONException e) {
@@ -151,8 +154,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            Log.e("status","failed");
-            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getSupportFragmentManager());
+            Log.e("status", "failed");
+            progressBar.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
     }
 }

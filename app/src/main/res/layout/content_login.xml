@@ -1,175 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ffffff"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="@layout/activity_login">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_height="wrap_content">
-    <EditText
-        android:id="@+id/et_user_name"
-        android:layout_width="match_parent"
-        android:hint="User name"
-        android:paddingTop="5dp"
-        android:paddingBottom="8dp"
-        android:drawablePadding="5dp"
-        android:includeFontPadding="false"
-        android:inputType="textCapSentences|textPersonName"
-        android:background="@drawable/edittext_border"
-        android:paddingLeft="35dp"
-        android:paddingRight="5dp"
-        android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_email"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:showIn="@layout/activity_login">
 
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp">
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:hint="Password"
-        android:paddingTop="5dp"
-        android:paddingBottom="8dp"
-        android:includeFontPadding="false"
-        android:inputType="textCapSentences|textPersonName"
-        android:background="@drawable/edittext_border"
-        android:paddingLeft="35dp"
-        android:paddingRight="5dp"
-        android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_baseline_lock_24"/>
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/login"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/rounded_solid_primary_color_view_button"
-        android:layout_marginBottom="10dp"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        android:text="@string/login_button"/>
-
-    <LinearLayout
-        android:id="@+id/fb_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="50dp"
-        android:paddingTop="7dp"
-        android:paddingBottom="7dp"
-        android:orientation="horizontal"
-        android:gravity="center|start"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:background="@drawable/rounded_solid_grey_view_button"
-        android:layout_marginLeft="50dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_facebook_app_logo"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:text="@string/login_using_fb"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical|start"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:paddingTop="7dp"
-        android:paddingBottom="7dp"
-        android:background="@drawable/rounded_solid_grey_view_button"
-        android:layout_marginLeft="50dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_google"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="2dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/et_user_name"
+            android:layout_width="match_parent"
+            android:hint="User name"
+            android:paddingTop="5dp"
+            android:paddingBottom="8dp"
+            android:drawablePadding="5dp"
             android:includeFontPadding="false"
-            android:layout_marginStart="10dp"
-            android:text="@string/login_using_google"/>
-    </LinearLayout>
+            android:inputType="textCapSentences|textPersonName"
+            android:background="@drawable/edittext_border"
+            android:paddingLeft="35dp"
+            android:paddingRight="5dp"
+            android:layout_height="wrap_content"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_email"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:gravity="center">
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="#000"
-            android:layout_marginTop="2dp"
-            android:layout_height="1dp"/>
-        <TextView
-            android:layout_width="wrap_content"
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp">
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:hint="Password"
+            android:paddingTop="5dp"
+            android:paddingBottom="8dp"
             android:includeFontPadding="false"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:text="@string/string_or"/>
+            android:inputType="textCapSentences|textPersonName"
+            android:background="@drawable/edittext_border"
+            android:paddingLeft="35dp"
+            android:paddingRight="5dp"
+            android:layout_height="wrap_content"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_baseline_lock_24"/>
+        </RelativeLayout>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="2dp"
-            android:background="#000"
-            android:layout_height="1dp"/>
+        <Button
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_solid_primary_color_view_button"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:text="@string/login_button"/>
+
+        <LinearLayout
+            android:id="@+id/fb_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="50dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:orientation="horizontal"
+            android:gravity="center|start"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/rounded_solid_grey_view_button"
+            android:layout_marginLeft="50dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_facebook_app_logo"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/login_using_fb"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical|start"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:background="@drawable/rounded_solid_grey_view_button"
+            android:layout_marginLeft="50dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_google"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="2dp"
+                android:includeFontPadding="false"
+                android:layout_marginStart="10dp"
+                android:text="@string/login_using_google"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center">
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="#000"
+                android:layout_marginTop="2dp"
+                android:layout_height="1dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
+                android:text="@string/string_or"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="2dp"
+                android:background="#000"
+                android:layout_height="1dp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/register"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rounded_solid_primary_color_view_button"
+            android:layout_marginBottom="10dp"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:text="@string/create_new_user_button"/>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/register"
+    <ProgressBar
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/rounded_solid_primary_color_view_button"
-        android:layout_marginBottom="10dp"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        android:text="@string/create_new_user_button"/>
-</LinearLayout>
+        android:visibility="gone"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

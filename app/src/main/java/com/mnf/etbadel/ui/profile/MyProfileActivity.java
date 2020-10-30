@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -46,6 +47,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import info.isuru.sheriff.enums.SheriffPermission;
 import info.isuru.sheriff.helper.Sheriff;
 import info.isuru.sheriff.interfaces.PermissionListener;
@@ -71,15 +73,20 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
     Map<String, String> params = new HashMap<String, String>();
     @BindView(R.id.btn_submit)
     Button btnSubmit;
+    @BindView(R.id.profile_image_layout)
+    LinearLayout profileImageLayout;
     @BindView(R.id.profile_image)
-    LinearLayout profileImage;
+    CircleImageView profileImage;
     @BindView(R.id.profileview)
     ImageView profileview;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
     private SharedPreferences sharedPreferences;
     private int user_id;
     Sheriff sheriffPermission;
     private boolean isGranted = false;
     private String imageUploadBase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +104,22 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
             @Override
             public void onClick(View view) {
                 if (isValidData()) {
+                    progressBar.setVisibility(View.VISIBLE);
                     Controller.getInstance(MyProfileActivity.this).updateProfile(params, new ProfileUpdateCallback());
+                }
+            }
+        });
+        profileImageLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isGranted) {
+                    ImagePicker.create(MyProfileActivity.this)
+                            .returnMode(ReturnMode.ALL) // set whether pick and / or camera action should return immediate result or not.
+                            .single() // single mode
+                            .showCamera(true) // show camera or not (true by default)
+                            .start(); // start image picker activity with request code
+                } else {
+                    sheriffPermission.requestPermissions();
                 }
             }
         });
@@ -115,6 +137,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
                 }
             }
         });
+        progressBar.setVisibility(View.VISIBLE);
         Controller.getInstance(MyProfileActivity.this).getProfile(user_id, new GetProfileCallback());
     }
 
@@ -122,18 +145,23 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
             // or get a single image only
+
             Image image = ImagePicker.getFirstImageOrNull(data);
             Glide.with(MyProfileActivity.this).load(image.getUri()).placeholder(R.drawable.ic_camera_alt_24px).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    profileImageLayout.setVisibility(View.VISIBLE);
+                    profileImage.setVisibility(View.GONE);
                     return false;
                 }
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    profileImageLayout.setVisibility(View.GONE);
+                    profileImage.setVisibility(View.VISIBLE);
                     return false;
                 }
-            }).into(profileview);
+            }).into(profileImage);
             try {
                 InputStream imageStream = getContentResolver().openInputStream(image.getUri());
                 Bitmap bm = BitmapFactory.decodeStream(imageStream);
@@ -181,8 +209,8 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
         } else {
             params.put("Email", etEmailId.getText().toString());
         }
-        if (imageUploadBase!=null){
-            params.put("Profile_Image_byte",imageUploadBase);
+        if (imageUploadBase != null) {
+            params.put("Profile_Image_byte", imageUploadBase);
         }
         return isValidData;
     }
@@ -201,6 +229,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
     private class ProfileUpdateCallback implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            progressBar.setVisibility(View.GONE);
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     try {
@@ -215,18 +244,22 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
                             etLastName.setText(userModel.getL_Name());
                             etEmailId.setText(userModel.getEmail());
                             etPassword.setText(userModel.getPassword());
-                            if (userModel.getProfile_Image_url()!=null){
+                            if (userModel.getProfile_Image_url() != null) {
                                 Glide.with(MyProfileActivity.this).load(userModel.getProfile_Image_url()).placeholder(R.drawable.ic_camera_alt_24px).listener(new RequestListener<Drawable>() {
                                     @Override
                                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        profileImageLayout.setVisibility(View.VISIBLE);
+                                        profileImage.setVisibility(View.GONE);
                                         return false;
                                     }
 
                                     @Override
                                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        profileImageLayout.setVisibility(View.GONE);
+                                        profileImage.setVisibility(View.VISIBLE);
                                         return false;
                                     }
-                                }).into(profileview);
+                                }).into(profileImage);
                             }
                         } else {
                             String error = jsonObject.getString("Message");
@@ -244,6 +277,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("status", "failed");
+            progressBar.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
     }
@@ -251,6 +285,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
     private class GetProfileCallback implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            progressBar.setVisibility(View.GONE);
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     try {
@@ -265,18 +300,23 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
                             etLastName.setText(userModel.getL_Name());
                             etEmailId.setText(userModel.getEmail());
                             etPassword.setText(userModel.getPassword());
-                            if (userModel.getProfile_Image_url()!=null){
+                            if (userModel.getProfile_Image_url() != null) {
+
                                 Glide.with(MyProfileActivity.this).load(userModel.getProfile_Image_url()).placeholder(R.drawable.ic_camera_alt_24px).listener(new RequestListener<Drawable>() {
                                     @Override
                                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        profileImageLayout.setVisibility(View.VISIBLE);
+                                        profileImage.setVisibility(View.GONE);
                                         return false;
                                     }
 
                                     @Override
                                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        profileImageLayout.setVisibility(View.GONE);
+                                        profileImage.setVisibility(View.VISIBLE);
                                         return false;
                                     }
-                                }).into(profileview);
+                                }).into(profileImage);
                             }
                         } else {
                             String error = jsonObject.getString("Message");
@@ -294,6 +334,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("status", "failed");
+            progressBar.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
     }
