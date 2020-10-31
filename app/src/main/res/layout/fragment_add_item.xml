@@ -208,6 +208,7 @@
             android:textColor="#000000"
             />
         <EditText
+            android:id="@+id/et_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -300,6 +301,7 @@
             />
 
         <EditText
+            android:id="@+id/et_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minLines="3"
@@ -313,6 +315,7 @@
             android:background="@drawable/rounded_edttxt"/>
 
             <Switch
+                android:id="@+id/sw_free"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"

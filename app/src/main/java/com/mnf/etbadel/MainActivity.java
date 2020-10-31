@@ -10,12 +10,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.mikepenz.actionitembadge.library.utils.BadgeStyle;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mnf.etbadel.controller.Controller;
+import com.mnf.etbadel.model.DropdownModel;
+import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
@@ -33,9 +38,17 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ru.nikartm.support.ImageBadgeView;
 
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_ADD_PRODUCTS;
@@ -53,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     ImageBadgeView ibvIconNotification;
     LinearLayout floatingActionButton;
 //    DrawerHeaderView drawerHeaderView;
-
+    private Controller controller;
+    private int selectedCategory=0;
+    private String searchKeyword="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         floatingActionButton=findViewById(R.id.floating_button);
         setSupportActionBar(toolbar);
         setNavigationView(toolbar, savedInstanceState);
+        init();
         drawableNotification = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null);
         drawableChat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_home_black_24dp, null);
         style = new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#FE0665"), Color.parseColor("#CC0548"), Color.parseColor("#EEEEEE"));
@@ -89,6 +105,13 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 setFragmentToDisplay(FRAGMENT_ADD_PRODUCTS,null,true);
             }
         });
+    }
+
+    private void init() {
+        int lang=0;
+        controller= Controller.getInstance(this);
+        controller.getCategoriesDropdown(lang, new CategoriesCallback());
+        controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
     }
 
     private void setNavigationView(Toolbar toolbar, Bundle savedInstanceState) {
@@ -229,5 +252,67 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     @Override
     public void performCLick() {
         setFragmentToDisplay(FRAGMENT_PRODUCTS,null,true);
+    }
+
+    private class CategoriesCallback implements Callback<ResponseBody> {
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        String modelStr = jsonObject.getString("Model");
+                        if (!modelStr.equals("null")) {
+                            JSONArray model = jsonObject.getJSONArray("Model");
+                            Gson gson = new Gson();
+                            List<DropdownModel> dropdownModelList = gson.fromJson(model.toString(), new TypeToken<List<DropdownModel>>(){}.getType());
+                        }else {
+                            String error= jsonObject.getString("Message");
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+        }
+    }
+
+    private class ItemsCallback implements Callback<ResponseBody> {
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        String modelStr = jsonObject.getString("Model");
+                        if (!modelStr.equals("null")) {
+                            JSONArray model = jsonObject.getJSONArray("Model");
+                            Gson gson = new Gson();
+                            List<ItemModel> itemModelList = gson.fromJson(model.toString(), new TypeToken<List<ItemModel>>() {
+                            }.getType());
+                        }else {
+                            String error= jsonObject.getString("Message");
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+        }
     }
 }
