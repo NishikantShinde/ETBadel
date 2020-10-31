@@ -56,6 +56,8 @@ public class RegisterActivity extends AppCompatActivity {
     LinearLayout googleRegister;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.progress_layout)
+    LinearLayout progressLayout;
 
     private UserModel userModel;
 
@@ -115,6 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void register() {
         progressBar.setVisibility(View.VISIBLE);
+        progressLayout.setVisibility(View.VISIBLE);
         userModel = new UserModel();
         userModel.setF_Name(etFirstName.getText().toString());
         userModel.setL_Name(etLastName.getText().toString());
@@ -128,6 +131,7 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
             progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     Log.e("status", "success");
@@ -156,6 +160,7 @@ public class RegisterActivity extends AppCompatActivity {
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("status", "failed");
             progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
     }

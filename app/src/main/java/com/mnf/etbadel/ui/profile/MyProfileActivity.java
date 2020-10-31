@@ -81,6 +81,8 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
     ImageView profileview;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.progress_layout)
+    LinearLayout progressLayout;
     private SharedPreferences sharedPreferences;
     private int user_id;
     Sheriff sheriffPermission;
@@ -105,6 +107,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
             public void onClick(View view) {
                 if (isValidData()) {
                     progressBar.setVisibility(View.VISIBLE);
+                    progressLayout.setVisibility(View.VISIBLE);
                     Controller.getInstance(MyProfileActivity.this).updateProfile(params, new ProfileUpdateCallback());
                 }
             }
@@ -138,6 +141,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
             }
         });
         progressBar.setVisibility(View.VISIBLE);
+        progressLayout.setVisibility(View.VISIBLE);
         Controller.getInstance(MyProfileActivity.this).getProfile(user_id, new GetProfileCallback());
     }
 
@@ -229,6 +233,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
             progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     try {
@@ -277,6 +282,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("status", "failed");
             progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
     }
@@ -285,6 +291,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
             progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     try {
@@ -334,6 +341,7 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("status", "failed");
             progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
     }

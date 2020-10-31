@@ -56,8 +56,11 @@ public class LoginActivity extends AppCompatActivity {
     EditText etPassword;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.progress_layout)
+    LinearLayout progressLayout;
 
     private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         Button login = findViewById(R.id.login);
         Button register = findViewById(R.id.register);
         LinearLayout fbLogin = findViewById(R.id.fb_login);
-        sharedPreferences= getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.mnf.etbadel",
@@ -108,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressBar.setVisibility(View.VISIBLE);
+                progressLayout.setVisibility(View.VISIBLE);
                 Fblogin();
             }
         });
@@ -131,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginWithCredentials() {
         progressBar.setVisibility(View.VISIBLE);
+        progressLayout.setVisibility(View.VISIBLE);
         String userName = etUserName.getText().toString();
         String password = etPassword.getText().toString();
         UserModel userModel = new UserModel();
@@ -157,6 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         progressBar.setVisibility(View.GONE);
+                        progressLayout.setVisibility(View.GONE);
                         System.out.println("Success");
                         GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -191,12 +197,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCancel() {
                         progressBar.setVisibility(View.GONE);
+                        progressLayout.setVisibility(View.GONE);
                         Log.d("TAG_CANCEL", "On cancel");
                     }
 
                     @Override
                     public void onError(FacebookException error) {
                         progressBar.setVisibility(View.GONE);
+                        progressLayout.setVisibility(View.GONE);
                         Log.d("TAG_ERROR", error.toString());
                         AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
                     }
@@ -207,6 +215,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
             progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
             if (response.isSuccessful()) {
                 if (response.body() != null) {
 
@@ -218,13 +227,13 @@ public class LoginActivity extends AppCompatActivity {
                             Gson gson = new Gson();
                             UserModel userModel = gson.fromJson(model.toString(), UserModel.class);
                             Log.e("status", "success");
-                            sharedPreferences.edit().putInt(AppConstants.SF_USER_ID,userModel.getId()).apply();
+                            sharedPreferences.edit().putInt(AppConstants.SF_USER_ID, userModel.getId()).apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
-                        }else {
-                            String error= jsonObject.getString("Message");
-                            Log.e("status","error "+error);
-                            AppConstants.showErroDIalog(error,getSupportFragmentManager());
+                        } else {
+                            String error = jsonObject.getString("Message");
+                            Log.e("status", "error " + error);
+                            AppConstants.showErroDIalog(error, getSupportFragmentManager());
                         }
 
                     } catch (JSONException e) {
@@ -239,6 +248,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             Log.e("status", "failed");
             progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
     }
