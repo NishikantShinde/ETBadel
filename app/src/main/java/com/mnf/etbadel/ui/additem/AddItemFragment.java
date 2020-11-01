@@ -6,17 +6,31 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -48,6 +62,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnItemSelected;
 import info.isuru.sheriff.enums.SheriffPermission;
 import info.isuru.sheriff.helper.Sheriff;
 import info.isuru.sheriff.interfaces.PermissionListener;
@@ -67,6 +82,14 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.progress_layout)
+    RelativeLayout progressLayout;
+
+    @BindView(R.id.scrollable_view)
+    ScrollView scrollableView;
+
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
     @BindView(R.id.et_title)
     EditText etTitle;
     @BindView(R.id.et_desc)
@@ -78,9 +101,9 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     private String mParam1;
     private String mParam2;
 
-    String[] neighbor = {"neighbor", "neighbor1", "neighbor2", "neighbor3"};
-    String[] city = {"city", "city1", "city2", "city3"};
-    String[] categories = {};
+    ArrayList<String> neighbor = new ArrayList<>();
+    ArrayList<String> city = new ArrayList<>();
+    ArrayList<String> categories = new ArrayList<>();
     Spinner spinnerNeighbor;
     Spinner spinnerCity;
     Spinner spinnerCategory;
@@ -107,6 +130,11 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     private String condition="Barely Used";
     private String isFree="false";
     private List<Image> images;
+
+
+    List<DropdownModel> dropdownModelCategoriesList;
+    List<DropdownModel> dropdownModelAreaList;
+    List<DropdownModel> dropdownModelCityList;
 
     public AddItemFragment() {
         // Required empty public constructor
@@ -149,9 +177,14 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 
         viewPager2.setAdapter(new ViewPagerAdapter(getContext(), this));
         controller = Controller.getInstance(getContext());
+//        int height=scrollableView.getHeight();
+//        int width=scrollableView.getWidth();
+//        RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(width,height);
+//        progressLayout.setLayoutParams(layoutParams);
+
         init();
-        categories = getResources().getStringArray(R.array.categoryList);
-        city = getResources().getStringArray(R.array.cityList);
+//        categories=getResources().getStringArray(R.array.categoryList);
+//        city=getResources().getStringArray(R.array.cityList);
         spinnerNeighbor = view.findViewById(R.id.spinner_neighbor);
         dropdownArrowNeighbor = view.findViewById(R.id.dropdown_arrow_neighbor);
         spinnerCity = view.findViewById(R.id.spinner_city);
@@ -164,6 +197,41 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         prevImgView = view.findViewById(R.id.prev_img_view);
         nxtImgView = view.findViewById(R.id.nxt_img_view);
 
+        spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCategory=dropdownModelCategoriesList.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCity=dropdownModelCityList.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerNeighbor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedArea=dropdownModelAreaList.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 //        prevImgView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -171,17 +239,17 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 //            }
 //        });
 
-        ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, neighbor);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerNeighbor.setAdapter(aa);
+//        ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, neighbor);
+//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerNeighbor.setAdapter(aa);
+//
+//        ArrayAdapter aa1 = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, city);
+//        aa1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerCity.setAdapter(aa1);
 
-        ArrayAdapter aa1 = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, city);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCity.setAdapter(aa1);
-
-        ArrayAdapter aa2 = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategory.setAdapter(aa2);
+//        ArrayAdapter aa2 = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
+//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinnerCategory.setAdapter(aa2);
 
         dropdownArrowNeighbor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,6 +314,12 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 
     private void init() {
         lang = 0;
+        progressBar.setVisibility(View.VISIBLE);
+        progressLayout.setVisibility(View.VISIBLE);
+//        controller.getCategoriesDropdown(lang, new CategoriesCallback());
+//        controller.getCitiesDropdown(lang, new CitiesCallback());
+//        controller.getAreasDropdown(lang, new AreasCallback());
+        lang = 0;
         sharedPreferences = getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
         user_id = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
         images= new ArrayList<>();
@@ -307,21 +381,37 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                             Gson gson = new Gson();
                             List<DropdownModel> dropdownModelList = gson.fromJson(model.toString(), new TypeToken<List<DropdownModel>>() {
                             }.getType());
+                            dropdownModelCategoriesList = dropdownModelList;
+                            for (int i = 0; i < dropdownModelCategoriesList.size(); i++) {
+                                categories.add(dropdownModelCategoriesList.get(i).getName());
+                            }
+                            ArrayAdapter aa2 = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
+                            aa2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerCategory.setAdapter(aa2);
                         } else {
                             String error = jsonObject.getString("Message");
+                            AppConstants.showErroDIalog(error, getActivity().getSupportFragmentManager());
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                 }
             }
+
+            if(dropdownModelCategoriesList!=null && dropdownModelCategoriesList.size()>0 &&
+                    dropdownModelAreaList!=null && dropdownModelAreaList.size()>0 &&
+                    dropdownModelCityList!=null && dropdownModelCityList.size()>0){
+                progressBar.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
         }
     }
 
@@ -338,8 +428,16 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                             Gson gson = new Gson();
                             List<DropdownModel> dropdownModelList = gson.fromJson(model.toString(), new TypeToken<List<DropdownModel>>() {
                             }.getType());
+                            dropdownModelCityList = dropdownModelList;
+                            for (int i = 0; i < dropdownModelCityList.size(); i++) {
+                                city.add(dropdownModelCityList.get(i).getName());
+                            }
+                            ArrayAdapter aa2 = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, city);
+                            aa2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerCity.setAdapter(aa2);
                         } else {
                             String error = jsonObject.getString("Message");
+                            AppConstants.showErroDIalog(error, getActivity().getSupportFragmentManager());
                         }
 
                     } catch (JSONException e) {
@@ -348,11 +446,19 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 
                 }
             }
+            if(dropdownModelCategoriesList!=null && dropdownModelCategoriesList.size()>0 &&
+                    dropdownModelAreaList!=null && dropdownModelAreaList.size()>0 &&
+                    dropdownModelCityList!=null && dropdownModelCityList.size()>0){
+                progressBar.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
         }
     }
 
@@ -369,8 +475,16 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                             Gson gson = new Gson();
                             List<DropdownModel> dropdownModelList = gson.fromJson(model.toString(), new TypeToken<List<DropdownModel>>() {
                             }.getType());
+                            dropdownModelAreaList = dropdownModelList;
+                            for (int i = 0; i < dropdownModelAreaList.size(); i++) {
+                                neighbor.add(dropdownModelAreaList.get(i).getName());
+                            }
+                            ArrayAdapter aa2 = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, neighbor);
+                            aa2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spinnerNeighbor.setAdapter(aa2);
                         } else {
                             String error = jsonObject.getString("Message");
+                            AppConstants.showErroDIalog(error, getActivity().getSupportFragmentManager());
                         }
 
                     } catch (JSONException e) {
@@ -379,11 +493,19 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 
                 }
             }
+            if(dropdownModelCategoriesList!=null && dropdownModelCategoriesList.size()>0 &&
+                    dropdownModelAreaList!=null && dropdownModelAreaList.size()>0 &&
+                    dropdownModelCityList!=null && dropdownModelCityList.size()>0){
+                progressBar.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
         }
     }
 
@@ -431,7 +553,9 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
         }
     }
 }

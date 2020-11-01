@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,6 +8,7 @@
     tools:context=".ui.additem.AddItemFragment">
 
     <ScrollView
+        android:id="@+id/scrollable_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -337,4 +338,18 @@
                 android:background="@drawable/rounded_solid_primary_color_view_button"/>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="1000dp"
+        android:orientation="vertical"
+        android:id="@+id/progress_layout"
+        android:background="#000000"
+        android:gravity="center"
+        android:alpha="0.6"/>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        />
+</RelativeLayout>
