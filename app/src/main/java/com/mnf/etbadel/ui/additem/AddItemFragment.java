@@ -6,13 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -62,7 +51,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnItemSelected;
 import info.isuru.sheriff.enums.SheriffPermission;
 import info.isuru.sheriff.helper.Sheriff;
 import info.isuru.sheriff.interfaces.PermissionListener;
@@ -96,6 +84,10 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     EditText etDesc;
     @BindView(R.id.sw_free)
     Switch swFree;
+    @BindView(R.id.prev_img_view)
+    ImageView prevImgView;
+    @BindView(R.id.nxt_img_view)
+    ImageView nxtImgView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -115,8 +107,6 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     RelativeLayout condition2Layout;
     RelativeLayout condition3Layout;
 
-    ImageView nxtImgView;
-    ImageView prevImgView;
     Controller controller;
     int lang;
     Sheriff sheriffPermission;
@@ -127,14 +117,17 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     private int selectedCity = 0;
     private int selectedCategory = 0;
     private int selectedArea = 0;
-    private String condition="Barely Used";
-    private String isFree="false";
-    private List<Image> images;
+    private int viewPagerPosition = 0;
+    private String condition = "Barely Used";
+    private String isFree = "false";
+    private List<Image> images = new ArrayList<>();
 
 
     List<DropdownModel> dropdownModelCategoriesList;
     List<DropdownModel> dropdownModelAreaList;
     List<DropdownModel> dropdownModelCityList;
+
+    ViewPagerAdapter viewPagerAdapter;
 
     public AddItemFragment() {
         // Required empty public constructor
@@ -172,10 +165,10 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_item, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         ViewPager2 viewPager2 = view.findViewById(R.id.viewPager2);
-
-        viewPager2.setAdapter(new ViewPagerAdapter(getContext(), this));
+        viewPagerAdapter = new ViewPagerAdapter(getContext(), images, this);
+        viewPager2.setAdapter(viewPagerAdapter);
         controller = Controller.getInstance(getContext());
 //        int height=scrollableView.getHeight();
 //        int width=scrollableView.getWidth();
@@ -194,13 +187,32 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         condition1Layout = view.findViewById(R.id.condition1_layout);
         condition2Layout = view.findViewById(R.id.condition2_layout);
         condition3Layout = view.findViewById(R.id.condition3_layout);
-        prevImgView = view.findViewById(R.id.prev_img_view);
-        nxtImgView = view.findViewById(R.id.nxt_img_view);
+//        prevImgView = view.findViewById(R.id.prev_img_view);
+//        nxtImgView = view.findViewById(R.id.nxt_img_view);
 
+        nxtImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(viewPagerPosition<2){
+                    viewPagerPosition++;
+                    viewPager2.setCurrentItem(viewPagerPosition);
+                }
+            }
+        });
+
+        prevImgView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(viewPagerPosition>0){
+                    viewPagerPosition--;
+                    viewPager2.setCurrentItem(viewPagerPosition);
+                }
+            }
+        });
         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCategory=dropdownModelCategoriesList.get(position).getId();
+                selectedCategory = dropdownModelCategoriesList.get(position).getId();
             }
 
             @Override
@@ -212,7 +224,7 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCity=dropdownModelCityList.get(position).getId();
+                selectedCity = dropdownModelCityList.get(position).getId();
             }
 
             @Override
@@ -224,7 +236,7 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         spinnerNeighbor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedArea=dropdownModelAreaList.get(position).getId();
+                selectedArea = dropdownModelAreaList.get(position).getId();
             }
 
             @Override
@@ -276,7 +288,7 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                 condition1Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_selected));
                 condition2Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_notselected));
                 condition3Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_notselected));
-                condition=getContext().getResources().getString(R.string.string_condition1);
+                condition = getContext().getResources().getString(R.string.string_condition1);
             }
         });
 
@@ -286,7 +298,7 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                 condition2Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_selected));
                 condition1Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_notselected));
                 condition3Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_notselected));
-                condition=getContext().getResources().getString(R.string.string_condition2);
+                condition = getContext().getResources().getString(R.string.string_condition2);
             }
         });
 
@@ -296,19 +308,21 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                 condition3Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_selected));
                 condition1Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_notselected));
                 condition2Layout.setBackground(getResources().getDrawable(R.drawable.rounded_view_condition_notselected));
-                condition=getContext().getResources().getString(R.string.string_condition3);
+                condition = getContext().getResources().getString(R.string.string_condition3);
             }
         });
         swFree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
-                    isFree="true";
-                }else {
-                    isFree="false";
+                if (b) {
+                    isFree = "true";
+                } else {
+                    isFree = "false";
                 }
             }
         });
+
+        viewPager2.setCurrentItem(viewPagerPosition);
         return view.getRootView();
     }
 
@@ -322,7 +336,7 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         lang = 0;
         sharedPreferences = getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
         user_id = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
-        images= new ArrayList<>();
+        images = new ArrayList<>();
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
         controller.getCitiesDropdown(lang, new CitiesCallback());
         controller.getAreasDropdown(lang, new AreasCallback());
@@ -363,9 +377,14 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
             // or get a single image only
             Image image = ImagePicker.getFirstImageOrNull(data);
-            images.add(position,image);
+            images.add(position, image);
+            setImageToFragment(position, image);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setImageToFragment(int position, Image image) {
+        viewPagerAdapter.setImageView(position, image);
     }
 
     private class CategoriesCallback implements Callback<ResponseBody> {
@@ -399,9 +418,9 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                 }
             }
 
-            if(dropdownModelCategoriesList!=null && dropdownModelCategoriesList.size()>0 &&
-                    dropdownModelAreaList!=null && dropdownModelAreaList.size()>0 &&
-                    dropdownModelCityList!=null && dropdownModelCityList.size()>0){
+            if (dropdownModelCategoriesList != null && dropdownModelCategoriesList.size() > 0 &&
+                    dropdownModelAreaList != null && dropdownModelAreaList.size() > 0 &&
+                    dropdownModelCityList != null && dropdownModelCityList.size() > 0) {
                 progressBar.setVisibility(View.GONE);
                 progressLayout.setVisibility(View.GONE);
             }
@@ -446,9 +465,9 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 
                 }
             }
-            if(dropdownModelCategoriesList!=null && dropdownModelCategoriesList.size()>0 &&
-                    dropdownModelAreaList!=null && dropdownModelAreaList.size()>0 &&
-                    dropdownModelCityList!=null && dropdownModelCityList.size()>0){
+            if (dropdownModelCategoriesList != null && dropdownModelCategoriesList.size() > 0 &&
+                    dropdownModelAreaList != null && dropdownModelAreaList.size() > 0 &&
+                    dropdownModelCityList != null && dropdownModelCityList.size() > 0) {
                 progressBar.setVisibility(View.GONE);
                 progressLayout.setVisibility(View.GONE);
             }
@@ -493,9 +512,9 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 
                 }
             }
-            if(dropdownModelCategoriesList!=null && dropdownModelCategoriesList.size()>0 &&
-                    dropdownModelAreaList!=null && dropdownModelAreaList.size()>0 &&
-                    dropdownModelCityList!=null && dropdownModelCityList.size()>0){
+            if (dropdownModelCategoriesList != null && dropdownModelCategoriesList.size() > 0 &&
+                    dropdownModelAreaList != null && dropdownModelAreaList.size() > 0 &&
+                    dropdownModelCityList != null && dropdownModelCityList.size() > 0) {
                 progressBar.setVisibility(View.GONE);
                 progressLayout.setVisibility(View.GONE);
             }
@@ -520,8 +539,8 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         params.put("Location", "");
         params.put("Condition", condition);
         params.put("Is_free", isFree);
-        if (images.size()>0){
-            for (int i=0;i<images.size();i++){
+        if (images.size() > 0) {
+            for (int i = 0; i < images.size(); i++) {
                 try {
                     InputStream imageStream = getContext().getContentResolver().openInputStream(images.get(i).getUri());
                     Bitmap bm = BitmapFactory.decodeStream(imageStream);
@@ -529,11 +548,11 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                     bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); // bm is the bitmap object
                     byte[] b = baos.toByteArray();
                     String imageBase = Base64.encodeToString(b, Base64.DEFAULT);
-                    if (i==0){
+                    if (i == 0) {
                         params.put("Imgs1_byte", imageBase);
-                    }else if (i==1){
+                    } else if (i == 1) {
                         params.put("Imgs2_byte", imageBase);
-                    }else if (i==2){
+                    } else if (i == 2) {
                         params.put("Imgs3_byte", imageBase);
                     }
                 } catch (FileNotFoundException e) {
@@ -542,6 +561,8 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
             }
         }
 
+        progressBar.setVisibility(View.VISIBLE);
+        progressLayout.setVisibility(View.VISIBLE);
         controller.itemSave(params, new SaveItemCallback());
     }
 
@@ -549,6 +570,8 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
+            progressBar.setVisibility(View.GONE);
+            progressLayout.setVisibility(View.GONE);
         }
 
         @Override

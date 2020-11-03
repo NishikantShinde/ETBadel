@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.model.Image;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -30,6 +32,7 @@ import com.mnf.etbadel.ui.profile.ProfileSenderFragment;
 import com.mnf.etbadel.util.AppConstants;
 import com.mnf.etbadel.util.ReplaceFragmentInterface;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
@@ -69,6 +72,20 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     private Controller controller;
     private int selectedCategory=0;
     private String searchKeyword="";
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+        fragment.onActivityResult(requestCode, resultCode, data);
+//        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+//            // or get a single image only
+//            Image image = ImagePicker.getFirstImageOrNull(data);
+////            images.add(position,image);
+////            setImageToFragment(position,image);
+//        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,19 +1,25 @@
 package com.mnf.etbadel.ui.additem.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.esafirm.imagepicker.model.Image;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.ui.additem.interfaces.ClickListen;
@@ -23,11 +29,16 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 //    private List<String> mData;
     private LayoutInflater mInflater;
     private ClickListen clickListen;
+    private List<Image> images;
 //    private ViewPager2 viewPager2;
+    Context context;
+    int mPosition;
 
-    public ViewPagerAdapter(Context context/*, List<String> data, ViewPager2 viewPager2*/, ClickListen clickListen) {
+    public ViewPagerAdapter(Context context, List<Image> images /* ViewPager2 viewPager2*/, ClickListen clickListen) {
+        this.context=context;
         this.mInflater = LayoutInflater.from(context);
         this.clickListen= clickListen;
+        this.images=images;
 //        this.mData = data;
 //        this.viewPager2 = viewPager2;
     }
@@ -47,6 +58,27 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
                 clickListen.onClickListen(position);
             }
         });
+
+        holder.adapterImageview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListen.onClickListen(position);
+            }
+        });
+        if(images!=null && images.size()>0){
+            InputStream imageStream = null;
+            if(position==mPosition) {
+                try {
+                    imageStream = context.getContentResolver().openInputStream(images.get(mPosition).getUri());
+                    Bitmap bm = BitmapFactory.decodeStream(imageStream);
+                    holder.adapterImageview.setImageBitmap(bm);
+                    holder.myTextView.setVisibility(View.GONE);
+                    holder.floatingActionButton.setVisibility(View.GONE);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 //        String animal = mData.get(position);
 //        holder.myTextView.setText(animal);
 //        holder.relativeLayout.setBackgroundResource(colorArray[position]);
@@ -54,35 +86,26 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 
     @Override
     public int getItemCount() {
-//        return mData.size();
         return 3;
+    }
+
+    public void setImageView(int position, Image image) {
+        mPosition=position;
+        images.add(position,image);
+        notifyDataSetChanged();
     }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-//        TextView myTextView;
+        TextView myTextView;
 //        RelativeLayout relativeLayout;
-//        Button button;
+        ImageView adapterImageview;
         FloatingActionButton floatingActionButton;
         ViewHolder(View itemView) {
             super(itemView);
             floatingActionButton= itemView.findViewById(R.id.floating_button);
-//            myTextView = itemView.findViewById(R.id.tvTitle);
-//            relativeLayout = itemView.findViewById(R.id.container);
-//            button = itemView.findViewById(R.id.btnToggle);
-//
-//            button.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//
-//                    if(viewPager2.getOrientation() == ViewPager2.ORIENTATION_VERTICAL)
-//                        viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-//                    else{
-//                        viewPager2.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
-//                    }
-//                }
-//            });
+            adapterImageview= itemView.findViewById(R.id.adapter_image_view);
+            myTextView= itemView.findViewById(R.id.adapter_txtview);
         }
     }
 

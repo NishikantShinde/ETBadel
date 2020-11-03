@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center"
+    app:cardCornerRadius="10dp"
     android:orientation="vertical"
-    android:background="#e2e2e2"
+    app:cardBackgroundColor="#e2e2e2"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <ImageView
         android:layout_width="wrap_content"
+        android:id="@+id/adapter_image_view"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_camera_alt_add_item_screen"/>
     <TextView
+        android:id="@+id/adapter_txtview"
         android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="Take Picture"
@@ -21,6 +32,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_button"
         android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
         android:elevation="0dp"
         app:fabSize="mini"
@@ -29,5 +41,5 @@
         android:clickable="true"
         android:layout_centerInParent="true"
         android:src="@drawable/ic_baseline_add_24"/>
-
-</LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
