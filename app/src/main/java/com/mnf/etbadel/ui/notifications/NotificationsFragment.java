@@ -31,6 +31,7 @@ import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.NotificationModel;
 import com.mnf.etbadel.model.UserModel;
+import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.notifications.adapter.NotificationAdapter;
 import com.mnf.etbadel.ui.profile.MyProfileActivity;
 import com.mnf.etbadel.util.AppConstants;
@@ -53,6 +54,11 @@ public class NotificationsFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private int user_id;
     NotificationAdapter notificationAdapter;
+    NavigationInterface navigationInterface;
+    public NotificationsFragment(NavigationInterface navigationInterface) {
+        this.navigationInterface=navigationInterface;
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
@@ -60,7 +66,7 @@ public class NotificationsFragment extends Fragment {
         user_id = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
         recyclerViewNotification=root.findViewById(R.id.notification_recyclerview);
         ArrayList<NotificationModel> notificationModelArrayList= new ArrayList<>();
-        notificationAdapter=new NotificationAdapter(getContext(),notificationModelArrayList);
+        notificationAdapter=new NotificationAdapter(getContext(),notificationModelArrayList,navigationInterface);
         recyclerViewNotification.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewNotification.setAdapter(notificationAdapter);
         Controller.getInstance(getContext()).getNotificationsById(1, new NotificationCallback());

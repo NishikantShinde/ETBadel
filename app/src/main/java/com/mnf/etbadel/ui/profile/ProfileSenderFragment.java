@@ -1,24 +1,34 @@
 package com.mnf.etbadel.ui.profile;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
-import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.util.AppConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,11 +45,42 @@ public class ProfileSenderFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    @BindView(R.id.profile_image)
+    CircleImageView profileImage;
+    @BindView(R.id.sender_name_txt)
+    TextView senderNameTxt;
+    @BindView(R.id.item_img)
+    ImageView itemImg;
+    @BindView(R.id.desc_txt)
+    TextView descTxt;
+    @BindView(R.id.item_name_txt)
+    TextView itemNameTxt;
+    @BindView(R.id.item_location_txt)
+    TextView itemLocationTxt;
+    @BindView(R.id.item_area_txt)
+    TextView itemAreaTxt;
+    @BindView(R.id.item_condition)
+    TextView itemCondition;
+    @BindView(R.id.btn_trade)
+    Button btnTrade;
+    @BindView(R.id.item_date)
+    TextView itemDate;
+    @BindView(R.id.left_arrow)
+    ImageView leftArrow;
+    @BindView(R.id.right_arrow)
+    ImageView rightArrow;
+    @BindView(R.id.img2)
+    ImageView img2;
+    @BindView(R.id.img3)
+    ImageView img3;
+    ArrayList<String> imageList= new ArrayList<>();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private int itemId=1;
+    private int itemId = 2;
+    private int selectedImg=0;
+
     public ProfileSenderFragment() {
         // Required empty public constructor
     }
@@ -75,8 +116,40 @@ public class ProfileSenderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_profile_sender, container, false);
+        ButterKnife.bind(this, view);
         Controller.getInstance(getContext()).getItemById(itemId, new GetItemCallback());
-        return inflater.inflate(R.layout.fragment_profile_sender, container, false);
+
+        leftArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedImg==1 && imageList.get(0)!=null){
+                    selectedImg=0;
+                    Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                }else if (selectedImg==2 && imageList.get(1)!=null){
+                    selectedImg=1;
+                    Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                }
+            }
+        });
+
+        rightArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedImg==0 && imageList.get(1)!=null){
+                    selectedImg=1;
+                    Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(0)).into(img2);
+                }else if (selectedImg==1 && imageList.get(2)!=null){
+                    selectedImg=2;
+                    Glide.with(getContext()).load(imageList.get(2)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(1)).into(img3);
+                }
+            }
+        });
+        return view.getRootView();
     }
 
     private class GetItemCallback implements Callback<ResponseBody> {
@@ -91,6 +164,61 @@ public class ProfileSenderFragment extends Fragment {
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
                             ItemModel itemModel = gson.fromJson(model.toString(), ItemModel.class);
+                            if (itemModel.getUser_Name() != null)
+                                senderNameTxt.setText(itemModel.getUser_Name());
+                            else
+                                senderNameTxt.setText("");
+                            if (itemModel.getUser_Profile() != null)
+                                Glide.with(getContext()).load(itemModel.getUser_Profile()).into(profileImage);
+                            if (itemModel.getDescription() != null)
+                                descTxt.setText(itemModel.getDescription());
+                            else
+                                descTxt.setText("");
+                            if (itemModel.getTitle() != null)
+                                itemNameTxt.setText(itemModel.getTitle());
+                            else
+                                itemNameTxt.setText("");
+                            if (itemModel.getArea_Name() != null)
+                                itemAreaTxt.setText(itemModel.getArea_Name());
+                            else
+                                itemAreaTxt.setText("");
+                            if (itemModel.getCondition() != null)
+                                itemCondition.setText(itemModel.getCondition());
+                            else
+                                itemCondition.setText("");
+                            if (itemModel.getLocation() != null)
+                                itemLocationTxt.setText(itemModel.getLocation());
+                            else
+                                itemLocationTxt.setText("");
+                            if (itemModel.getC_date() != null) {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                                SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+                                Date date = null;
+                                String dateString = "";
+                                try {
+                                    date = dateFormat.parse(itemModel.getC_date());
+                                    dateString = dateFormat1.format(date);
+                                    itemDate.setText(dateString);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                itemDate.setText("");
+                            }
+                            if (itemModel.getImg1_url()!=null){
+                                selectedImg=0;
+                                imageList.add(itemModel.getImg1_url());
+                                Glide.with(getContext()).load(itemModel.getImg1_url()).into(itemImg);
+                            }
+                            if (itemModel.getImg2_url()!=null){
+                                imageList.add(itemModel.getImg2_url());
+                                Glide.with(getContext()).load(itemModel.getImg2_url()).into(img2);
+                            }
+                            if (itemModel.getImg3_url()!=null){
+                                imageList.add(itemModel.getImg3_url());
+                                Glide.with(getContext()).load(itemModel.getImg3_url()).into(img3);
+                            }
+
                         } else {
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);

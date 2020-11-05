@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.model.NotificationModel;
+import com.mnf.etbadel.ui.NavigationInterface;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,10 +24,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     Context context;
     ArrayList<NotificationModel> notificationModels;
-
-    public NotificationAdapter(Context context, ArrayList<NotificationModel> notificationModels){
+    NavigationInterface navigationInterface;
+    public NotificationAdapter(Context context, ArrayList<NotificationModel> notificationModels, NavigationInterface navigationInterface){
         this.context=context;
         this.notificationModels=notificationModels;
+        this.navigationInterface=navigationInterface;
     }
 
     @NonNull
@@ -54,6 +56,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             e.printStackTrace();
         }
         holder.dateTxt.setText(dateString);
+        holder.notificationListCellMainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigationInterface.NavigateFragment(notificationModel.getSender_Id());
+            }
+        });
     }
 
     public void updateList(ArrayList<NotificationModel> notificationModels){

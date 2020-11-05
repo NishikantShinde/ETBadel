@@ -59,6 +59,7 @@ import static com.mnf.etbadel.util.AppConstants.FRAGMENT_ADD_PRODUCTS;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_DASHBOARD;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_PRODUCTS;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_NOTIFICATION_LIST;
+import static com.mnf.etbadel.util.AppConstants.FRAGMENT_SENDER_PROFILE;
 
 public class MainActivity extends AppCompatActivity implements ReplaceFragmentInterface, NavigationInterface {
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     private Controller controller;
     private int selectedCategory=0;
     private String searchKeyword="";
-
+    private int senderId=0;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -243,9 +244,11 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 //                title.setText(G7Constants.DASHBOARD_TITLE);
                     break;
             case AppConstants.FRAGMENT_PROFILE:
-//                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
-//                startActivity(i);
-                fragment = new ProductsFragment();
+                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
+                startActivity(i);
+                break;
+            case AppConstants.FRAGMENT_SENDER_PROFILE:
+                fragment = new ProductsFragment(senderId);
                 fragmentTag = "profileFragment";
                 break;
 //            case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
@@ -255,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             }
         }else {
             if(index==AppConstants.FRAGMENT_NOTIFICATION_LIST){
-                fragment=new NotificationsFragment();
+                fragment=new NotificationsFragment(this);
                fragmentTag="notification list";
             }
 
@@ -265,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             }
 
             if(index==AppConstants.FRAGMENT_ADD_PRODUCTS){
-                fragment=new AddItemFragment(this);
+                fragment=new AddItemFragment(this,0);
                fragmentTag="Add Item fragment";
             }
         }
@@ -281,8 +284,13 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     }
 
     @Override
-    public void NavigateFragment() {
-        setFragmentToDisplay(FRAGMENT_DASHBOARD,null,false);
+    public void NavigateFragment(int i) {
+        if (i==0){
+            setFragmentToDisplay(FRAGMENT_DASHBOARD,null,false);
+        }else {
+            senderId = i;
+            setFragmentToDisplay(FRAGMENT_SENDER_PROFILE,null,false);
+        }
     }
 
     private class CategoriesCallback implements Callback<ResponseBody> {

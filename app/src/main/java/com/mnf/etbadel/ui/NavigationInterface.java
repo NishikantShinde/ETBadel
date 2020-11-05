@@ -2,5 +2,5 @@ package com.mnf.etbadel.ui;
 
 public interface NavigationInterface {
 
-    public void NavigateFragment();
+    public void NavigateFragment(int i);
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.DropdownModel;
+import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.adapter.ViewPagerAdapter;
 import com.mnf.etbadel.ui.additem.interfaces.ClickListen;
 import com.mnf.etbadel.util.AppConstants;
@@ -59,11 +61,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddItemFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddItemFragment extends Fragment implements ClickListen, PermissionListener {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -82,12 +79,13 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     EditText etTitle;
     @BindView(R.id.et_desc)
     EditText etDesc;
-    @BindView(R.id.sw_free)
-    Switch swFree;
+    @BindView(R.id.sw_free) Switch swFree;
     @BindView(R.id.prev_img_view)
     ImageView prevImgView;
     @BindView(R.id.nxt_img_view)
     ImageView nxtImgView;
+    @BindView(R.id.btn_submit)
+    Button submit;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -129,19 +127,14 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 
     ViewPagerAdapter viewPagerAdapter;
 
-    public AddItemFragment() {
+    NavigationInterface navigationInterface;
+    public AddItemFragment(NavigationInterface navigationInterface,int i) {
         // Required empty public constructor
+        this.navigationInterface= navigationInterface;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddItemFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
+  /*  // TODO: Rename and change types and number of parameters
     public static AddItemFragment newInstance(String param1, String param2) {
         AddItemFragment fragment = new AddItemFragment();
         Bundle args = new Bundle();
@@ -149,7 +142,7 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -190,6 +183,22 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
 //        prevImgView = view.findViewById(R.id.prev_img_view);
 //        nxtImgView = view.findViewById(R.id.nxt_img_view);
 
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (etTitle.getText().toString().equals("")){
+                    AppConstants.showErroDIalog("Please tell us what are you trading?", getActivity().getSupportFragmentManager());
+                }else if (etDesc.getText().toString().equals("")){
+                    AppConstants.showErroDIalog("Description Cannot be empty", getActivity().getSupportFragmentManager());
+                }else if (!(images.size()>0)){
+                    AppConstants.showErroDIalog("Upload atleast one image", getActivity().getSupportFragmentManager());
+                } else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressLayout.setVisibility(View.VISIBLE);
+                    saveItem();
+                }
+            }
+        });
         nxtImgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -569,9 +578,25 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     private class SaveItemCallback implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        if (jsonObject.getBoolean("Success")) {
+                            progressBar.setVisibility(View.GONE);
+                            progressLayout.setVisibility(View.GONE);
+                            navigationInterface.NavigateFragment(0);
+                        } else {
+                            String error = jsonObject.getString("Message");
+                            AppConstants.showErroDIalog(error, getActivity().getSupportFragmentManager());
+                        }
 
-            progressBar.setVisibility(View.GONE);
-            progressLayout.setVisibility(View.GONE);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
         }
 
         @Override

@@ -16,6 +16,7 @@ import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.NotificationModel;
+import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.util.ReplaceFragmentInterface;
 
 import java.util.ArrayList;

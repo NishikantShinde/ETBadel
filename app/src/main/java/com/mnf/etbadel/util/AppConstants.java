@@ -58,6 +58,7 @@ public class AppConstants {
     public static final int FRAGMENT_PRODUCTS =9;
     public static final int FRAGMENT_ADD_PRODUCTS =10;
     public static final int SWITCH_TO_ARABIC =11;
+    public static final int FRAGMENT_SENDER_PROFILE =12;
 
 
     public static final int TIMEOUT=60*1000;

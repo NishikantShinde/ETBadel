@@ -12,6 +12,7 @@ public class ItemModel {
     private String Area_Name;
     private int User_Id;
     private String User_Name;
+    private String User_Profile;
     private String Location;
     private String Condition;
     private String Img1;
@@ -207,5 +208,13 @@ public class ItemModel {
 
     public void setU_date(String u_date) {
         U_date = u_date;
+    }
+
+    public String getUser_Profile() {
+        return User_Profile;
+    }
+
+    public void setUser_Profile(String user_Profile) {
+        User_Profile = user_Profile;
     }
 }

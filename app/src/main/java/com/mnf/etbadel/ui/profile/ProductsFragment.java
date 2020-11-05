@@ -19,6 +19,7 @@ import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.UserModel;
+import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.profile.adapter.ProfileAdapter;
 import com.mnf.etbadel.util.AppConstants;
 import com.mnf.etbadel.util.EqualSpacingItemDecoration;
@@ -62,9 +63,9 @@ public class ProductsFragment extends Fragment {
     RecyclerView itemViewRecyclerview;
     ProfileAdapter profileAdapter;
     private int profile_id = 1;
-
-    public ProductsFragment() {
+    public ProductsFragment(int senderId) {
         // Required empty public constructor
+//        profile_id=senderId;
     }
 
     /**
@@ -77,7 +78,7 @@ public class ProductsFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static ProductsFragment newInstance(String param1, String param2) {
-        ProductsFragment fragment = new ProductsFragment();
+        ProductsFragment fragment = new ProductsFragment(0);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
