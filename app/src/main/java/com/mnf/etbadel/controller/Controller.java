@@ -6,6 +6,7 @@ import com.mnf.etbadel.controller.services.AreaCityService;
 import com.mnf.etbadel.controller.services.CategoryService;
 import com.mnf.etbadel.controller.services.ItemService;
 import com.mnf.etbadel.controller.services.LoginService;
+import com.mnf.etbadel.controller.services.NotificationService;
 import com.mnf.etbadel.controller.services.ProfileService;
 import com.mnf.etbadel.controller.services.RegisterService;
 import com.mnf.etbadel.model.UserModel;
@@ -111,6 +112,20 @@ public class Controller {
         Retrofit retrofit = AppConstants.buildRetrofit(false);
         ItemService itemService= retrofit.create(ItemService.class);
         Call<ResponseBody> serviceResponse= itemService.save(params);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void getItemById(int id, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ItemService itemService= retrofit.create(ItemService.class);
+        Call<ResponseBody> serviceResponse= itemService.getItemById(id);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void getNotificationsById(int id, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        NotificationService notificationService= retrofit.create(NotificationService.class);
+        Call<ResponseBody> serviceResponse= notificationService.getById(id);
         serviceResponse.enqueue(callback);
     }
 }

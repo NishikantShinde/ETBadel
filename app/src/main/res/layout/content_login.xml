@@ -21,7 +21,7 @@
         <EditText
             android:id="@+id/et_user_name"
             android:layout_width="match_parent"
-            android:hint="User name"
+            android:hint="@string/edit_email"
             android:paddingTop="5dp"
             android:paddingBottom="8dp"
             android:drawablePadding="5dp"
@@ -108,6 +108,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/google_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="50dp"

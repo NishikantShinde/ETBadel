@@ -37,8 +37,10 @@ public class AppConstants {
     public static final String AREAS_DROPDOWN_ALL="Area/dropdownlist";
     public static final String ITEMS_ALL="Item/getlist";
     public static final String ITEM_SAVE="Item/save";
+    public static final String ITEM_BYID="Item/getbyid";
     public static final String PROFILE_UPDATE="User/update";
     public static final String PROFILE_GETBYID="User/getbyid";
+    public static final String NOTIFICATION_GETBYUSERID="Notification/getallbyuserid";
 
     public static final String SHAREDPREFERENCES_NAME="EtBadel_SF";
     public static final String SF_USER_ID="user_id_sf";

@@ -4,11 +4,25 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.mnf.etbadel.R;
+import com.mnf.etbadel.controller.Controller;
+import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.model.UserModel;
+import com.mnf.etbadel.util.AppConstants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +39,7 @@ public class ProfileSenderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private int itemId=1;
     public ProfileSenderFragment() {
         // Required empty public constructor
     }
@@ -61,6 +75,37 @@ public class ProfileSenderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Controller.getInstance(getContext()).getItemById(itemId, new GetItemCallback());
         return inflater.inflate(R.layout.fragment_profile_sender, container, false);
+    }
+
+    private class GetItemCallback implements Callback<ResponseBody> {
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        String modelStr = jsonObject.getString("Model");
+                        if (!modelStr.equals("null")) {
+                            JSONObject model = jsonObject.getJSONObject("Model");
+                            Gson gson = new Gson();
+                            ItemModel itemModel = gson.fromJson(model.toString(), ItemModel.class);
+                        } else {
+                            String error = jsonObject.getString("Message");
+                            Log.e("status", "error " + error);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+        }
     }
 }

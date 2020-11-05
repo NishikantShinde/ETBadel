@@ -23,6 +23,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
@@ -55,10 +56,11 @@ import retrofit2.Response;
 import ru.nikartm.support.ImageBadgeView;
 
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_ADD_PRODUCTS;
+import static com.mnf.etbadel.util.AppConstants.FRAGMENT_DASHBOARD;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_PRODUCTS;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_NOTIFICATION_LIST;
 
-public class MainActivity extends AppCompatActivity implements ReplaceFragmentInterface {
+public class MainActivity extends AppCompatActivity implements ReplaceFragmentInterface, NavigationInterface {
 
     Drawable drawableNotification;
     Drawable drawableChat;
@@ -124,6 +126,11 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         });
     }
 
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+    }
+
     private void init() {
         int lang=0;
         controller= Controller.getInstance(this);
@@ -166,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 
         List<IDrawerItem> primaryDrawerItems = new ArrayList<>();
 //        .withIcon(R.drawable.ic_home_black_24dp)
-        primaryDrawerItems.add(new PrimaryDrawerItem().withSelectable(true).withName(menus[0]).withIcon(R.drawable.ic_icon05_home).withIdentifier(AppConstants.FRAGMENT_DASHBOARD));
+        primaryDrawerItems.add(new PrimaryDrawerItem().withSelectable(true).withName(menus[0]).withIcon(R.drawable.ic_icon05_home).withIdentifier(FRAGMENT_DASHBOARD));
         primaryDrawerItems.add(new SwitchDrawerItem().withName(menus[1]).withIcon(R.drawable.ic_icon05_notification).withIdentifier(AppConstants.FRAGMENT_NOTIFICATION));
         primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[2]).withIcon(R.drawable.ic_icon05_my_ads).withIdentifier(AppConstants.FRAGMENT_ADS));
         primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[3]).withIcon(R.drawable.ic_icon05_my_profile).withIdentifier(AppConstants.FRAGMENT_PROFILE));
@@ -230,18 +237,20 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         String fragmentTag = "";
         if(!isBottomMenu) {
             switch (index) {
-                case AppConstants.FRAGMENT_DASHBOARD:
+                case FRAGMENT_DASHBOARD:
                     fragment = new DashboardFragment();
                     fragmentTag = "dashboardFragment";
 //                title.setText(G7Constants.DASHBOARD_TITLE);
                     break;
             case AppConstants.FRAGMENT_PROFILE:
+//                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
+//                startActivity(i);
                 fragment = new ProductsFragment();
                 fragmentTag = "profileFragment";
                 break;
-            case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
-                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
-                startActivity(i);
+//            case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
+//                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
+//                startActivity(i);
 
             }
         }else {
@@ -256,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             }
 
             if(index==AppConstants.FRAGMENT_ADD_PRODUCTS){
-                fragment=new AddItemFragment();
+                fragment=new AddItemFragment(this);
                fragmentTag="Add Item fragment";
             }
         }
@@ -269,6 +278,11 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     @Override
     public void performCLick() {
         setFragmentToDisplay(FRAGMENT_PRODUCTS,null,true);
+    }
+
+    @Override
+    public void NavigateFragment() {
+        setFragmentToDisplay(FRAGMENT_DASHBOARD,null,false);
     }
 
     private class CategoriesCallback implements Callback<ResponseBody> {

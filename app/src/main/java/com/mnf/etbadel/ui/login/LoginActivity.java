@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.CallbackManager;
@@ -26,6 +27,13 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
@@ -58,9 +66,11 @@ public class LoginActivity extends AppCompatActivity {
     ProgressBar progressBar;
     @BindView(R.id.progress_layout)
     LinearLayout progressLayout;
-
+    @BindView(R.id.google_login)
+    LinearLayout googleLogin;
+    GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences sharedPreferences;
-
+    private int RC_SIGN_IN= 200;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +81,11 @@ public class LoginActivity extends AppCompatActivity {
         Button register = findViewById(R.id.register);
         LinearLayout fbLogin = findViewById(R.id.fb_login);
         sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        revokeAccess();
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "com.mnf.etbadel",
@@ -80,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                 md.update(signature.toByteArray());
                 String key = Base64.encodeToString(md.digest(), Base64.DEFAULT);
                 Log.e("KeyHash:", key);
-                Toast.makeText(this, key, Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, key, Toast.LENGTH_LONG).show();
             }
         } catch (PackageManager.NameNotFoundException e) {
 
@@ -110,9 +125,15 @@ public class LoginActivity extends AppCompatActivity {
         fbLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                progressLayout.setVisibility(View.VISIBLE);
                 Fblogin();
+            }
+        });
+
+        googleLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
     }
@@ -147,25 +168,62 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackmanager.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }else {
+            callbackmanager.onActivityResult(requestCode, resultCode, data);
+        }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+    private void revokeAccess() {
+        mGoogleSignInClient.revokeAccess()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
+    }
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            updateUI(null);
+        }
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
+        if (account!=null){
+            progressBar.setVisibility(View.VISIBLE);
+            progressLayout.setVisibility(View.VISIBLE);
+            UserModel userModel = new UserModel();
+            userModel.setIs_Gmail_Login(true);
+            userModel.setGmail_Token(account.getId());
+            Controller.getInstance(LoginActivity.this).login(userModel, new LoginServiceCall());
+        }
     }
 
     private void Fblogin() {
         callbackmanager = CallbackManager.Factory.create();
 
+        LoginManager.getInstance().logOut();
         // Set permissions
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "user_photos", "public_profile"));
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
 
         LoginManager.getInstance().registerCallback(callbackmanager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        progressBar.setVisibility(View.GONE);
-                        progressLayout.setVisibility(View.GONE);
                         System.out.println("Success");
-                        GraphRequest.newMeRequest(
-                                loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
                                     @Override
                                     public void onCompleted(JSONObject json, GraphResponse response) {
                                         if (response.getError() != null) {
@@ -175,36 +233,36 @@ public class LoginActivity extends AppCompatActivity {
                                         } else {
                                             System.out.println("Success");
                                             try {
-
                                                 String jsonresult = String.valueOf(json);
                                                 System.out.println("JSON Result" + jsonresult);
-
-                                                String str_email = json.getString("email");
                                                 String str_id = json.getString("id");
-                                                String str_firstname = json.getString("first_name");
-                                                String str_lastname = json.getString("last_name");
-
+                                                progressBar.setVisibility(View.VISIBLE);
+                                                progressLayout.setVisibility(View.VISIBLE);
+                                                UserModel userModel = new UserModel();
+                                                userModel.setIs_FB_Login(true);
+                                                userModel.setFB_Token(str_id);
+                                                Controller.getInstance(LoginActivity.this).login(userModel, new LoginServiceCall());
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
                                         }
                                     }
+                                });
 
-                                }).executeAsync();
-
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,email");
+                        request.setParameters(parameters);
+                        request.executeAsync();
                     }
 
                     @Override
                     public void onCancel() {
-                        progressBar.setVisibility(View.GONE);
-                        progressLayout.setVisibility(View.GONE);
                         Log.d("TAG_CANCEL", "On cancel");
+                        LoginManager.getInstance().logOut();
                     }
 
                     @Override
                     public void onError(FacebookException error) {
-                        progressBar.setVisibility(View.GONE);
-                        progressLayout.setVisibility(View.GONE);
                         Log.d("TAG_ERROR", error.toString());
                         AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
                     }
@@ -230,6 +288,7 @@ public class LoginActivity extends AppCompatActivity {
                             sharedPreferences.edit().putInt(AppConstants.SF_USER_ID, userModel.getId()).apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
+                            finish();
                         } else {
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);

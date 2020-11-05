@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.model.NotificationModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationHolder> {
 
@@ -37,19 +41,40 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         if(position%2==0){
             holder.notificationListCellMainLayout.setBackgroundColor(context.getResources().getColor(R.color.notification_snd_row_color));
         }
+        NotificationModel notificationModel= notificationModels.get(position);
+        holder.notificationTxt.setText(notificationModel.getSenderName()+" "+context.getResources().getString(R.string.notification_txt_string)+" "+notificationModel.getItemName());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.mmm");
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = null;
+        String dateString="";
+        try {
+            date = dateFormat.parse(notificationModel.getC_date());
+            dateString=dateFormat1.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        holder.dateTxt.setText(dateString);
+    }
+
+    public void updateList(ArrayList<NotificationModel> notificationModels){
+        this.notificationModels=notificationModels;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return 15;
+        return notificationModels.size();
     }
 
     public class NotificationHolder extends RecyclerView.ViewHolder {
 
         LinearLayout notificationListCellMainLayout;
+        TextView notificationTxt, dateTxt;
         public NotificationHolder(@NonNull View itemView) {
             super(itemView);
             notificationListCellMainLayout=itemView.findViewById(R.id.notification_list_cell_main_layout);
+            notificationTxt= itemView.findViewById(R.id.notification_txt);
+            dateTxt= itemView.findViewById(R.id.date_txt);
         }
     }
 }

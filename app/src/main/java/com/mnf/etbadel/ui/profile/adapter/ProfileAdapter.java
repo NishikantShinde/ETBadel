@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
+import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.NotificationModel;
 import com.mnf.etbadel.util.ReplaceFragmentInterface;
 
@@ -21,13 +23,18 @@ import java.util.ArrayList;
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.NotificationHolder> {
 
     Context context;
-    ArrayList<NotificationModel> notificationModels;
+    ArrayList<ItemModel> itemModels;
     ReplaceFragmentInterface replaceFragmentInterface;
 
-    public ProfileAdapter(ReplaceFragmentInterface replaceFragmentInterface, Context context1, ArrayList<NotificationModel> notificationModels){
+    public ProfileAdapter(ReplaceFragmentInterface replaceFragmentInterface, Context context, ArrayList<ItemModel> itemModels){
         this.context=context;
-        this.notificationModels=notificationModels;
+        this.itemModels=itemModels;
         this.replaceFragmentInterface=replaceFragmentInterface;
+    }
+
+    public void updateList(ArrayList<ItemModel> itemModels){
+        this.itemModels= itemModels;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -39,6 +46,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.Notifica
 
     @Override
     public void onBindViewHolder(@NonNull NotificationHolder holder, int position) {
+        if (itemModels.get(position).getImg1_url()!=null){
+            Glide.with(context).load(itemModels.get(position).getImg1_url()).into(holder.itemImg);
+        }
         holder.dashboardCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +59,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.Notifica
 
     @Override
     public int getItemCount() {
-        return 15;
+        return itemModels.size();
     }
 
     public class NotificationHolder extends RecyclerView.ViewHolder {

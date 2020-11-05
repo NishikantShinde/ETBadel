@@ -20,4 +20,7 @@ public interface ItemService {
     @FormUrlEncoded
     @POST(AppConstants.ITEM_SAVE)
     Call<ResponseBody> save(@FieldMap Map<String, String> params);
+
+    @GET(AppConstants.ITEM_BYID)
+    Call<ResponseBody> getItemById(@Query("Id") int id);
 }

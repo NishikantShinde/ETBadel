@@ -79,7 +79,7 @@
                 <EditText
                     android:id="@+id/et_user_name"
                     android:layout_width="match_parent"
-                    android:hint="@string/user_name"
+                    android:hint="@string/edit_email"
                     android:paddingLeft="35dp"
                     android:paddingRight="5dp"
                     android:paddingTop="5dp"
