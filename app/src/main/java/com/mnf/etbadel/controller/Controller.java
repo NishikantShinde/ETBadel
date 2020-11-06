@@ -130,6 +130,20 @@ public class Controller {
         serviceResponse.enqueue(callback);
     }
 
+    public void unreadByUser(int id, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        NotificationService notificationService= retrofit.create(NotificationService.class);
+        Call<ResponseBody> serviceResponse= notificationService.unreadByUser(id);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void readNotification(String ids, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        NotificationService notificationService= retrofit.create(NotificationService.class);
+        Call<ResponseBody> serviceResponse= notificationService.readNotification(ids);
+        serviceResponse.enqueue(callback);
+    }
+
     public void saveNotification(NotificationModel notificationModel, Callback<ResponseBody> callback){
         Retrofit retrofit = AppConstants.buildRetrofit(false);
         NotificationService notificationService= retrofit.create(NotificationService.class);

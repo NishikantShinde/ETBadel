@@ -44,7 +44,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             holder.notificationListCellMainLayout.setBackgroundColor(context.getResources().getColor(R.color.notification_snd_row_color));
         }
         NotificationModel notificationModel= notificationModels.get(position);
-        holder.notificationTxt.setText(notificationModel.getSenderName()+" "+context.getResources().getString(R.string.notification_txt_string)+" "+notificationModel.getItemName());
+        if (notificationModel.getType_Id()==0) {
+            holder.notificationTxt.setText(notificationModel.getSenderName() + " " + context.getResources().getString(R.string.notification_txt_string0) + " " + notificationModel.getItemName());
+        }else if (notificationModel.getType_Id()==1){
+            holder.notificationTxt.setText(notificationModel.getSenderName() + " " + context.getResources().getString(R.string.notification_txt_string1));
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.mmm");
         SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
         Date date = null;

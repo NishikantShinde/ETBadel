@@ -82,7 +82,8 @@
     <string name="valid_emailid_error">Please enter valid email ID</string>
     <string name="password_string_error">Please enter password</string>
     <string name="same_password_string_error">Please make sure your passwords match</string>
-    <string name="notification_txt_string">is interested in</string>
+    <string name="notification_txt_string0">is interested in</string>
+    <string name="notification_txt_string1">added new item</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>

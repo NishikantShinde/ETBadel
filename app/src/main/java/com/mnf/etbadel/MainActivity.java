@@ -1,9 +1,11 @@
 package com.mnf.etbadel;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -23,10 +25,12 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.ads.AdsFragment;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
+import com.mnf.etbadel.ui.login.LoginActivity;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
 import com.mnf.etbadel.ui.profile.MyProfileActivity;
 import com.mnf.etbadel.ui.profile.ProductsFragment;
@@ -72,11 +76,13 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     BadgeStyle style;
     ImageBadgeView ibvIconNotification;
     LinearLayout floatingActionButton;
+    ImageBadgeView imageBadgeView;
 //    DrawerHeaderView drawerHeaderView;
     private Controller controller;
     private int selectedCategory=0;
     private String searchKeyword="";
     private int senderId=0;
+    SharedPreferences sharedPreferences;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -106,8 +112,10 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 //        NavigationUI.setupWithNavController(navView, navController);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         floatingActionButton=findViewById(R.id.floating_button);
+        imageBadgeView= findViewById(R.id.ibv_icon_notification);
         setSupportActionBar(toolbar);
         setNavigationView(toolbar, savedInstanceState);
+        sharedPreferences= getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME,MODE_PRIVATE);
         init();
         drawableNotification = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null);
         drawableChat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_home_black_24dp, null);
@@ -138,6 +146,18 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         controller= Controller.getInstance(this);
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
         controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+        if (userId!=0){
+            controller.unreadByUser(userId, new UnreadNotificationsCallback());
+        }else {
+            imageBadgeView.clearBadge();
+        }
     }
 
     private void setNavigationView(Toolbar toolbar, Bundle savedInstanceState) {
@@ -245,12 +265,18 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 //                title.setText(G7Constants.DASHBOARD_TITLE);
                     break;
             case AppConstants.FRAGMENT_PROFILE:
-                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
-                startActivity(i);
+                int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+                if (userId!=0) {
+                    Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
+                    startActivity(i);
+                }else {
+                    Intent intent= new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
                 break;
             case AppConstants.FRAGMENT_SENDER_PROFILE:
                 fragment = new ProductsFragment(senderId);
-//                fragment = new ProductsFragment();
                 fragmentTag = "profileFragment";
                 break;
             case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
@@ -266,8 +292,14 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             }
         }else {
             if(index==AppConstants.FRAGMENT_NOTIFICATION_LIST){
-                fragment=new NotificationsFragment(this);
-               fragmentTag="notification list";
+                int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+                if (userId!=0) {
+                    fragment = new NotificationsFragment(this);
+                    fragmentTag = "notification list";
+                }else {
+                    Intent intent= new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
             }
 
             if(index==AppConstants.FRAGMENT_PRODUCTS){
@@ -276,8 +308,15 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             }
 
             if(index==AppConstants.FRAGMENT_ADD_PRODUCTS){
-                fragment=new AddItemFragment(this);
-               fragmentTag="Add Item fragment";
+                int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+                if (userId!=0) {
+                    fragment=new AddItemFragment(this);
+                    fragmentTag="Add Item fragment";
+                }else {
+                    Intent intent= new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
             }
         }
         if (fragment != null) {
@@ -360,6 +399,35 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+        }
+    }
+
+    private class UnreadNotificationsCallback implements Callback<ResponseBody> {
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        int modelStr = jsonObject.getInt("Model");
+                        if (modelStr!=0) {
+                            imageBadgeView.setBadgeValue(modelStr);
+                        } else {
+                            imageBadgeView.clearBadge();
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+            imageBadgeView.clearBadge();
         }
     }
 }

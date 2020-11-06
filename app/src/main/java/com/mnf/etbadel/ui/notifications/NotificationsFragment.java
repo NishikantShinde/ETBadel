@@ -87,6 +87,50 @@ public class NotificationsFragment extends Fragment {
                             ArrayList<NotificationModel> notificationModels = gson.fromJson(model.toString(), new TypeToken<List<NotificationModel>>() {
                             }.getType());
                             notificationAdapter.updateList(notificationModels);
+                            if (notificationModels.size()>0)
+                                updateServer(notificationModels);
+                        } else {
+                            String error = jsonObject.getString("Message");
+                            Log.e("status", "error " + error);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+        }
+    }
+
+    private void updateServer(ArrayList<NotificationModel> notificationModels) {
+        String ids="";
+        for (NotificationModel notificationModel: notificationModels){
+            if (!notificationModel.isIs_read()){
+                ids=ids+notificationModel.getId()+",";
+            }
+        }
+        ids=ids.substring(0,ids.length()-1);
+        Log.e("","");
+        Controller.getInstance(getContext()).readNotification(ids, new UnreadNotificationCallback());
+    }
+
+    private class UnreadNotificationCallback implements Callback<ResponseBody> {
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        String modelStr = jsonObject.getString("Model");
+                        if (!modelStr.equals("null")) {
+                            JSONArray model = jsonObject.getJSONArray("Model");
+                            Gson gson = new Gson();
+
                         } else {
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);

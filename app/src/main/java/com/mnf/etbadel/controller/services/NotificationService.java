@@ -16,6 +16,12 @@ public interface NotificationService {
     @GET(AppConstants.NOTIFICATION_GETBYUSERID)
     Call<ResponseBody> getById(@Query("uid") int id);
 
+    @GET(AppConstants.NOTIFICATION_UNREADBYUSER)
+    Call<ResponseBody> unreadByUser(@Query("uid") int id);
+
     @POST(AppConstants.NOTIFICATION_SAVED)
     Call<ResponseBody> save(@Body NotificationModel notificationModel);
+
+    @POST(AppConstants.NOTIFICATION_READ)
+    Call<ResponseBody> readNotification(@Query("ids") String ids);
 }
