@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:id="@+id/notification_list_cell_main_layout"
+        android:background="@color/notification_fst_row_color"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1">
+<!---->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Notification name is here"
+            android:textColor="#000000"
+            android:textSize="16dp"
+
+            android:id="@+id/notification_txt"/>
+
+        <!---->
+        <TextView
+            android:text="03/09/2020"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date_txt"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:background="#ffffff"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:padding="10dp"
+        android:background="#00dfb7"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_baseline_edit_24"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <View
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:background="#ffffff"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:layout_marginBottom="3dp"
+        android:background="#00dfb7"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_baseline_delete_24"
+        android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:background="#ffffff"/>
+
+</LinearLayout>

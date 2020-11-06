@@ -49,7 +49,7 @@ public class MainActivity2 extends AppCompatActivity {
         roundCornerProgressBar.setOnProgressChangedListener(new BaseRoundCornerProgressBar.OnProgressChangedListener() {
             @Override
             public void onProgressChanged(View view, float progress, boolean isPrimaryProgress, boolean isSecondaryProgress) {
-                if(progress==100){
+                if(progress>=100){
                     Intent intent=new Intent(MainActivity2.this, LoginActivity.class);
                     startActivity(intent);
                 }

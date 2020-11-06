@@ -25,6 +25,7 @@ import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
+import com.mnf.etbadel.ui.ads.AdsFragment;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
 import com.mnf.etbadel.ui.profile.MyProfileActivity;
@@ -249,11 +250,18 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 break;
             case AppConstants.FRAGMENT_SENDER_PROFILE:
                 fragment = new ProductsFragment(senderId);
+//                fragment = new ProductsFragment();
                 fragmentTag = "profileFragment";
                 break;
-//            case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
+            case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
 //                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
 //                startActivity(i);
+                break;
+
+            case AppConstants.FRAGMENT_ADS:
+                fragment = new AdsFragment();
+                fragmentTag = "profileFragment";
+                    break;
 
             }
         }else {

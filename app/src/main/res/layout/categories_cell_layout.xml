@@ -10,8 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
         android:id="@+id/category_txt"
-        android:layout_margin="10dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
         android:text="Categories 1" />
 
 </LinearLayout>
