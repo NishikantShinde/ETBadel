@@ -114,9 +114,11 @@ public class NotificationsFragment extends Fragment {
                 ids=ids+notificationModel.getId()+",";
             }
         }
-        ids=ids.substring(0,ids.length()-1);
-        Log.e("","");
-        Controller.getInstance(getContext()).readNotification(ids, new UnreadNotificationCallback());
+        if (!ids.equals("")) {
+            ids = ids.substring(0, ids.length() - 1);
+            Log.e("", "");
+            Controller.getInstance(getContext()).readNotification(ids, new UnreadNotificationCallback());
+        }
     }
 
     private class UnreadNotificationCallback implements Callback<ResponseBody> {
@@ -126,10 +128,8 @@ public class NotificationsFragment extends Fragment {
                 if (response.body() != null) {
                     try {
                         JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
-                        String modelStr = jsonObject.getString("Model");
-                        if (!modelStr.equals("null")) {
-                            JSONArray model = jsonObject.getJSONArray("Model");
-                            Gson gson = new Gson();
+                        boolean modelStr = jsonObject.getBoolean("Success");
+                        if (modelStr) {
 
                         } else {
                             String error = jsonObject.getString("Message");

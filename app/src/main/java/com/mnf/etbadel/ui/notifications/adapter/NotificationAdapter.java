@@ -47,7 +47,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         if (notificationModel.getType_Id()==0) {
             holder.notificationTxt.setText(notificationModel.getSenderName() + " " + context.getResources().getString(R.string.notification_txt_string0) + " " + notificationModel.getItemName());
         }else if (notificationModel.getType_Id()==1){
-            holder.notificationTxt.setText(notificationModel.getSenderName() + " " + context.getResources().getString(R.string.notification_txt_string1));
+            holder.notificationTxt.setText(notificationModel.getUserName() + " " + context.getResources().getString(R.string.notification_txt_string1));
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.mmm");
         SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
@@ -63,7 +63,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.notificationListCellMainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navigationInterface.NavigateFragment(notificationModel.getSender_Id());
+                if (notificationModel.getSender_Id()!=0) {
+                    navigationInterface.NavigateFragment(notificationModel.getSender_Id());
+                }
             }
         });
     }
