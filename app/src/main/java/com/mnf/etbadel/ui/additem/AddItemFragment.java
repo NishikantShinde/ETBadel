@@ -128,7 +128,7 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
     ViewPagerAdapter viewPagerAdapter;
 
     NavigationInterface navigationInterface;
-    public AddItemFragment(NavigationInterface navigationInterface,int i) {
+    public AddItemFragment(NavigationInterface navigationInterface) {
         // Required empty public constructor
         this.navigationInterface= navigationInterface;
     }

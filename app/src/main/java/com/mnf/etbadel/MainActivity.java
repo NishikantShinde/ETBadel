@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             }
 
             if(index==AppConstants.FRAGMENT_ADD_PRODUCTS){
-                fragment=new AddItemFragment(this,0);
+                fragment=new AddItemFragment(this);
                fragmentTag="Add Item fragment";
             }
         }

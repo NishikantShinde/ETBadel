@@ -9,6 +9,7 @@ import com.mnf.etbadel.controller.services.LoginService;
 import com.mnf.etbadel.controller.services.NotificationService;
 import com.mnf.etbadel.controller.services.ProfileService;
 import com.mnf.etbadel.controller.services.RegisterService;
+import com.mnf.etbadel.model.NotificationModel;
 import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.util.AppConstants;
 
@@ -126,6 +127,13 @@ public class Controller {
         Retrofit retrofit = AppConstants.buildRetrofit(false);
         NotificationService notificationService= retrofit.create(NotificationService.class);
         Call<ResponseBody> serviceResponse= notificationService.getById(id);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void saveNotification(NotificationModel notificationModel, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        NotificationService notificationService= retrofit.create(NotificationService.class);
+        Call<ResponseBody> serviceResponse= notificationService.save(notificationModel);
         serviceResponse.enqueue(callback);
     }
 }

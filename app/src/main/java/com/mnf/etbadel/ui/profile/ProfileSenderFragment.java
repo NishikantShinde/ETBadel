@@ -1,5 +1,7 @@
 package com.mnf.etbadel.ui.profile;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,8 @@ import com.google.gson.Gson;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.model.NotificationModel;
+import com.mnf.etbadel.ui.dashboard.adapter.DashboardAdapter;
 import com.mnf.etbadel.util.AppConstants;
 
 import org.json.JSONException;
@@ -80,7 +84,7 @@ public class ProfileSenderFragment extends Fragment {
     private String mParam2;
     private int itemId = 2;
     private int selectedImg=0;
-
+    ItemModel itemModel;
     public ProfileSenderFragment() {
         // Required empty public constructor
     }
@@ -138,15 +142,28 @@ public class ProfileSenderFragment extends Fragment {
         rightArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedImg==0 && imageList.get(1)!=null){
+                if (selectedImg==0 && imageList.size()>1){
                     selectedImg=1;
                     Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
                     Glide.with(getContext()).load(imageList.get(0)).into(img2);
-                }else if (selectedImg==1 && imageList.get(2)!=null){
+                }else if (selectedImg==1 && imageList.size()>2){
                     selectedImg=2;
                     Glide.with(getContext()).load(imageList.get(2)).into(itemImg);
                     Glide.with(getContext()).load(imageList.get(1)).into(img3);
                 }
+            }
+        });
+
+        btnTrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences= getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+                int senderId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+                NotificationModel notificationModel= new NotificationModel();
+                notificationModel.setUser_Id(itemModel.getUser_Id());
+                notificationModel.setSender_Id(senderId);
+                notificationModel.setItem_Id(itemModel.getId());
+                Controller.getInstance(getContext()).saveNotification(notificationModel, new NotificationSaveCallback());
             }
         });
         return view.getRootView();
@@ -163,7 +180,7 @@ public class ProfileSenderFragment extends Fragment {
                         if (!modelStr.equals("null")) {
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
-                            ItemModel itemModel = gson.fromJson(model.toString(), ItemModel.class);
+                            itemModel = gson.fromJson(model.toString(), ItemModel.class);
                             if (itemModel.getUser_Name() != null)
                                 senderNameTxt.setText(itemModel.getUser_Name());
                             else
@@ -227,6 +244,39 @@ public class ProfileSenderFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+        }
+    }
+
+    private class NotificationSaveCallback implements Callback<ResponseBody> {
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        String modelStr = jsonObject.getString("Model");
+                        if (!modelStr.equals("null")) {
+                            JSONObject model = jsonObject.getJSONObject("Model");
+                            Gson gson = new Gson();
+                            NotificationModel notificationModel = gson.fromJson(model.toString(), NotificationModel.class);
+                            Log.e("status", "success");
+                        } else {
+                            String error = jsonObject.getString("Message");
+                            Log.e("status", "error " + error);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }

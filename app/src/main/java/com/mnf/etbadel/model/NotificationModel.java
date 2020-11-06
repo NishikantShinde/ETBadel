@@ -12,6 +12,7 @@ public class NotificationModel {
     int Type_Id;
     String Type;
     boolean Is_active;
+    boolean Is_read;
     String C_date;
     String U_date;
 
@@ -109,5 +110,13 @@ public class NotificationModel {
 
     public void setU_date(String u_date) {
         U_date = u_date;
+    }
+
+    public boolean isIs_read() {
+        return Is_read;
+    }
+
+    public void setIs_read(boolean is_read) {
+        Is_read = is_read;
     }
 }

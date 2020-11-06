@@ -41,6 +41,7 @@ public class AppConstants {
     public static final String PROFILE_UPDATE="User/update";
     public static final String PROFILE_GETBYID="User/getbyid";
     public static final String NOTIFICATION_GETBYUSERID="Notification/getallbyuserid";
+    public static final String NOTIFICATION_SAVED="Notification/save";
 
     public static final String SHAREDPREFERENCES_NAME="EtBadel_SF";
     public static final String SF_USER_ID="user_id_sf";

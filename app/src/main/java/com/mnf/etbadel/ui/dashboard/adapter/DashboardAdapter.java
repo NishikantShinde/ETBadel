@@ -1,6 +1,9 @@
 package com.mnf.etbadel.ui.dashboard.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +15,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
+import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.model.NotificationModel;
+import com.mnf.etbadel.model.UserModel;
+import com.mnf.etbadel.ui.login.LoginActivity;
+import com.mnf.etbadel.util.AppConstants;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +35,10 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.NotificationHolder> {
 
@@ -47,17 +64,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
     public void onBindViewHolder(@NonNull NotificationHolder holder, int position) {
         ArrayList<String> imageList = new ArrayList<>();
         ItemModel itemModel = itemModels.get(position);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = null;
-        String dateString = "";
-        try {
-            date = dateFormat.parse(itemModel.getC_date());
-            dateString = dateFormat1.format(date);
-            holder.dateTxtview.setText(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
         if (itemModel.getImg1_url() != null) {
             selectedImg = 0;
             imageList.add(itemModel.getImg1_url());
@@ -89,23 +96,62 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         holder.nxtImgview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedImg==0 && imageList.get(1)!=null){
+                if (selectedImg==0 && imageList.size()>1){
                     selectedImg=1;
                     Glide.with(context).load(imageList.get(1)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(0)).into(holder.subImg1);
-                }else if (selectedImg==1 && imageList.get(2)!=null){
+                }else if (selectedImg==1 && imageList.size()>2){
                     selectedImg=2;
                     Glide.with(context).load(imageList.get(2)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(1)).into(holder.subImg2);
                 }
             }
         });
-        holder.dateTxtview.setText(itemModel.getC_date());
+        if (itemModel.getC_date() != null) {
+            String dT;
+            if (itemModel.getC_date().length()>19) {
+                dT = itemModel.getC_date().substring(0, itemModel.getC_date().lastIndexOf("."));
+            }else {
+                dT=itemModel.getC_date();
+            }
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = null;
+            String dateString = "";
+            try {
+                date = dateFormat.parse(dT);
+                dateString = dateFormat1.format(date);
+                holder.dateTxtview.setText(dateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            holder.dateTxtview.setText("");
+        }
+
         holder.areaTxtview.setText(" :" + itemModel.getArea_Name());
         holder.itemNameTxtview.setText(" :" + itemModel.getTitle());
         holder.cndtTxtview.setText(" :" + itemModel.getCondition());
         holder.dscrTxtview.setText(itemModel.getDescription());
         holder.locTxtview.setText(" :" + itemModel.getLocation());
+        holder.submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences sharedPreferences= context.getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+                int senderId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+                if (senderId==0){
+                    Intent intent= new Intent(context, LoginActivity.class);
+                    context.startActivity(intent);
+                }else {
+                    NotificationModel notificationModel= new NotificationModel();
+                    notificationModel.setUser_Id(itemModel.getUser_Id());
+                    notificationModel.setSender_Id(senderId);
+                    notificationModel.setItem_Id(itemModel.getId());
+                    notificationModel.setType_Id(0);
+                    Controller.getInstance(context).saveNotification(notificationModel, new NotificationSaveCallback());
+                }
+            }
+        });
     }
 
     public void updateList(ArrayList<ItemModel> itemModels) {
@@ -148,6 +194,39 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         public NotificationHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    private class NotificationSaveCallback implements Callback<ResponseBody> {
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        String modelStr = jsonObject.getString("Model");
+                        if (!modelStr.equals("null")) {
+                            JSONObject model = jsonObject.getJSONObject("Model");
+                            Gson gson = new Gson();
+                            NotificationModel notificationModel = gson.fromJson(model.toString(), NotificationModel.class);
+                            Log.e("status", "success");
+                        } else {
+                            String error = jsonObject.getString("Message");
+                            Log.e("status", "error " + error);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
         }
     }
 }

@@ -286,8 +286,8 @@ public class LoginActivity extends AppCompatActivity {
                             UserModel userModel = gson.fromJson(model.toString(), UserModel.class);
                             Log.e("status", "success");
                             sharedPreferences.edit().putInt(AppConstants.SF_USER_ID, userModel.getId()).apply();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            /*Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);*/
                             finish();
                         } else {
                             String error = jsonObject.getString("Message");
