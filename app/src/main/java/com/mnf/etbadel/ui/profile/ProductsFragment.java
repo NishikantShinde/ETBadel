@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -19,7 +21,6 @@ import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.UserModel;
-import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.profile.adapter.ProfileAdapter;
 import com.mnf.etbadel.util.AppConstants;
 import com.mnf.etbadel.util.EqualSpacingItemDecoration;
@@ -55,6 +56,10 @@ public class ProductsFragment extends Fragment {
     CircleImageView profileImage;
     @BindView(R.id.txt_name)
     TextView txtName;
+    @BindView(R.id.progress_layout)
+    LinearLayout progressLayout;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -63,6 +68,7 @@ public class ProductsFragment extends Fragment {
     RecyclerView itemViewRecyclerview;
     ProfileAdapter profileAdapter;
     private int profile_id = 1;
+
     public ProductsFragment(int senderId) {
         // Required empty public constructor
 //        profile_id=senderId;
@@ -100,10 +106,10 @@ public class ProductsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         itemViewRecyclerview = view.findViewById(R.id.item_view_recyclerview);
         ReplaceFragmentInterface replaceFragmentInterface = (ReplaceFragmentInterface) getActivity();
-        ArrayList<ItemModel> itemModels= new ArrayList<>();
+        ArrayList<ItemModel> itemModels = new ArrayList<>();
         profileAdapter = new ProfileAdapter(replaceFragmentInterface, getContext(), itemModels);
         itemViewRecyclerview.setHasFixedSize(true);
         LinearLayoutManager layoutManagerFirst = new GridLayoutManager(getContext(), 3);
@@ -113,6 +119,8 @@ public class ProductsFragment extends Fragment {
         itemViewRecyclerview.scrollToPosition(0);
         itemViewRecyclerview.addItemDecoration(new EqualSpacingItemDecoration(10));
 
+        progressLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         Controller.getInstance(getContext()).getProfile(profile_id, new GetProfileCallback());
         return view.getRootView();
     }
@@ -140,6 +148,7 @@ public class ProductsFragment extends Fragment {
 
                         } else {
                             String error = jsonObject.getString("Message");
+                            AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
                             Log.e("status", "error " + error);
                         }
 
@@ -148,21 +157,25 @@ public class ProductsFragment extends Fragment {
                     }
                 }
             }
+            progressLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            progressLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }
 
     private void setDataToUI(UserModel userModel, ArrayList<ItemModel> itemModelList) {
-        if (userModel.getProfile_Image_url()!=null){
+        if (userModel.getProfile_Image_url() != null) {
             Glide.with(getContext()).load(userModel.getProfile_Image_url()).into(profileImage);
         }
-        if (userModel.getF_Name()!=null && userModel.getL_Name()!=null){
-            txtName.setText(userModel.getF_Name()+" "+userModel.getL_Name());
-        }else if (userModel.getF_Name()!=null){
+        if (userModel.getF_Name() != null && userModel.getL_Name() != null) {
+            txtName.setText(userModel.getF_Name() + " " + userModel.getL_Name());
+        } else if (userModel.getF_Name() != null) {
             txtName.setText(userModel.getF_Name());
         }
         profileAdapter.updateList(itemModelList);

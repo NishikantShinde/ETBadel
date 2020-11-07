@@ -89,6 +89,7 @@ public class NotificationsFragment extends Fragment {
                                 updateServer(notificationModels);
                         } else {
                             String error = jsonObject.getString("Message");
+                            AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
                             Log.e("status", "error " + error);
                         }
 
@@ -97,11 +98,15 @@ public class NotificationsFragment extends Fragment {
                     }
                 }
             }
+            progressLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            progressLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }
 
@@ -115,6 +120,8 @@ public class NotificationsFragment extends Fragment {
         if (!ids.equals("")) {
             ids = ids.substring(0, ids.length() - 1);
             Log.e("", "");
+            progressLayout.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
             Controller.getInstance(getContext()).readNotification(ids, new UnreadNotificationCallback());
         }
     }
@@ -123,6 +130,8 @@ public class NotificationsFragment extends Fragment {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
             if (response.isSuccessful()) {
+                progressLayout.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 if (response.body() != null) {
                     try {
                         JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
