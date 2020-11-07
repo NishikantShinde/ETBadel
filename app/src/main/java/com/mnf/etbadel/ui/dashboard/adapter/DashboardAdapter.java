@@ -1,6 +1,7 @@
 package com.mnf.etbadel.ui.dashboard.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -24,6 +25,8 @@ import com.mnf.etbadel.model.NotificationModel;
 import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.ui.login.LoginActivity;
 import com.mnf.etbadel.util.AppConstants;
+import com.mnf.etbadel.util.SucessDialogFragment;
+import com.mnf.etbadel.util.TradeFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,14 +46,22 @@ import retrofit2.Response;
 public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.NotificationHolder> {
 
     Context context;
+    MainActivity activity;
     ArrayList<ItemModel> itemModels;
     private int selectedImg = 0;
 
+    HideShowProgress hideShowProgress;
 
+    public interface HideShowProgress{
+        void showProgress();
+        void hideProgress();
+    }
     //    NavigationInterface navigationInterface;
-    public DashboardAdapter(Context context, ArrayList<ItemModel> itemModels) {
+    public DashboardAdapter(MainActivity activity, Context context, ArrayList<ItemModel> itemModels, HideShowProgress hideShowProgress) {
+        this.activity=activity;
         this.context = context;
         this.itemModels = itemModels;
+        this.hideShowProgress = hideShowProgress;
     }
 
     @NonNull
@@ -143,15 +154,36 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
                     Intent intent= new Intent(context, LoginActivity.class);
                     context.startActivity(intent);
                 }else {
-                    NotificationModel notificationModel= new NotificationModel();
-                    notificationModel.setUser_Id(itemModel.getUser_Id());
-                    notificationModel.setSender_Id(senderId);
-                    notificationModel.setItem_Id(itemModel.getId());
-                    notificationModel.setType_Id(0);
-                    Controller.getInstance(context).saveNotification(notificationModel, new NotificationSaveCallback());
+                    TradeFragment.CallbackInterface callbackInterface=new TradeFragment.CallbackInterface() {
+                        @Override
+                        public void doCallbackOnClick() {
+                            NotificationModel notificationModel= new NotificationModel();
+                            notificationModel.setUser_Id(itemModel.getUser_Id());
+                            notificationModel.setSender_Id(senderId);
+                            notificationModel.setItem_Id(itemModel.getId());
+                            notificationModel.setType_Id(0);
+                            hideShowProgress.showProgress();
+                            Controller.getInstance(context).saveNotification(notificationModel, new NotificationSaveCallback());
+                        }
+                    };
+
+
+                    TradeFragment alertDialog = new TradeFragment();
+                    alertDialog.setInterfaceInstance(callbackInterface);
+                    alertDialog.show(activity.getSupportFragmentManager(), "fragment_alert");
+
+
                 }
             }
         });
+
+//        alertDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//
+//            }
+//        });
+
     }
 
     public void updateList(ArrayList<ItemModel> itemModels) {
@@ -202,7 +234,6 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
             if (response.isSuccessful()) {
                 if (response.body() != null) {
-
                     try {
                         JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
                         String modelStr = jsonObject.getString("Model");
@@ -210,23 +241,26 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
                             NotificationModel notificationModel = gson.fromJson(model.toString(), NotificationModel.class);
+                            SucessDialogFragment sucessDialogFragment=new SucessDialogFragment();
+                            sucessDialogFragment.show(activity.getSupportFragmentManager(),"");
                             Log.e("status", "success");
                         } else {
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);
+                            AppConstants.showErroDIalog(error,activity.getSupportFragmentManager());
                         }
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
+            hideShowProgress.hideProgress();
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            hideShowProgress.hideProgress();
+            AppConstants.showErroDIalog(context.getResources().getString(R.string.server_unreachable_error),activity.getSupportFragmentManager());
         }
     }
 }

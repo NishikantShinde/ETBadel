@@ -36,6 +36,8 @@ import com.mnf.etbadel.ui.profile.MyProfileActivity;
 import com.mnf.etbadel.ui.profile.ProductsFragment;
 import com.mnf.etbadel.ui.profile.ProfileSenderFragment;
 import com.mnf.etbadel.util.AppConstants;
+import com.mnf.etbadel.util.ErrorAlertDialogDialogFragment;
+import com.mnf.etbadel.util.LogoutFragment;
 import com.mnf.etbadel.util.ReplaceFragmentInterface;
 
 import androidx.annotation.Nullable;
@@ -287,6 +289,11 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             case AppConstants.FRAGMENT_ADS:
                 fragment = new AdsFragment();
                 fragmentTag = "profileFragment";
+                    break;
+
+            case AppConstants.FRAGMENT_LOGOUT:
+                LogoutFragment alertDialog = LogoutFragment.newInstance("","");
+                alertDialog.show(getSupportFragmentManager(), "fragment_alert");
                     break;
 
             }

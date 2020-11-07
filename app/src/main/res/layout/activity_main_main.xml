@@ -31,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_marginRight="15dp"
                     android:padding="0dp"
-                    android:src="@drawable/ic_icon17_logo"
+                    android:src="@drawable/ic_eng_logo"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>

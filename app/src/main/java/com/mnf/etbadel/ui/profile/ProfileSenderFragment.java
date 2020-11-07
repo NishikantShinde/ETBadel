@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -77,13 +79,17 @@ public class ProfileSenderFragment extends Fragment {
     ImageView img2;
     @BindView(R.id.img3)
     ImageView img3;
-    ArrayList<String> imageList= new ArrayList<>();
+    ArrayList<String> imageList = new ArrayList<>();
+    @BindView(R.id.progress_layout)
+    LinearLayout progressLayout;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private int itemId = 2;
-    private int selectedImg=0;
+    private int selectedImg = 0;
     ItemModel itemModel;
     public ProfileSenderFragment() {
         // Required empty public constructor
@@ -122,17 +128,19 @@ public class ProfileSenderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_sender, container, false);
         ButterKnife.bind(this, view);
+        progressLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         Controller.getInstance(getContext()).getItemById(itemId, new GetItemCallback());
 
         leftArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedImg==1 && imageList.get(0)!=null){
-                    selectedImg=0;
+                if (selectedImg == 1 && imageList.get(0) != null) {
+                    selectedImg = 0;
                     Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
                     Glide.with(getContext()).load(imageList.get(1)).into(img2);
-                }else if (selectedImg==2 && imageList.get(1)!=null){
-                    selectedImg=1;
+                } else if (selectedImg == 2 && imageList.get(1) != null) {
+                    selectedImg = 1;
                     Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
                     Glide.with(getContext()).load(imageList.get(2)).into(img3);
                 }
@@ -239,6 +247,7 @@ public class ProfileSenderFragment extends Fragment {
                         } else {
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);
+                            AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
                         }
 
                     } catch (JSONException e) {
@@ -246,11 +255,16 @@ public class ProfileSenderFragment extends Fragment {
                     }
                 }
             }
+
+            progressLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            progressLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }
 
@@ -283,7 +297,9 @@ public class ProfileSenderFragment extends Fragment {
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+            progressLayout.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }
 }

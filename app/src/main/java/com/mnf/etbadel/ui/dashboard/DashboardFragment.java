@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.ui.dashboard.adapter.DashboardAdapter;
-import com.mnf.etbadel.ui.notifications.adapter.NotificationAdapter;
 import com.mnf.etbadel.util.AppConstants;
 
 import org.json.JSONArray;
@@ -38,26 +39,33 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements DashboardAdapter.HideShowProgress {
 
     LinearLayout categoriesMainLayout;
     ArrayList<CategoriesLayoutClass> categoriesLayoutClasses;
     @BindView(R.id.dashboard_recyclerview)
     RecyclerView dashboardRecyclerview;
+    @BindView(R.id.progress_layout)
+    LinearLayout progressLayout;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
     private Controller controller;
     private int selectedCategory = 0;
     private String searchKeyword = "";
-    ArrayList<ItemModel> itemModelList=new ArrayList<>();
+    boolean isCategoryServicecompleted;
+    boolean isItemModelServciecompleted;
+    ArrayList<ItemModel> itemsModelList = new ArrayList<>();
+    List<DropdownModel> dropdownModelsList = new ArrayList<>();
     DashboardAdapter dashboardAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        ButterKnife.bind(this,root);
+        ButterKnife.bind(this, root);
         categoriesMainLayout = root.findViewById(R.id.categories_main_layout);
         categoriesLayoutClasses = new ArrayList<>();
-        dashboardAdapter=new DashboardAdapter(getContext(),itemModelList);
-        dashboardRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        dashboardAdapter = new DashboardAdapter((MainActivity) getActivity(), getContext(), itemsModelList,this);
+        dashboardRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         dashboardRecyclerview.setAdapter(dashboardAdapter);
         init();
         return root;
@@ -65,7 +73,11 @@ public class DashboardFragment extends Fragment {
 
     private void init() {
         int lang = 0;
+        isCategoryServicecompleted=false;
+        isItemModelServciecompleted=false;
         controller = Controller.getInstance(getContext());
+        progressLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
         controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
     }
@@ -80,6 +92,18 @@ public class DashboardFragment extends Fragment {
             categoriesLayoutClasses.add(categoriesLayoutClass);
             categoriesMainLayout.addView(categoriesLayoutClass);
         }
+    }
+
+    @Override
+    public void showProgress() {
+        progressLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     public class CategoriesLayoutClass extends LinearLayout {
@@ -115,6 +139,7 @@ public class DashboardFragment extends Fragment {
     private class CategoriesCallback implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            isCategoryServicecompleted=true;
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     try {
@@ -125,6 +150,7 @@ public class DashboardFragment extends Fragment {
                             Gson gson = new Gson();
                             List<DropdownModel> dropdownModelList = gson.fromJson(model.toString(), new TypeToken<List<DropdownModel>>() {
                             }.getType());
+                            dropdownModelsList=dropdownModelList;
                             setCategories(dropdownModelList);
                         } else {
                             String error = jsonObject.getString("Message");
@@ -136,18 +162,27 @@ public class DashboardFragment extends Fragment {
                     }
                 }
             }
+            if(isItemModelServciecompleted){
+                progressBar.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
+            isCategoryServicecompleted=true;
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
+            if(isItemModelServciecompleted){
+                progressBar.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
+            }
         }
     }
 
     private class ItemsCallback implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+            isItemModelServciecompleted=true;
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     try {
@@ -158,6 +193,7 @@ public class DashboardFragment extends Fragment {
                             Gson gson = new Gson();
                             ArrayList<ItemModel> itemModelList = gson.fromJson(model.toString(), new TypeToken<List<ItemModel>>() {
                             }.getType());
+                            itemsModelList=itemModelList;
                             dashboardAdapter.updateList(itemModelList);
                             dashboardRecyclerview.scrollToPosition(0);
                         } else {
@@ -171,11 +207,20 @@ public class DashboardFragment extends Fragment {
 
                 }
             }
+            if(isCategoryServicecompleted){
+                progressBar.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
+            isItemModelServciecompleted=true;
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
+            if(isCategoryServicecompleted){
+                progressBar.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
+            }
         }
     }
 }
