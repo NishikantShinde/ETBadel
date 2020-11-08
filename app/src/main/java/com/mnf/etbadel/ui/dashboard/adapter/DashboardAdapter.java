@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -82,12 +83,22 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
             Glide.with(context).load(itemModel.getImg1_url()).into(holder.itemImg);
         }
         if (itemModel.getImg2_url() != null) {
+            holder.cardSubImg1.setVisibility(View.VISIBLE);
+            holder.subImg1.setVisibility(View.VISIBLE);
             imageList.add(itemModel.getImg2_url());
             Glide.with(context).load(itemModel.getImg2_url()).into(holder.subImg1);
+        }else {
+            holder.cardSubImg1.setVisibility(View.INVISIBLE);
+            holder.subImg1.setVisibility(View.INVISIBLE);
         }
         if (itemModel.getImg3_url() != null) {
+            holder.cardSubImg2.setVisibility(View.VISIBLE);
+            holder.subImg2.setVisibility(View.VISIBLE);
             imageList.add(itemModel.getImg3_url());
             Glide.with(context).load(itemModel.getImg3_url()).into(holder.subImg2);
+        }else {
+            holder.cardSubImg2.setVisibility(View.INVISIBLE);
+            holder.subImg2.setVisibility(View.INVISIBLE);
         }
         holder.prevImgview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,11 +151,11 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
             holder.dateTxtview.setText("");
         }
 
-        holder.areaTxtview.setText(" :" + itemModel.getArea_Name());
-        holder.itemNameTxtview.setText(" :" + itemModel.getTitle());
-        holder.cndtTxtview.setText(" :" + itemModel.getCondition());
+        holder.areaTxtview.setText(itemModel.getArea_Name());
+        holder.itemNameTxtview.setText(itemModel.getTitle());
+        holder.cndtTxtview.setText(itemModel.getCondition());
         holder.dscrTxtview.setText(itemModel.getDescription());
-        holder.locTxtview.setText(" :" + itemModel.getLocation());
+        holder.locTxtview.setText(itemModel.getLocation());
         holder.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,6 +233,10 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         ImageView subImg1;
         @BindView(R.id.sub_img_2)
         ImageView subImg2;
+        @BindView(R.id.card_sub_img_1)
+        CardView cardSubImg1;
+        @BindView(R.id.card_sub_img_2)
+        CardView cardSubImg2;
 
         public NotificationHolder(@NonNull View itemView) {
             super(itemView);

@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     private String searchKeyword="";
     private int senderId=0;
     SharedPreferences sharedPreferences;
+    int itemId=0;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -133,7 +134,14 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFragmentToDisplay(FRAGMENT_ADD_PRODUCTS,null,true);
+                int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+                if (userId!=0){
+                    setFragmentToDisplay(FRAGMENT_ADD_PRODUCTS,null,true);
+                }else {
+                    Intent intent= new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
     }
@@ -176,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 .addDrawerItems(
 
                 ) // add the items we want to use with our Drawer
+
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -310,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             }
 
             if(index==AppConstants.FRAGMENT_PRODUCTS){
-                fragment=new ProfileSenderFragment();
+                fragment=new ProfileSenderFragment(itemId);
                fragmentTag="profile sender frahment";
             }
 
@@ -333,7 +342,8 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     }
 
     @Override
-    public void performCLick() {
+    public void performCLick(int i) {
+        itemId=i;
         setFragmentToDisplay(FRAGMENT_PRODUCTS,null,true);
     }
 

@@ -63,10 +63,10 @@
     <string name="string_desctription">Describe the item</string>
     <string name="string_free">Give it for free</string>
     <string name="string_done">Post</string>
-    <string name="string_name">"Name "</string>
-    <string name="string_location">"Location "</string>
-    <string name="string_area">"Area "</string>
-    <string name="string_condition_dashboard">"Condition "</string>
+    <string name="string_name">"Name: "</string>
+    <string name="string_location">"Location: "</string>
+    <string name="string_area">"Area: "</string>
+    <string name="string_condition_dashboard">"Condition: "</string>
     <string name="string_send">Trade</string>
     <string name="string_desctription_hint">Example: Used for 2 months, with no scratches</string>
     <string name="facebook_app_id">769384030578964</string>

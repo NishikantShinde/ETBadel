@@ -21,6 +21,7 @@ import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.UserModel;
+import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.profile.adapter.ProfileAdapter;
 import com.mnf.etbadel.util.AppConstants;
 import com.mnf.etbadel.util.EqualSpacingItemDecoration;
@@ -67,8 +68,8 @@ public class ProductsFragment extends Fragment {
 
     RecyclerView itemViewRecyclerview;
     ProfileAdapter profileAdapter;
-    private int profile_id = 1;
-
+    private int profile_id = 1; // HardCoded
+//    private int profile_id;
     public ProductsFragment(int senderId) {
         // Required empty public constructor
 //        profile_id=senderId;
@@ -106,10 +107,10 @@ public class ProductsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        ButterKnife.bind(this, view);
+        ButterKnife.bind(this,view);
         itemViewRecyclerview = view.findViewById(R.id.item_view_recyclerview);
         ReplaceFragmentInterface replaceFragmentInterface = (ReplaceFragmentInterface) getActivity();
-        ArrayList<ItemModel> itemModels = new ArrayList<>();
+        ArrayList<ItemModel> itemModels= new ArrayList<>();
         profileAdapter = new ProfileAdapter(replaceFragmentInterface, getContext(), itemModels);
         itemViewRecyclerview.setHasFixedSize(true);
         LinearLayoutManager layoutManagerFirst = new GridLayoutManager(getContext(), 3);
@@ -170,12 +171,12 @@ public class ProductsFragment extends Fragment {
     }
 
     private void setDataToUI(UserModel userModel, ArrayList<ItemModel> itemModelList) {
-        if (userModel.getProfile_Image_url() != null) {
+        if (userModel.getProfile_Image_url()!=null){
             Glide.with(getContext()).load(userModel.getProfile_Image_url()).into(profileImage);
         }
-        if (userModel.getF_Name() != null && userModel.getL_Name() != null) {
-            txtName.setText(userModel.getF_Name() + " " + userModel.getL_Name());
-        } else if (userModel.getF_Name() != null) {
+        if (userModel.getF_Name()!=null && userModel.getL_Name()!=null){
+            txtName.setText(userModel.getF_Name()+" "+userModel.getL_Name());
+        }else if (userModel.getF_Name()!=null){
             txtName.setText(userModel.getF_Name());
         }
         profileAdapter.updateList(itemModelList);

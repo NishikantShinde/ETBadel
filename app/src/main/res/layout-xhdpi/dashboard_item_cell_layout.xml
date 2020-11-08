@@ -9,7 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_weight="1">
@@ -26,7 +25,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:layout_height="300dp"
+            android:layout_height="240dp"
             android:elevation="0dp"
             app:cardCornerRadius="40dp">
             <ImageView
@@ -68,9 +67,9 @@
                 app:cardCornerRadius="15dp">
             <ImageView
                 android:id="@+id/sub_img_1"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
@@ -87,9 +86,9 @@
                 app:cardCornerRadius="15dp">
                 <ImageView
                     android:id="@+id/sub_img_2"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:scaleType="fitXY"/>
+                    android:layout_width="40dp"
+                    android:scaleType="fitXY"
+                    android:layout_height="40dp"/>
             </androidx.cardview.widget.CardView>
 
 
@@ -127,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:orientation="vertical"
             android:layout_weight="1">
             <TextView
                 android:textSize="10dp"
@@ -140,6 +140,8 @@
                 android:id="@+id/item_name_txtview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="#000000"
                 android:text=":Item1"/>
         </LinearLayout>
@@ -147,6 +149,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:gravity="center"
+            android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <TextView
@@ -160,6 +163,8 @@
                 android:textSize="10dp"
                 android:id="@+id/loc_txtview"
                 android:layout_width="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
                 android:text=":Location1"/>
@@ -167,6 +172,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:gravity="center"
+            android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_weight="1">
             <TextView
@@ -180,6 +186,8 @@
                 android:textSize="10dp"
                 android:id="@+id/area_txtview"
                 android:layout_width="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:layout_height="wrap_content"
                 android:textColor="#000000"
                 android:text=":Area1"/>
@@ -189,12 +197,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:orientation="vertical"
             android:layout_weight="1">
             <TextView
                 android:textSize="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/string_condition_dashboard"
+                android:text="@string/string_condition"
                 android:textColor="#ffffff"/>
 
             <TextView
@@ -202,6 +211,8 @@
                 android:id="@+id/cndt_txtview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="#000000"
                 android:text=":Condition1"/>
         </LinearLayout>

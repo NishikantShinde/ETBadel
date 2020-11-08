@@ -88,11 +88,13 @@ public class ProfileSenderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private int itemId = 2;
+    private int itemId = 2; // HardCoded
+//    private int itemId;
     private int selectedImg = 0;
     ItemModel itemModel;
-    public ProfileSenderFragment() {
+    public ProfileSenderFragment(int itemId) {
         // Required empty public constructor
+//        this.itemId=itemId;
     }
 
     /**
@@ -105,7 +107,7 @@ public class ProfileSenderFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static ProfileSenderFragment newInstance(String param1, String param2) {
-        ProfileSenderFragment fragment = new ProfileSenderFragment();
+        ProfileSenderFragment fragment = new ProfileSenderFragment(0);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -236,12 +238,18 @@ public class ProfileSenderFragment extends Fragment {
                                 Glide.with(getContext()).load(itemModel.getImg1_url()).into(itemImg);
                             }
                             if (itemModel.getImg2_url()!=null){
+                                img2.setVisibility(View.VISIBLE);
                                 imageList.add(itemModel.getImg2_url());
                                 Glide.with(getContext()).load(itemModel.getImg2_url()).into(img2);
+                            }else {
+                                img2.setVisibility(View.GONE);
                             }
                             if (itemModel.getImg3_url()!=null){
+                                img3.setVisibility(View.VISIBLE);
                                 imageList.add(itemModel.getImg3_url());
                                 Glide.with(getContext()).load(itemModel.getImg3_url()).into(img3);
+                            }else {
+                                img3.setVisibility(View.GONE);
                             }
 
                         } else {

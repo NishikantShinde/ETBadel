@@ -53,7 +53,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.Notifica
         holder.dashboardCardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                replaceFragmentInterface.performCLick();
+                replaceFragmentInterface.performCLick(itemModels.get(position).getId());
             }
         });
     }

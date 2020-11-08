@@ -67,7 +67,7 @@ public class NotificationsFragment extends Fragment {
         recyclerViewNotification.setAdapter(notificationAdapter);
         progressLayout.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        Controller.getInstance(getContext()).getNotificationsById(1, new NotificationCallback());
+        Controller.getInstance(getContext()).getNotificationsById(1, new NotificationCallback()); //HardCoded
         return root;
     }
 
@@ -92,7 +92,8 @@ public class NotificationsFragment extends Fragment {
                             AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
                             Log.e("status", "error " + error);
                         }
-
+                        progressLayout.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -149,15 +150,11 @@ public class NotificationsFragment extends Fragment {
                     }
                 }
             }
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
-            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }
 }
