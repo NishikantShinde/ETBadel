@@ -26,7 +26,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:layout_height="300dp"
+            android:layout_height="@dimen/image_size"
             android:elevation="0dp"
             app:cardCornerRadius="40dp">
             <ImageView
@@ -68,8 +68,8 @@
                 app:cardCornerRadius="15dp">
             <ImageView
                 android:id="@+id/sub_img_1"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="@dimen/sub_image_size"
+                android:layout_height="@dimen/sub_image_size"
                 android:scaleType="fitXY"/>
             </androidx.cardview.widget.CardView>
 
@@ -87,8 +87,8 @@
                 app:cardCornerRadius="15dp">
                 <ImageView
                     android:id="@+id/sub_img_2"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="@dimen/sub_image_size"
+                    android:layout_height="@dimen/sub_image_size"
                     android:scaleType="fitXY"/>
             </androidx.cardview.widget.CardView>
 
