@@ -10,10 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/notification_recyclerview"
-
         android:paddingTop="5dp"
         android:paddingBottom="5dp"/>
 
+    <LinearLayout
+        android:id="@+id/no_noti_layout"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="200dp"
+
+            android:alpha="0.5"
+            android:src="@drawable/ic_icon05_notification"
+            android:layout_height="200dp"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:text="@string/no_notifications"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,7 +42,7 @@
         android:background="#000000"
         android:minHeight="750dp"
         android:layout_centerInParent="true"
-        android:alpha="0.6"/>
+            android:alpha="@dimen/alp_value"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"

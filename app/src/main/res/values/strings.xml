@@ -50,7 +50,7 @@
     <string name="edit_email">Email</string>
     <string name="submit_txt">Submit</string>
     <string name="profile_image">Profile Image</string>
-    <string name="string_search">"        Search"</string>
+    <string name="string_search">"Search"</string>
     <string name="string_neighbor">Neighbor</string>
     <string name="string_city">City</string>
     <string name="string_category">Category</string>
@@ -84,6 +84,8 @@
     <string name="same_password_string_error">Please make sure your passwords match</string>
     <string name="notification_txt_string0">is interested in</string>
     <string name="notification_txt_string1">added new item</string>
+    <string name="no_notifications">No notifications</string>
+    <string name="no_post_yet">No Posts Yet</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>

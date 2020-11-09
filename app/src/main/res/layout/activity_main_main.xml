@@ -35,6 +35,7 @@
                     android:id="@+id/title_member"
                     android:layout_width="wrap_content"
                     android:layout_marginRight="15dp"
+                    android:visibility="gone"
                     android:src="@drawable/ic_eng_logo"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -183,7 +184,7 @@
         android:id="@+id/progress_layout"
         android:background="#000000"
         android:gravity="center"
-        android:alpha="0.6"/>
+        android:alpha="@dimen/alp_value"/>
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"

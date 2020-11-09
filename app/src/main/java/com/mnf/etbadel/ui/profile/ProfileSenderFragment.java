@@ -88,15 +88,15 @@ public class ProfileSenderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private int itemId = 2; // HardCoded
-//    private int itemId;
+//    private int itemId = 2; // HardCoded
+    private int itemId;
     private int selectedImg = 0;
     ItemModel itemModel;
     HideShowProgressView hideShowProgressView;
     
     public ProfileSenderFragment(int itemId, HideShowProgressView hideShowProgressView) {
         // Required empty public constructor
-//        this.itemId=itemId;
+        this.itemId=itemId;
         this.hideShowProgressView=hideShowProgressView;
     }
 
@@ -133,6 +133,8 @@ public class ProfileSenderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_sender, container, false);
         ButterKnife.bind(this, view);
+        leftArrow.setVisibility(View.INVISIBLE);
+        rightArrow.setVisibility(View.INVISIBLE);
         hideShowProgressView.showProgress();
         Controller.getInstance(getContext()).getItemById(itemId, new GetItemCallback());
 
@@ -146,6 +148,62 @@ public class ProfileSenderFragment extends Fragment {
                 } else if (selectedImg == 2 && imageList.get(1) != null) {
                     selectedImg = 1;
                     Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                }
+            }
+        });
+
+        img2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imageList.size()>2) {
+                    if (selectedImg == 0) {
+                        selectedImg = 1;
+                        Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(0)).into(img2);
+                        Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                    } else if (selectedImg == 1) {
+                        selectedImg = 0;
+                        Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                        Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                    } else if (selectedImg == 2) {
+                        selectedImg = 0;
+                        Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                        Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                    }
+                }else {
+                    if (selectedImg == 0) {
+                        selectedImg = 1;
+                        Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(0)).into(img2);
+                    } else if (selectedImg == 1) {
+                        selectedImg = 0;
+                        Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                    }
+                }
+            }
+        });
+
+        img3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedImg==0){
+                    selectedImg=2;
+                    Glide.with(getContext()).load(imageList.get(2)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                    Glide.with(getContext()).load(imageList.get(0)).into(img3);
+                }else if (selectedImg==1){
+                    selectedImg=0;
+                    Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                    Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                }else if (selectedImg==2){
+                    selectedImg=0;
+                    Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(1)).into(img2);
                     Glide.with(getContext()).load(imageList.get(2)).into(img3);
                 }
             }

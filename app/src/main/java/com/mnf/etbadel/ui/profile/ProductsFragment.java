@@ -61,6 +61,8 @@ public class ProductsFragment extends Fragment {
     LinearLayout progressLayout;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.no_post_layout)
+    LinearLayout noPostLayout;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -68,13 +70,14 @@ public class ProductsFragment extends Fragment {
 
     RecyclerView itemViewRecyclerview;
     ProfileAdapter profileAdapter;
-    private int profile_id = 1; // HardCoded
+    private int profile_id;
     HideShowProgressView hideShowProgressView;
-//    private int profile_id;
+
+    //    private int profile_id;
     public ProductsFragment(int senderId, HideShowProgressView hideShowProgressView) {
         // Required empty public constructor
-//        profile_id=senderId;
-        this.hideShowProgressView=hideShowProgressView;
+        profile_id=senderId;
+        this.hideShowProgressView = hideShowProgressView;
     }
 
     /**
@@ -109,10 +112,10 @@ public class ProductsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         itemViewRecyclerview = view.findViewById(R.id.item_view_recyclerview);
         ReplaceFragmentInterface replaceFragmentInterface = (ReplaceFragmentInterface) getActivity();
-        ArrayList<ItemModel> itemModels= new ArrayList<>();
+        ArrayList<ItemModel> itemModels = new ArrayList<>();
         profileAdapter = new ProfileAdapter(replaceFragmentInterface, getContext(), itemModels);
         itemViewRecyclerview.setHasFixedSize(true);
         LinearLayoutManager layoutManagerFirst = new GridLayoutManager(getContext(), 3);
@@ -145,12 +148,19 @@ public class ProductsFragment extends Fragment {
                             UserModel userModel = gson.fromJson(model.toString(), UserModel.class);
                             ArrayList<ItemModel> itemModelList = gson.fromJson(items.toString(), new TypeToken<List<ItemModel>>() {
                             }.getType());
-                            setDataToUI(userModel, itemModelList);
+                            if (itemModelList.size()>0) {
+                                itemViewRecyclerview.setVisibility(View.VISIBLE);
+                                noPostLayout.setVisibility(View.GONE);
+                                setDataToUI(userModel, itemModelList);
+                            }else {
+                                noPostLayout.setVisibility(View.VISIBLE);
+                                itemViewRecyclerview.setVisibility(View.GONE);
+                            }
                             Log.e("status", "success");
 
                         } else {
                             String error = jsonObject.getString("Message");
-                            AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
+                            AppConstants.showErroDIalog(error, getActivity().getSupportFragmentManager());
                             Log.e("status", "error " + error);
                         }
 
@@ -165,17 +175,17 @@ public class ProductsFragment extends Fragment {
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             hideShowProgressView.hideProgress();
-            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
         }
     }
 
     private void setDataToUI(UserModel userModel, ArrayList<ItemModel> itemModelList) {
-        if (userModel.getProfile_Image_url()!=null){
+        if (userModel.getProfile_Image_url() != null) {
             Glide.with(getContext()).load(userModel.getProfile_Image_url()).into(profileImage);
         }
-        if (userModel.getF_Name()!=null && userModel.getL_Name()!=null){
-            txtName.setText(userModel.getF_Name()+" "+userModel.getL_Name());
-        }else if (userModel.getF_Name()!=null){
+        if (userModel.getF_Name() != null && userModel.getL_Name() != null) {
+            txtName.setText(userModel.getF_Name() + " " + userModel.getL_Name());
+        } else if (userModel.getF_Name() != null) {
             txtName.setText(userModel.getF_Name());
         }
         profileAdapter.updateList(itemModelList);
