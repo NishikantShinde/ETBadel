@@ -21,10 +21,10 @@ import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.UserModel;
-import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.profile.adapter.ProfileAdapter;
 import com.mnf.etbadel.util.AppConstants;
 import com.mnf.etbadel.util.EqualSpacingItemDecoration;
+import com.mnf.etbadel.util.HideShowProgressView;
 import com.mnf.etbadel.util.ReplaceFragmentInterface;
 
 import org.json.JSONArray;
@@ -69,10 +69,12 @@ public class ProductsFragment extends Fragment {
     RecyclerView itemViewRecyclerview;
     ProfileAdapter profileAdapter;
     private int profile_id = 1; // HardCoded
+    HideShowProgressView hideShowProgressView;
 //    private int profile_id;
-    public ProductsFragment(int senderId) {
+    public ProductsFragment(int senderId, HideShowProgressView hideShowProgressView) {
         // Required empty public constructor
 //        profile_id=senderId;
+        this.hideShowProgressView=hideShowProgressView;
     }
 
     /**
@@ -85,7 +87,7 @@ public class ProductsFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static ProductsFragment newInstance(String param1, String param2) {
-        ProductsFragment fragment = new ProductsFragment(0);
+        ProductsFragment fragment = new ProductsFragment(0, null);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -120,8 +122,7 @@ public class ProductsFragment extends Fragment {
         itemViewRecyclerview.scrollToPosition(0);
         itemViewRecyclerview.addItemDecoration(new EqualSpacingItemDecoration(10));
 
-        progressLayout.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        hideShowProgressView.showProgress();
         Controller.getInstance(getContext()).getProfile(profile_id, new GetProfileCallback());
         return view.getRootView();
     }
@@ -158,14 +159,12 @@ public class ProductsFragment extends Fragment {
                     }
                 }
             }
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            hideShowProgressView.hideProgress();
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            hideShowProgressView.hideProgress();
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }

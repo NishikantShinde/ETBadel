@@ -23,6 +23,7 @@ import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.ui.dashboard.adapter.DashboardAdapter;
 import com.mnf.etbadel.util.AppConstants;
+import com.mnf.etbadel.util.HideShowProgressView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,6 +58,11 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     ArrayList<ItemModel> itemsModelList = new ArrayList<>();
     List<DropdownModel> dropdownModelsList = new ArrayList<>();
     DashboardAdapter dashboardAdapter;
+    HideShowProgressView hideShowProgressView;
+    public DashboardFragment(HideShowProgressView hideShowProgressView) {
+        this.hideShowProgressView=hideShowProgressView;
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -76,8 +82,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
         isCategoryServicecompleted=false;
         isItemModelServciecompleted=false;
         controller = Controller.getInstance(getContext());
-        progressLayout.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        hideShowProgressView.showProgress();
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
         controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
     }
@@ -96,14 +101,12 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
 
     @Override
     public void showProgress() {
-        progressLayout.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        hideShowProgressView.showProgress();
     }
 
     @Override
     public void hideProgress() {
-        progressLayout.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
+        hideShowProgressView.hideProgress();
     }
 
     public class CategoriesLayoutClass extends LinearLayout {
@@ -163,8 +166,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                 }
             }
             if(isItemModelServciecompleted){
-                progressBar.setVisibility(View.GONE);
-                progressLayout.setVisibility(View.GONE);
+                hideShowProgressView.hideProgress();
             }
         }
 
@@ -173,8 +175,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
             isCategoryServicecompleted=true;
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
             if(isItemModelServciecompleted){
-                progressBar.setVisibility(View.GONE);
-                progressLayout.setVisibility(View.GONE);
+                hideShowProgressView.hideProgress();
             }
         }
     }
@@ -208,8 +209,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                 }
             }
             if(isCategoryServicecompleted){
-                progressBar.setVisibility(View.GONE);
-                progressLayout.setVisibility(View.GONE);
+                hideShowProgressView.hideProgress();
             }
         }
 
@@ -218,8 +218,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
             isItemModelServciecompleted=true;
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
             if(isCategoryServicecompleted){
-                progressBar.setVisibility(View.GONE);
-                progressLayout.setVisibility(View.GONE);
+                hideShowProgressView.hideProgress();
             }
         }
     }

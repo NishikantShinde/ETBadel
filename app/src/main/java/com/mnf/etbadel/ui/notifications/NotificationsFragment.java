@@ -23,6 +23,7 @@ import com.mnf.etbadel.model.NotificationModel;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.notifications.adapter.NotificationAdapter;
 import com.mnf.etbadel.util.AppConstants;
+import com.mnf.etbadel.util.HideShowProgressView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,9 +50,11 @@ public class NotificationsFragment extends Fragment {
     private int user_id;
     NotificationAdapter notificationAdapter;
     NavigationInterface navigationInterface;
+    HideShowProgressView hideShowProgressView;
 
-    public NotificationsFragment(NavigationInterface navigationInterface) {
+    public NotificationsFragment(NavigationInterface navigationInterface, HideShowProgressView hideShowProgressView) {
         this.navigationInterface = navigationInterface;
+        this.hideShowProgressView=hideShowProgressView;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -65,8 +68,7 @@ public class NotificationsFragment extends Fragment {
         notificationAdapter = new NotificationAdapter(getContext(), notificationModelArrayList, navigationInterface);
         recyclerViewNotification.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewNotification.setAdapter(notificationAdapter);
-        progressLayout.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        hideShowProgressView.showProgress();
         Controller.getInstance(getContext()).getNotificationsById(1, new NotificationCallback()); //HardCoded
         return root;
     }
@@ -92,21 +94,18 @@ public class NotificationsFragment extends Fragment {
                             AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
                             Log.e("status", "error " + error);
                         }
-                        progressLayout.setVisibility(View.GONE);
-                        progressBar.setVisibility(View.GONE);
+                  hideShowProgressView.hideProgress();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            hideShowProgressView.hideProgress();
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            hideShowProgressView.hideProgress();
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }
@@ -121,8 +120,7 @@ public class NotificationsFragment extends Fragment {
         if (!ids.equals("")) {
             ids = ids.substring(0, ids.length() - 1);
             Log.e("", "");
-            progressLayout.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.VISIBLE);
+            hideShowProgressView.showProgress();
             Controller.getInstance(getContext()).readNotification(ids, new UnreadNotificationCallback());
         }
     }
@@ -131,8 +129,7 @@ public class NotificationsFragment extends Fragment {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
             if (response.isSuccessful()) {
-                progressLayout.setVisibility(View.GONE);
-                progressBar.setVisibility(View.GONE);
+                hideShowProgressView.hideProgress();
                 if (response.body() != null) {
                     try {
                         JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
@@ -155,6 +152,8 @@ public class NotificationsFragment extends Fragment {
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
+            hideShowProgressView.hideProgress();
+            AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }
 }

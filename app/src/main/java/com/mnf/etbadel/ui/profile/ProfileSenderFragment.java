@@ -21,8 +21,8 @@ import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.NotificationModel;
-import com.mnf.etbadel.ui.dashboard.adapter.DashboardAdapter;
 import com.mnf.etbadel.util.AppConstants;
+import com.mnf.etbadel.util.HideShowProgressView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -92,9 +92,12 @@ public class ProfileSenderFragment extends Fragment {
 //    private int itemId;
     private int selectedImg = 0;
     ItemModel itemModel;
-    public ProfileSenderFragment(int itemId) {
+    HideShowProgressView hideShowProgressView;
+    
+    public ProfileSenderFragment(int itemId, HideShowProgressView hideShowProgressView) {
         // Required empty public constructor
 //        this.itemId=itemId;
+        this.hideShowProgressView=hideShowProgressView;
     }
 
     /**
@@ -107,7 +110,7 @@ public class ProfileSenderFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static ProfileSenderFragment newInstance(String param1, String param2) {
-        ProfileSenderFragment fragment = new ProfileSenderFragment(0);
+        ProfileSenderFragment fragment = new ProfileSenderFragment(0, null);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -130,8 +133,7 @@ public class ProfileSenderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_sender, container, false);
         ButterKnife.bind(this, view);
-        progressLayout.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
+        hideShowProgressView.showProgress();
         Controller.getInstance(getContext()).getItemById(itemId, new GetItemCallback());
 
         leftArrow.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +175,7 @@ public class ProfileSenderFragment extends Fragment {
                 notificationModel.setUser_Id(itemModel.getUser_Id());
                 notificationModel.setSender_Id(senderId);
                 notificationModel.setItem_Id(itemModel.getId());
+                hideShowProgressView.showProgress();
                 Controller.getInstance(getContext()).saveNotification(notificationModel, new NotificationSaveCallback());
             }
         });
@@ -264,14 +267,12 @@ public class ProfileSenderFragment extends Fragment {
                 }
             }
 
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            hideShowProgressView.hideProgress();
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            hideShowProgressView.hideProgress();
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }
@@ -292,6 +293,7 @@ public class ProfileSenderFragment extends Fragment {
                             Log.e("status", "success");
                         } else {
                             String error = jsonObject.getString("Message");
+                            AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
                             Log.e("status", "error " + error);
                         }
 
@@ -301,12 +303,12 @@ public class ProfileSenderFragment extends Fragment {
 
                 }
             }
+            hideShowProgressView.hideProgress();
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            progressLayout.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            hideShowProgressView.hideProgress();
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
     }

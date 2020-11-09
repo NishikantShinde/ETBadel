@@ -253,6 +253,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:minHeight="750dp"
+        android:visibility="gone"
         android:id="@+id/progress_layout"
         android:background="#000000"
         android:gravity="center"

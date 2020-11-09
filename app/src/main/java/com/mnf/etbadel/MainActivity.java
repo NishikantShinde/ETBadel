@@ -5,15 +5,19 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 
-import com.esafirm.imagepicker.features.ImagePicker;
-import com.esafirm.imagepicker.model.Image;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mikepenz.actionitembadge.library.utils.BadgeStyle;
@@ -25,7 +29,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
-import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.ads.AdsFragment;
@@ -36,18 +39,9 @@ import com.mnf.etbadel.ui.profile.MyProfileActivity;
 import com.mnf.etbadel.ui.profile.ProductsFragment;
 import com.mnf.etbadel.ui.profile.ProfileSenderFragment;
 import com.mnf.etbadel.util.AppConstants;
-import com.mnf.etbadel.util.ErrorAlertDialogDialogFragment;
+import com.mnf.etbadel.util.HideShowProgressView;
 import com.mnf.etbadel.util.LogoutFragment;
 import com.mnf.etbadel.util.ReplaceFragmentInterface;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +50,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,28 +60,34 @@ import ru.nikartm.support.ImageBadgeView;
 
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_ADD_PRODUCTS;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_DASHBOARD;
-import static com.mnf.etbadel.util.AppConstants.FRAGMENT_PRODUCTS;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_NOTIFICATION_LIST;
+import static com.mnf.etbadel.util.AppConstants.FRAGMENT_PRODUCTS;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_SENDER_PROFILE;
 
-public class MainActivity extends AppCompatActivity implements ReplaceFragmentInterface, NavigationInterface {
+public class MainActivity extends AppCompatActivity implements ReplaceFragmentInterface, NavigationInterface, HideShowProgressView {
 
     Drawable drawableNotification;
     Drawable drawableChat;
     Menu menu;
+    @BindView(R.id.progress_layout)
+    LinearLayout progressLayout;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
     private Drawer result = null;
     Toolbar toolbar;
     BadgeStyle style;
     ImageBadgeView ibvIconNotification;
     LinearLayout floatingActionButton;
     ImageBadgeView imageBadgeView;
-//    DrawerHeaderView drawerHeaderView;
+    //    DrawerHeaderView drawerHeaderView;
     private Controller controller;
-    private int selectedCategory=0;
-    private String searchKeyword="";
-    private int senderId=0;
+    private int selectedCategory = 0;
+    private String searchKeyword = "";
+    private int senderId = 0;
     SharedPreferences sharedPreferences;
-    int itemId=0;
+    HideShowProgressView hideShowProgressView;
+    int itemId = 0;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_main);
+        ButterKnife.bind(this);
+        hideShowProgressView=this;
 //        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 //        BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -114,31 +118,31 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 //        NavigationUI.setupWithNavController(navView, navController);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        floatingActionButton=findViewById(R.id.floating_button);
-        imageBadgeView= findViewById(R.id.ibv_icon_notification);
+        floatingActionButton = findViewById(R.id.floating_button);
+        imageBadgeView = findViewById(R.id.ibv_icon_notification);
         setSupportActionBar(toolbar);
         setNavigationView(toolbar, savedInstanceState);
-        sharedPreferences= getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME,MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, MODE_PRIVATE);
         init();
         drawableNotification = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null);
         drawableChat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_home_black_24dp, null);
         style = new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#FE0665"), Color.parseColor("#CC0548"), Color.parseColor("#EEEEEE"));
-        ibvIconNotification=findViewById(R.id.ibv_icon_notification);
+        ibvIconNotification = findViewById(R.id.ibv_icon_notification);
         ibvIconNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setFragmentToDisplay(FRAGMENT_NOTIFICATION_LIST,null,true);
+                setFragmentToDisplay(FRAGMENT_NOTIFICATION_LIST, null, true);
             }
         });
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
-                if (userId!=0){
-                    setFragmentToDisplay(FRAGMENT_ADD_PRODUCTS,null,true);
-                }else {
-                    Intent intent= new Intent(MainActivity.this, LoginActivity.class);
+                int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+                if (userId != 0) {
+                    setFragmentToDisplay(FRAGMENT_ADD_PRODUCTS, null, true);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
 
@@ -152,8 +156,8 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     }
 
     private void init() {
-        int lang=0;
-        controller= Controller.getInstance(this);
+        int lang = 0;
+        controller = Controller.getInstance(this);
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
         controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
     }
@@ -162,10 +166,10 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     protected void onResume() {
         super.onResume();
 
-        int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
-        if (userId!=0){
+        int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+        if (userId != 0) {
             controller.unreadByUser(userId, new UnreadNotificationsCallback());
-        }else {
+        } else {
             imageBadgeView.clearBadge();
         }
     }
@@ -268,68 +272,68 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         String fragmentTag = "";
-        if(!isBottomMenu) {
+        if (!isBottomMenu) {
             switch (index) {
                 case FRAGMENT_DASHBOARD:
-                    fragment = new DashboardFragment();
+                    fragment = new DashboardFragment(hideShowProgressView);
                     fragmentTag = "dashboardFragment";
 //                title.setText(G7Constants.DASHBOARD_TITLE);
                     break;
-            case AppConstants.FRAGMENT_PROFILE:
-                int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
-                if (userId!=0) {
-                    Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
-                    startActivity(i);
-                }else {
-                    Intent intent= new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-                }
+                case AppConstants.FRAGMENT_PROFILE:
+                    int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+                    if (userId != 0) {
+                        Intent i = new Intent(MainActivity.this, MyProfileActivity.class);
+                        startActivity(i);
+                    } else {
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        startActivity(intent);
+                    }
 
-                break;
-            case AppConstants.FRAGMENT_SENDER_PROFILE:
-                fragment = new ProductsFragment(senderId);
-                fragmentTag = "profileFragment";
-                break;
-            case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
+                    break;
+                case FRAGMENT_SENDER_PROFILE:
+                    fragment = new ProductsFragment(senderId,hideShowProgressView);
+                    fragmentTag = "profileFragment";
+                    break;
+                case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
 //                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
 //                startActivity(i);
-                break;
-
-            case AppConstants.FRAGMENT_ADS:
-                fragment = new AdsFragment();
-                fragmentTag = "profileFragment";
                     break;
 
-            case AppConstants.FRAGMENT_LOGOUT:
-                LogoutFragment alertDialog = LogoutFragment.newInstance("","");
-                alertDialog.show(getSupportFragmentManager(), "fragment_alert");
+                case AppConstants.FRAGMENT_ADS:
+                    fragment = new AdsFragment();
+                    fragmentTag = "profileFragment";
+                    break;
+
+                case AppConstants.FRAGMENT_LOGOUT:
+                    LogoutFragment alertDialog = LogoutFragment.newInstance("", "");
+                    alertDialog.show(getSupportFragmentManager(), "fragment_alert");
                     break;
 
             }
-        }else {
-            if(index==AppConstants.FRAGMENT_NOTIFICATION_LIST){
-                int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
-                if (userId!=0) {
-                    fragment = new NotificationsFragment(this);
+        } else {
+            if (index == FRAGMENT_NOTIFICATION_LIST) {
+                int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+                if (userId != 0) {
+                    fragment = new NotificationsFragment(this,hideShowProgressView);
                     fragmentTag = "notification list";
-                }else {
-                    Intent intent= new Intent(this, LoginActivity.class);
+                } else {
+                    Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 }
             }
 
-            if(index==AppConstants.FRAGMENT_PRODUCTS){
-                fragment=new ProfileSenderFragment(itemId);
-               fragmentTag="profile sender frahment";
+            if (index == FRAGMENT_PRODUCTS) {
+                fragment = new ProfileSenderFragment(itemId,hideShowProgressView);
+                fragmentTag = "profile sender frahment";
             }
 
-            if(index==AppConstants.FRAGMENT_ADD_PRODUCTS){
-                int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
-                if (userId!=0) {
-                    fragment=new AddItemFragment(this);
-                    fragmentTag="Add Item fragment";
-                }else {
-                    Intent intent= new Intent(this, LoginActivity.class);
+            if (index == FRAGMENT_ADD_PRODUCTS) {
+                int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+                if (userId != 0) {
+                    fragment = new AddItemFragment(this);
+                    fragmentTag = "Add Item fragment";
+                } else {
+                    Intent intent = new Intent(this, LoginActivity.class);
                     startActivity(intent);
                 }
 
@@ -343,18 +347,30 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 
     @Override
     public void performCLick(int i) {
-        itemId=i;
-        setFragmentToDisplay(FRAGMENT_PRODUCTS,null,true);
+        itemId = i;
+        setFragmentToDisplay(FRAGMENT_PRODUCTS, null, true);
     }
 
     @Override
     public void NavigateFragment(int i) {
-        if (i==0){
-            setFragmentToDisplay(FRAGMENT_DASHBOARD,null,false);
-        }else {
+        if (i == 0) {
+            setFragmentToDisplay(FRAGMENT_DASHBOARD, null, false);
+        } else {
             senderId = i;
-            setFragmentToDisplay(FRAGMENT_SENDER_PROFILE,null,false);
+            setFragmentToDisplay(FRAGMENT_SENDER_PROFILE, null, false);
         }
+    }
+
+    @Override
+    public void showProgress() {
+        progressLayout.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     private class CategoriesCallback implements Callback<ResponseBody> {
@@ -368,9 +384,10 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                         if (!modelStr.equals("null")) {
                             JSONArray model = jsonObject.getJSONArray("Model");
                             Gson gson = new Gson();
-                            List<DropdownModel> dropdownModelList = gson.fromJson(model.toString(), new TypeToken<List<DropdownModel>>(){}.getType());
-                        }else {
-                            String error= jsonObject.getString("Message");
+                            List<DropdownModel> dropdownModelList = gson.fromJson(model.toString(), new TypeToken<List<DropdownModel>>() {
+                            }.getType());
+                        } else {
+                            String error = jsonObject.getString("Message");
                         }
 
                     } catch (JSONException e) {
@@ -401,8 +418,8 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                             Gson gson = new Gson();
                             List<ItemModel> itemModelList = gson.fromJson(model.toString(), new TypeToken<List<ItemModel>>() {
                             }.getType());
-                        }else {
-                            String error= jsonObject.getString("Message");
+                        } else {
+                            String error = jsonObject.getString("Message");
                         }
 
                     } catch (JSONException e) {
@@ -428,7 +445,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     try {
                         JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
                         int modelStr = jsonObject.getInt("Model");
-                        if (modelStr!=0) {
+                        if (modelStr != 0) {
                             imageBadgeView.setBadgeValue(modelStr);
                         } else {
                             imageBadgeView.clearBadge();
