@@ -2,9 +2,12 @@ package com.mnf.etbadel.ui.dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
@@ -32,6 +36,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +44,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
 
 public class DashboardFragment extends Fragment implements DashboardAdapter.HideShowProgress {
 
@@ -50,6 +56,10 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     LinearLayout progressLayout;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.et_search)
+    EditText etSearch;
+    @BindView(R.id.no_post)
+    LinearLayout noPost;
     private Controller controller;
     private int selectedCategory = 0;
     private String searchKeyword = "";
@@ -59,8 +69,9 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     List<DropdownModel> dropdownModelsList = new ArrayList<>();
     DashboardAdapter dashboardAdapter;
     HideShowProgressView hideShowProgressView;
+
     public DashboardFragment(HideShowProgressView hideShowProgressView) {
-        this.hideShowProgressView=hideShowProgressView;
+        this.hideShowProgressView = hideShowProgressView;
     }
 
 
@@ -70,7 +81,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
         ButterKnife.bind(this, root);
         categoriesMainLayout = root.findViewById(R.id.categories_main_layout);
         categoriesLayoutClasses = new ArrayList<>();
-        dashboardAdapter = new DashboardAdapter((MainActivity) getActivity(), getContext(), itemsModelList,this);
+        dashboardAdapter = new DashboardAdapter((MainActivity) getActivity(), getContext(), itemsModelList, this);
         dashboardRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         dashboardRecyclerview.setAdapter(dashboardAdapter);
         init();
@@ -79,12 +90,53 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
 
     private void init() {
         int lang = 0;
-        isCategoryServicecompleted=false;
-        isItemModelServciecompleted=false;
+        isCategoryServicecompleted = false;
+        isItemModelServciecompleted = false;
         controller = Controller.getInstance(getContext());
         hideShowProgressView.showProgress();
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
         controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (etSearch.getText().toString().length()==0){
+                    searchKeyword="";
+                    hideShowProgressView.showProgress();
+                    controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        Observable<String> obs = RxTextView.textChanges(etSearch)
+                .filter(charSequence -> charSequence.length() >= 3)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .map(charSequence -> charSequence.toString());
+
+        obs.subscribe(string -> {
+            fetchData();
+        });
+
+    }
+
+    private void fetchData() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                searchKeyword = etSearch.getText().toString().trim();
+                hideShowProgressView.showProgress();
+                controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+            }
+        });
+
     }
 
     private void setCategories(List<DropdownModel> dropdownModelList) {
@@ -133,6 +185,8 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                         }
                     }
                     selectedCategory = dropdownModel.getId();
+                    hideShowProgressView.showProgress();
+                    controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
                 }
             });
             categoriesTxtview.setText(dropdownModel.getName());
@@ -142,7 +196,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     private class CategoriesCallback implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-            isCategoryServicecompleted=true;
+            isCategoryServicecompleted = true;
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     try {
@@ -153,7 +207,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                             Gson gson = new Gson();
                             List<DropdownModel> dropdownModelList = gson.fromJson(model.toString(), new TypeToken<List<DropdownModel>>() {
                             }.getType());
-                            dropdownModelsList=dropdownModelList;
+                            dropdownModelsList = dropdownModelList;
                             setCategories(dropdownModelList);
                         } else {
                             String error = jsonObject.getString("Message");
@@ -165,16 +219,16 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                     }
                 }
             }
-            if(isItemModelServciecompleted){
+            if (isItemModelServciecompleted) {
                 hideShowProgressView.hideProgress();
             }
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            isCategoryServicecompleted=true;
+            isCategoryServicecompleted = true;
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
-            if(isItemModelServciecompleted){
+            if (isItemModelServciecompleted) {
                 hideShowProgressView.hideProgress();
             }
         }
@@ -183,7 +237,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     private class ItemsCallback implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-            isItemModelServciecompleted=true;
+            isItemModelServciecompleted = true;
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     try {
@@ -194,9 +248,16 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                             Gson gson = new Gson();
                             ArrayList<ItemModel> itemModelList = gson.fromJson(model.toString(), new TypeToken<List<ItemModel>>() {
                             }.getType());
-                            itemsModelList=itemModelList;
-                            dashboardAdapter.updateList(itemModelList);
-                            dashboardRecyclerview.scrollToPosition(0);
+                            if (itemModelList.size()>0) {
+                                dashboardRecyclerview.setVisibility(View.VISIBLE);
+                                noPost.setVisibility(View.GONE);
+                                itemsModelList = itemModelList;
+                                dashboardAdapter.updateList(itemModelList);
+                                dashboardRecyclerview.scrollToPosition(0);
+                            }else {
+                                dashboardRecyclerview.setVisibility(View.GONE);
+                                noPost.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             String error = jsonObject.getString("Message");
                             AppConstants.showErroDIalog(error, getActivity().getSupportFragmentManager());
@@ -208,16 +269,16 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
 
                 }
             }
-            if(isCategoryServicecompleted){
+            if (isCategoryServicecompleted) {
                 hideShowProgressView.hideProgress();
             }
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
-            isItemModelServciecompleted=true;
+            isItemModelServciecompleted = true;
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
-            if(isCategoryServicecompleted){
+            if (isCategoryServicecompleted) {
                 hideShowProgressView.hideProgress();
             }
         }

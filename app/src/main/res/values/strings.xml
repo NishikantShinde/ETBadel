@@ -86,6 +86,9 @@
     <string name="notification_txt_string1">added new item</string>
     <string name="no_notifications">No notifications</string>
     <string name="no_post_yet">No Posts Yet</string>
+    <string name="send_trade_offer">Send Trade Offer?</string>
+    <string name="send_trade_offer_desc">The receiver of this offer will let you know which of your item(s) they are interested to trade you for</string>
+    <string name="trade_success">Trade Offer Successfully Sent</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>

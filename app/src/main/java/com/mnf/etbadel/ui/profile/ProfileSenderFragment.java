@@ -21,8 +21,11 @@ import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.NotificationModel;
+import com.mnf.etbadel.ui.dashboard.adapter.DashboardAdapter;
 import com.mnf.etbadel.util.AppConstants;
 import com.mnf.etbadel.util.HideShowProgressView;
+import com.mnf.etbadel.util.SucessDialogFragment;
+import com.mnf.etbadel.util.TradeFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -227,14 +230,23 @@ public class ProfileSenderFragment extends Fragment {
         btnTrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences= getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
-                int senderId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
-                NotificationModel notificationModel= new NotificationModel();
-                notificationModel.setUser_Id(itemModel.getUser_Id());
-                notificationModel.setSender_Id(senderId);
-                notificationModel.setItem_Id(itemModel.getId());
-                hideShowProgressView.showProgress();
-                Controller.getInstance(getContext()).saveNotification(notificationModel, new NotificationSaveCallback());
+                TradeFragment.CallbackInterface callbackInterface=new TradeFragment.CallbackInterface() {
+                    @Override
+                    public void doCallbackOnClick() {
+                        SharedPreferences sharedPreferences= getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+                        int senderId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+                        NotificationModel notificationModel= new NotificationModel();
+                        notificationModel.setUser_Id(itemModel.getUser_Id());
+                        notificationModel.setSender_Id(senderId);
+                        notificationModel.setItem_Id(itemModel.getId());
+                        hideShowProgressView.showProgress();
+                        Controller.getInstance(getContext()).saveNotification(notificationModel, new NotificationSaveCallback());
+                    }
+                };
+                TradeFragment alertDialog = new TradeFragment();
+                alertDialog.setInterfaceInstance(callbackInterface);
+                alertDialog.show(getActivity().getSupportFragmentManager(), "fragment_alert");
+
             }
         });
         return view.getRootView();
@@ -348,6 +360,8 @@ public class ProfileSenderFragment extends Fragment {
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
                             NotificationModel notificationModel = gson.fromJson(model.toString(), NotificationModel.class);
+                            SucessDialogFragment sucessDialogFragment=new SucessDialogFragment();
+                            sucessDialogFragment.show(getActivity().getSupportFragmentManager(),"");
                             Log.e("status", "success");
                         } else {
                             String error = jsonObject.getString("Message");

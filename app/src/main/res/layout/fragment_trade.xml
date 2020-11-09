@@ -19,13 +19,15 @@
         android:textSize="16dp"
         android:textStyle="bold"
         android:layout_height="wrap_content"
-        android:text="Trade Item?"
+        android:text="@string/send_trade_offer"
         android:textColor="#000000"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_height="wrap_content"
-        android:text="Do you really want to trade item?" />
+        android:text="@string/send_trade_offer_desc" />
 
     <LinearLayout
         android:layout_width="match_parent"
