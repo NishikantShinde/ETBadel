@@ -362,6 +362,14 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     }
 
     @Override
+    public void updateNotificationCount() {
+        int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+        if (userId != 0) {
+            controller.unreadByUser(userId, new UnreadNotificationsCallback());
+        }
+    }
+
+    @Override
     public void showProgress() {
         progressLayout.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);

@@ -181,7 +181,7 @@
         android:id="@+id/progress_layout"
         android:background="#000000"
         android:gravity="center"
-        android:alpha="0.6"/>
+            android:alpha="@dimen/alp_value"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"

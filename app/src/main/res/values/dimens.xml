@@ -9,4 +9,6 @@
     <dimen name="image_size">300dp</dimen>
     <dimen name="frag_image_size">350dp</dimen>
     <dimen name="sub_image_size">60dp</dimen>
+
+    <item name="alp_value" type="dimen" format="float">0.4</item>
 </resources>

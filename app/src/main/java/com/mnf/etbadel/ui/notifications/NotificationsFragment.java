@@ -46,6 +46,8 @@ public class NotificationsFragment extends Fragment {
     LinearLayout progressLayout;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.no_noti_layout)
+    LinearLayout noNotifications;
     private SharedPreferences sharedPreferences;
     private int user_id;
     NotificationAdapter notificationAdapter;
@@ -69,7 +71,7 @@ public class NotificationsFragment extends Fragment {
         recyclerViewNotification.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewNotification.setAdapter(notificationAdapter);
         hideShowProgressView.showProgress();
-        Controller.getInstance(getContext()).getNotificationsById(1, new NotificationCallback()); //HardCoded
+        Controller.getInstance(getContext()).getNotificationsById(user_id, new NotificationCallback()); //HardCoded
         return root;
     }
 
@@ -86,9 +88,15 @@ public class NotificationsFragment extends Fragment {
                             Gson gson = new Gson();
                             ArrayList<NotificationModel> notificationModels = gson.fromJson(model.toString(), new TypeToken<List<NotificationModel>>() {
                             }.getType());
-                            notificationAdapter.updateList(notificationModels);
-                            if (notificationModels.size()>0)
+                            if (notificationModels.size()>0) {
+                                notificationAdapter.updateList(notificationModels);
+                                recyclerViewNotification.setVisibility(View.VISIBLE);
+                                noNotifications.setVisibility(View.GONE);
                                 updateServer(notificationModels);
+                            }else {
+                                recyclerViewNotification.setVisibility(View.GONE);
+                                noNotifications.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             String error = jsonObject.getString("Message");
                             AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
@@ -135,7 +143,7 @@ public class NotificationsFragment extends Fragment {
                         JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
                         boolean modelStr = jsonObject.getBoolean("Success");
                         if (modelStr) {
-
+                            navigationInterface.updateNotificationCount();
                         } else {
                             String error = jsonObject.getString("Message");
                             AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());

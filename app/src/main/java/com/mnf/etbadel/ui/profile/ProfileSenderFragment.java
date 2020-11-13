@@ -21,8 +21,11 @@ import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.NotificationModel;
+import com.mnf.etbadel.ui.dashboard.adapter.DashboardAdapter;
 import com.mnf.etbadel.util.AppConstants;
 import com.mnf.etbadel.util.HideShowProgressView;
+import com.mnf.etbadel.util.SucessDialogFragment;
+import com.mnf.etbadel.util.TradeFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,15 +91,15 @@ public class ProfileSenderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private int itemId = 2; // HardCoded
-//    private int itemId;
+//    private int itemId = 2; // HardCoded
+    private int itemId;
     private int selectedImg = 0;
     ItemModel itemModel;
     HideShowProgressView hideShowProgressView;
     
     public ProfileSenderFragment(int itemId, HideShowProgressView hideShowProgressView) {
         // Required empty public constructor
-//        this.itemId=itemId;
+        this.itemId=itemId;
         this.hideShowProgressView=hideShowProgressView;
     }
 
@@ -133,6 +136,8 @@ public class ProfileSenderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile_sender, container, false);
         ButterKnife.bind(this, view);
+        leftArrow.setVisibility(View.INVISIBLE);
+        rightArrow.setVisibility(View.INVISIBLE);
         hideShowProgressView.showProgress();
         Controller.getInstance(getContext()).getItemById(itemId, new GetItemCallback());
 
@@ -146,6 +151,62 @@ public class ProfileSenderFragment extends Fragment {
                 } else if (selectedImg == 2 && imageList.get(1) != null) {
                     selectedImg = 1;
                     Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                }
+            }
+        });
+
+        img2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imageList.size()>2) {
+                    if (selectedImg == 0) {
+                        selectedImg = 1;
+                        Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(0)).into(img2);
+                        Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                    } else if (selectedImg == 1) {
+                        selectedImg = 0;
+                        Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                        Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                    } else if (selectedImg == 2) {
+                        selectedImg = 0;
+                        Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                        Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                    }
+                }else {
+                    if (selectedImg == 0) {
+                        selectedImg = 1;
+                        Glide.with(getContext()).load(imageList.get(1)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(0)).into(img2);
+                    } else if (selectedImg == 1) {
+                        selectedImg = 0;
+                        Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                        Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                    }
+                }
+            }
+        });
+
+        img3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedImg==0){
+                    selectedImg=2;
+                    Glide.with(getContext()).load(imageList.get(2)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                    Glide.with(getContext()).load(imageList.get(0)).into(img3);
+                }else if (selectedImg==1){
+                    selectedImg=0;
+                    Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(1)).into(img2);
+                    Glide.with(getContext()).load(imageList.get(2)).into(img3);
+                }else if (selectedImg==2){
+                    selectedImg=0;
+                    Glide.with(getContext()).load(imageList.get(0)).into(itemImg);
+                    Glide.with(getContext()).load(imageList.get(1)).into(img2);
                     Glide.with(getContext()).load(imageList.get(2)).into(img3);
                 }
             }
@@ -169,14 +230,23 @@ public class ProfileSenderFragment extends Fragment {
         btnTrade.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences= getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
-                int senderId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
-                NotificationModel notificationModel= new NotificationModel();
-                notificationModel.setUser_Id(itemModel.getUser_Id());
-                notificationModel.setSender_Id(senderId);
-                notificationModel.setItem_Id(itemModel.getId());
-                hideShowProgressView.showProgress();
-                Controller.getInstance(getContext()).saveNotification(notificationModel, new NotificationSaveCallback());
+                TradeFragment.CallbackInterface callbackInterface=new TradeFragment.CallbackInterface() {
+                    @Override
+                    public void doCallbackOnClick() {
+                        SharedPreferences sharedPreferences= getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+                        int senderId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+                        NotificationModel notificationModel= new NotificationModel();
+                        notificationModel.setUser_Id(itemModel.getUser_Id());
+                        notificationModel.setSender_Id(senderId);
+                        notificationModel.setItem_Id(itemModel.getId());
+                        hideShowProgressView.showProgress();
+                        Controller.getInstance(getContext()).saveNotification(notificationModel, new NotificationSaveCallback());
+                    }
+                };
+                TradeFragment alertDialog = new TradeFragment();
+                alertDialog.setInterfaceInstance(callbackInterface);
+                alertDialog.show(getActivity().getSupportFragmentManager(), "fragment_alert");
+
             }
         });
         return view.getRootView();
@@ -290,6 +360,8 @@ public class ProfileSenderFragment extends Fragment {
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
                             NotificationModel notificationModel = gson.fromJson(model.toString(), NotificationModel.class);
+                            SucessDialogFragment sucessDialogFragment=new SucessDialogFragment();
+                            sucessDialogFragment.show(getActivity().getSupportFragmentManager(),"");
                             Log.e("status", "success");
                         } else {
                             String error = jsonObject.getString("Message");

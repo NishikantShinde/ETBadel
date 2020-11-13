@@ -115,6 +115,62 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
             }
         });
 
+        holder.subImg1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imageList.size()>2) {
+                    if (selectedImg == 0) {
+                        selectedImg = 1;
+                        Glide.with(context).load(imageList.get(1)).into(holder.itemImg);
+                        Glide.with(context).load(imageList.get(0)).into(holder.subImg1);
+                        Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
+                    } else if (selectedImg == 1) {
+                        selectedImg = 0;
+                        Glide.with(context).load(imageList.get(0)).into(holder.itemImg);
+                        Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
+                        Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
+                    } else if (selectedImg == 2) {
+                        selectedImg = 0;
+                        Glide.with(context).load(imageList.get(0)).into(holder.itemImg);
+                        Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
+                        Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
+                    }
+                }else {
+                    if (selectedImg == 0) {
+                        selectedImg = 1;
+                        Glide.with(context).load(imageList.get(1)).into(holder.itemImg);
+                        Glide.with(context).load(imageList.get(0)).into(holder.subImg1);
+                    } else if (selectedImg == 1) {
+                        selectedImg = 0;
+                        Glide.with(context).load(imageList.get(0)).into(holder.itemImg);
+                        Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
+                    }
+                }
+            }
+        });
+
+        holder.subImg2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedImg==0){
+                    selectedImg=2;
+                    Glide.with(context).load(imageList.get(2)).into(holder.itemImg);
+                    Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
+                    Glide.with(context).load(imageList.get(0)).into(holder.subImg2);
+                }else if (selectedImg==1){
+                    selectedImg=0;
+                    Glide.with(context).load(imageList.get(0)).into(holder.itemImg);
+                    Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
+                    Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
+                }else if (selectedImg==2){
+                    selectedImg=0;
+                    Glide.with(context).load(imageList.get(0)).into(holder.itemImg);
+                    Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
+                    Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
+                }
+            }
+        });
+
         holder.nxtImgview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
