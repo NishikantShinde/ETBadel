@@ -2,11 +2,17 @@ package com.mnf.etbadel;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -23,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mikepenz.actionitembadge.library.utils.BadgeStyle;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -32,6 +39,7 @@ import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.ads.AdsFragment;
+import com.mnf.etbadel.ui.changelanguage.ChangeLanguage;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.login.LoginActivity;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
@@ -49,6 +57,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     SharedPreferences sharedPreferences;
     HideShowProgressView hideShowProgressView;
     int itemId = 0;
-
+    private String mLanguageCode = "en";
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -106,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_main);
         ButterKnife.bind(this);
+        sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, MODE_PRIVATE);
         hideShowProgressView=this;
 //        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 //        BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -122,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         imageBadgeView = findViewById(R.id.ibv_icon_notification);
         setSupportActionBar(toolbar);
         setNavigationView(toolbar, savedInstanceState);
-        sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, MODE_PRIVATE);
+
         init();
         drawableNotification = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null);
         drawableChat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_home_black_24dp, null);
@@ -185,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 .withDisplayBelowStatusBar(true)
                 .withActionBarDrawerToggle(true)
                 .withHeaderPadding(true)
+                .withDrawerGravity(Gravity.LEFT)
                 .addDrawerItems(
 
                 ) // add the items we want to use with our Drawer
@@ -218,7 +229,40 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[5]).withIcon(R.drawable.ic_icon05_privacy).withIdentifier(AppConstants.FRAGMENT_PRIVACY_AGREEMENT));
 //        primaryDrawerItems.add(new DividerDrawerItem());
         primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[6]).withIcon(R.drawable.ic_icon05_logout).withIdentifier(AppConstants.FRAGMENT_LOGOUT));
-        primaryDrawerItems.add(new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC));
+        mLanguageCode= sharedPreferences.getString(AppConstants.LANG,"en");
+        if (mLanguageCode.equals("en")){
+            SwitchDrawerItem item=new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC).withChecked(false).withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        sharedPreferences.edit().putString(AppConstants.LANG,"ar").apply();
+                    }else {
+                        sharedPreferences.edit().putString(AppConstants.LANG,"en").apply();
+                    }
+                    Intent intent= new Intent(MainActivity.this, ChangeLanguage.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            primaryDrawerItems.add(item);
+        }else {
+            SwitchDrawerItem item=new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC).withChecked(true).withOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        sharedPreferences.edit().putString(AppConstants.LANG,"ar").apply();
+                    }else {
+                        sharedPreferences.edit().putString(AppConstants.LANG,"en").apply();
+                    }
+                    Intent intent= new Intent(MainActivity.this, ChangeLanguage.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
+            primaryDrawerItems.add(item);
+        }
+
+
 
         drawerBuilder.withDrawerItems(primaryDrawerItems);
         result = drawerBuilder.build();
@@ -244,7 +288,6 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     private void updateIcon() {
 
     }
-
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
@@ -305,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     break;
 
                 case AppConstants.FRAGMENT_LOGOUT:
-                    LogoutFragment alertDialog = LogoutFragment.newInstance("", "");
+                    LogoutFragment alertDialog = new LogoutFragment(this);
                     alertDialog.show(getSupportFragmentManager(), "fragment_alert");
                     break;
 

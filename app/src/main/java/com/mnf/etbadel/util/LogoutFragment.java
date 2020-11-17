@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.mnf.etbadel.R;
+import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.login.LoginActivity;
 
 import butterknife.BindView;
@@ -38,9 +39,10 @@ public class LogoutFragment extends DialogFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    public LogoutFragment() {
+    private NavigationInterface navigationInterface;
+    public LogoutFragment(NavigationInterface navigationInterface) {
         // Required empty public constructor
+        this.navigationInterface=navigationInterface;
     }
 
     /**
@@ -53,7 +55,7 @@ public class LogoutFragment extends DialogFragment {
      */
     // TODO: Rename and change types and number of parameters
     public static LogoutFragment newInstance(String param1, String param2) {
-        LogoutFragment fragment = new LogoutFragment();
+        LogoutFragment fragment = new LogoutFragment(null);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -82,9 +84,10 @@ public class LogoutFragment extends DialogFragment {
             public void onClick(View v) {
                 SharedPreferences sharedPreferences= getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
                 sharedPreferences.edit().clear().apply();
-                Intent intent=new Intent(getActivity(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                navigationInterface.NavigateFragment(0);
+//                Intent intent=new Intent(getActivity(), LoginActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent);
                 dismiss();
             }
         });

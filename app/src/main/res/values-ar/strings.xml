@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EtBadel</string>
     <string name="title_chat">Chat</string>
@@ -91,13 +92,13 @@
     <string name="trade_success">Trade Offer Successfully Sent</string>
     <string name="no_internet">Please check internet connection</string>
     <string-array name="menuList">
-        <item>Home</item>
+        <item>الرئيسية</item>
         <item>Mute Notification</item>
-        <item>My Ads</item>
-        <item>My Profile</item>
+        <item>إعلاناتي</item>
+        <item>حسابي</item>
         <item>Service Agreement</item>
         <item>Privacy Agreement</item>
-        <item>Logout</item>
+        <item>تسجيل خروج</item>
         <item>Switch to Arabic</item>
 
     </string-array>
@@ -133,5 +134,4 @@
         <item>dead sea</item>
         <item>ramtha</item>
     </string-array>
-
 </resources>

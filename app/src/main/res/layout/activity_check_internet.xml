@@ -13,29 +13,29 @@
         android:gravity="center"
         android:layout_height="match_parent">
 
-<!--        <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_no_wifi"/>-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:textSize="18dp"-->
-<!--            android:textColor="#000000"-->
-<!--            android:text="Please check internet connection"/>-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_no_wifi"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="18dp"
+            android:textColor="#000000"
+            android:text="@string/no_internet"/>
 
-<!--        <Button-->
-<!--            android:id="@+id/check_again_btn"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:background="@drawable/rounded_view_black_color"-->
-<!--            android:text="Check Again"-->
-<!--            android:textColor="@color/primary"-->
-<!--            android:includeFontPadding="false"-->
-<!--            android:textStyle="bold"-->
-<!--            android:minWidth="200dp"/>-->
+        <Button
+            android:id="@+id/check_again_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_view_black_color"
+            android:text="Check Again"
+            android:textColor="@color/primary"
+            android:includeFontPadding="false"
+            android:textStyle="bold"
+            android:minWidth="200dp"/>
 
 
     </LinearLayout>

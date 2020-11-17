@@ -66,6 +66,7 @@ public class AppConstants {
 
     public static final int TIMEOUT=60*1000;
 
+    public static final String LANG="LANG";
 
     // Navigation panel
 //	public static final int

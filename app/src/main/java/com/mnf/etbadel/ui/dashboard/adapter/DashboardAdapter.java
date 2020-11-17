@@ -75,7 +75,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
     @Override
     public void onBindViewHolder(@NonNull NotificationHolder holder, int position) {
         ArrayList<String> imageList = new ArrayList<>();
-        ItemModel itemModel = itemModels.get(position);
+        /*ItemModel itemModel = itemModels.get(position);
 
         if (itemModel.getImg1_url() != null) {
             selectedImg = 0;
@@ -242,7 +242,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
 
                 }
             }
-        });
+        });*/
 
 //        alertDialog.getDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
 //            @Override
@@ -260,7 +260,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
 
     @Override
     public int getItemCount() {
-        return itemModels.size();
+        return 2;
     }
 
     public class NotificationHolder extends RecyclerView.ViewHolder {

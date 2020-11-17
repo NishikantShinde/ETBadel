@@ -93,9 +93,9 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
         isCategoryServicecompleted = false;
         isItemModelServciecompleted = false;
         controller = Controller.getInstance(getContext());
-        hideShowProgressView.showProgress();
+        //hideShowProgressView.showProgress();
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
-        controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+        //controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
