@@ -44,6 +44,7 @@ import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.ads.AdsFragment;
 import com.mnf.etbadel.ui.agreement.AgreementFragment;
 import com.mnf.etbadel.ui.changelanguage.ChangeLanguage;
+import com.mnf.etbadel.ui.chats.ChatFragment;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.login.LoginActivity;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
@@ -72,6 +73,7 @@ import retrofit2.Response;
 import ru.nikartm.support.ImageBadgeView;
 
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_ADD_PRODUCTS;
+import static com.mnf.etbadel.util.AppConstants.FRAGMENT_CHAT_LIST;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_DASHBOARD;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_NOTIFICATION_LIST;
 import static com.mnf.etbadel.util.AppConstants.FRAGMENT_PRODUCTS;
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     Toolbar toolbar;
     BadgeStyle style;
     ImageBadgeView ibvIconNotification;
+    ImageBadgeView ibvIconChat;
     LinearLayout floatingActionButton;
     ImageBadgeView imageBadgeView;
     //    DrawerHeaderView drawerHeaderView;
@@ -157,6 +160,14 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             @Override
             public void onClick(View v) {
                 setFragmentToDisplay(FRAGMENT_NOTIFICATION_LIST, null, true);
+            }
+        });
+
+        ibvIconChat= findViewById(R.id.ibv_icon_chat);
+        ibvIconChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFragmentToDisplay(FRAGMENT_CHAT_LIST, null, true);
             }
         });
 
@@ -358,8 +369,15 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     fragmentTag = "profileFragment";
                     break;
                 case AppConstants.FRAGMENT_ADS:
-                    fragment = new AdsFragment(hideShowProgressView);
-                    fragmentTag = "profileFragment";
+                    int userid = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+                    if (userid != 0) {
+                        fragment = new AdsFragment(hideShowProgressView);
+                        fragmentTag = "ads fragment";
+                    } else {
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+
                     break;
 
                 case AppConstants.FRAGMENT_LOGOUT:
@@ -388,9 +406,20 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 }
             }
 
+            if (index == FRAGMENT_CHAT_LIST) {
+                int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+                if (userId != 0) {
+                    fragment = new ChatFragment(this,hideShowProgressView);
+                    fragmentTag = "chat fragment";
+                } else {
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+
             if (index == FRAGMENT_PRODUCTS) {
                 fragment = new ProfileSenderFragment(itemId,hideShowProgressView);
-                fragmentTag = "profile sender frahment";
+                fragmentTag = "profile sender fragment";
             }
 
             if (index == FRAGMENT_ADD_PRODUCTS) {

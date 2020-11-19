@@ -90,6 +90,9 @@
     <string name="send_trade_offer_desc">The receiver of this offer will let you know which of your item(s) they are interested to trade you for</string>
     <string name="trade_success">Trade Offer Successfully Sent</string>
     <string name="no_internet">Please check internet connection</string>
+    <string name="all_messages">All Messages</string>
+    <string name="unread_messages">Unread Messages</string>
+    <string name="online_users_messages">Online Users</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>
