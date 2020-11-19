@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Notification name is here"
             android:textColor="#000000"
             android:textSize="16dp"
 
@@ -40,12 +39,14 @@
         android:background="#ffffff"/>
 
     <LinearLayout
+        android:id="@+id/edit_layout"
         android:layout_width="wrap_content"
         android:layout_marginBottom="3dp"
         android:padding="10dp"
         android:background="#00dfb7"
         android:layout_height="wrap_content">
     <ImageView
+
         android:layout_width="wrap_content"
         android:src="@drawable/ic_baseline_edit_24"
         android:layout_height="wrap_content"/>
@@ -56,6 +57,7 @@
         android:background="#ffffff"/>
 
     <LinearLayout
+        android:id="@+id/delete_layout"
         android:layout_width="wrap_content"
         android:padding="10dp"
         android:layout_marginBottom="3dp"

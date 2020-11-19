@@ -38,12 +38,15 @@ public class AppConstants {
     public static final String ITEMS_ALL="Item/getlist";
     public static final String ITEM_SAVE="Item/save";
     public static final String ITEM_BYID="Item/getbyid";
+    public static final String ITEM_BYUSERID="Item/getbyuserid";
+    public static final String ITEM_DELETE="Item/delete";
     public static final String PROFILE_UPDATE="User/update";
     public static final String PROFILE_GETBYID="User/getbyid";
     public static final String NOTIFICATION_GETBYUSERID="Notification/getallbyuserid";
     public static final String NOTIFICATION_UNREADBYUSER="Notification/getunreadbyuserid";
     public static final String NOTIFICATION_READ="Notification/readnotification";
     public static final String NOTIFICATION_SAVED="Notification/save";
+    public static final String AGREEMENT_GET="Settings/get";
 
     public static final String SHAREDPREFERENCES_NAME="EtBadel_SF";
     public static final String SF_USER_ID="user_id_sf";

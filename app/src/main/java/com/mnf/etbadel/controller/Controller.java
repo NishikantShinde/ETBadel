@@ -2,6 +2,7 @@ package com.mnf.etbadel.controller;
 
 import android.content.Context;
 
+import com.mnf.etbadel.controller.services.AgreementService;
 import com.mnf.etbadel.controller.services.AreaCityService;
 import com.mnf.etbadel.controller.services.CategoryService;
 import com.mnf.etbadel.controller.services.ItemService;
@@ -148,6 +149,27 @@ public class Controller {
         Retrofit retrofit = AppConstants.buildRetrofit(false);
         NotificationService notificationService= retrofit.create(NotificationService.class);
         Call<ResponseBody> serviceResponse= notificationService.save(notificationModel);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void getAgreement(int id, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        AgreementService agreementService= retrofit.create(AgreementService.class);
+        Call<ResponseBody> serviceResponse= agreementService.getAgreement(id);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void getItemByUserId(int uId, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ItemService itemService= retrofit.create(ItemService.class);
+        Call<ResponseBody> serviceResponse= itemService.getItemByUserId(uId);
+        serviceResponse.enqueue(callback);
+    }
+
+    public void deleteItem(int id, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ItemService itemService= retrofit.create(ItemService.class);
+        Call<ResponseBody> serviceResponse= itemService.delete(id);
         serviceResponse.enqueue(callback);
     }
 }

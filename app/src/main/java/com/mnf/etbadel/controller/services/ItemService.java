@@ -23,4 +23,10 @@ public interface ItemService {
 
     @GET(AppConstants.ITEM_BYID)
     Call<ResponseBody> getItemById(@Query("Id") int id);
+
+    @GET(AppConstants.ITEM_BYUSERID)
+    Call<ResponseBody> getItemByUserId(@Query("uId") int id);
+
+    @POST(AppConstants.ITEM_DELETE)
+    Call<ResponseBody> delete(@Query("Id") int id);
 }

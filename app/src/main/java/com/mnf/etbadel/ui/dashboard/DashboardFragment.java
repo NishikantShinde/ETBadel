@@ -1,6 +1,7 @@
 package com.mnf.etbadel.ui.dashboard;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,6 +47,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Observable;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class DashboardFragment extends Fragment implements DashboardAdapter.HideShowProgress {
 
     LinearLayout categoriesMainLayout;
@@ -90,12 +93,18 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
 
     private void init() {
         int lang = 0;
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, MODE_PRIVATE);
+        String mLanguageCode=sharedPreferences.getString(AppConstants.LANG,"en");
+        assert mLanguageCode != null;
+        if (mLanguageCode.equals("ar")){
+            lang=1;
+        }
         isCategoryServicecompleted = false;
         isItemModelServciecompleted = false;
         controller = Controller.getInstance(getContext());
-        //hideShowProgressView.showProgress();
+        hideShowProgressView.showProgress();
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
-        //controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+        controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

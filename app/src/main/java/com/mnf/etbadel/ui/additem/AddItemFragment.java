@@ -339,12 +339,13 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
         lang = 0;
         progressBar.setVisibility(View.VISIBLE);
         progressLayout.setVisibility(View.VISIBLE);
-//        controller.getCategoriesDropdown(lang, new CategoriesCallback());
-//        controller.getCitiesDropdown(lang, new CitiesCallback());
-//        controller.getAreasDropdown(lang, new AreasCallback());
-        lang = 0;
         sharedPreferences = getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
         user_id = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+        String mLanguageCode=sharedPreferences.getString(AppConstants.LANG,"en");
+        assert mLanguageCode != null;
+        if (mLanguageCode.equals("ar")){
+            lang=1;
+        }
         images = new ArrayList<>();
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
         controller.getCitiesDropdown(lang, new CitiesCallback());

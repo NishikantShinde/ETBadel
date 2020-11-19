@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -25,6 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.mikepenz.actionitembadge.library.utils.BadgeStyle;
 import com.mikepenz.materialdrawer.Drawer;
@@ -34,11 +36,13 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mnf.etbadel.controller.Controller;
+import com.mnf.etbadel.model.AgreementModel;
 import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.ads.AdsFragment;
+import com.mnf.etbadel.ui.agreement.AgreementFragment;
 import com.mnf.etbadel.ui.changelanguage.ChangeLanguage;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.login.LoginActivity;
@@ -97,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     HideShowProgressView hideShowProgressView;
     int itemId = 0;
     private String mLanguageCode = "en";
+    private AgreementModel agreementModel;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -113,9 +118,19 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, MODE_PRIVATE);
+        String lcode= sharedPreferences.getString(AppConstants.LANG,"en");
+        Resources resources = getResources();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN_MR1){
+            config.setLocale(new Locale(lcode.toLowerCase()));
+        } else {
+            config.locale = new Locale(lcode.toLowerCase());
+        }
+        resources.updateConfiguration(config, dm);
         setContentView(R.layout.activity_main_main);
         ButterKnife.bind(this);
-        sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, MODE_PRIVATE);
         hideShowProgressView=this;
 //        getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
 //        BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -168,14 +183,19 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     private void init() {
         int lang = 0;
         controller = Controller.getInstance(this);
-        controller.getCategoriesDropdown(lang, new CategoriesCallback());
-        controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+        mLanguageCode=sharedPreferences.getString(AppConstants.LANG,"en");
+        assert mLanguageCode != null;
+        if (mLanguageCode.equals("ar")){
+            lang=1;
+        }
+//        controller.getCategoriesDropdown(lang, new CategoriesCallback());
+//        controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+        controller.getAgreement(lang, new GetAgreementCallback());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
         if (userId != 0) {
             controller.unreadByUser(userId, new UnreadNotificationsCallback());
@@ -337,19 +357,22 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     fragment = new ProductsFragment(senderId,hideShowProgressView);
                     fragmentTag = "profileFragment";
                     break;
-                case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
-//                Intent i= new Intent(MainActivity.this, MyProfileActivity.class);
-//                startActivity(i);
-                    break;
-
                 case AppConstants.FRAGMENT_ADS:
-                    fragment = new AdsFragment();
+                    fragment = new AdsFragment(hideShowProgressView);
                     fragmentTag = "profileFragment";
                     break;
 
                 case AppConstants.FRAGMENT_LOGOUT:
                     LogoutFragment alertDialog = new LogoutFragment(this);
                     alertDialog.show(getSupportFragmentManager(), "fragment_alert");
+                    break;
+                case AppConstants.FRAGMENT_SERVICE_AGREEMENT:
+                    fragment = new AgreementFragment("s",agreementModel);
+                    fragmentTag = "service fragment";
+                    break;
+                case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
+                    fragment = new AgreementFragment("p",agreementModel);
+                    fragmentTag = "privacy fragment";
                     break;
 
             }
@@ -513,6 +536,34 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             imageBadgeView.clearBadge();
+        }
+    }
+
+    private class GetAgreementCallback implements Callback<ResponseBody> {
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        assert jsonObject != null;
+                        if (jsonObject.getBoolean("Success")){
+                            JSONArray model= jsonObject.getJSONArray("Model");
+                            Gson gson = new Gson();
+                            List<AgreementModel> agreementModels = gson.fromJson(model.toString(), new TypeToken<List<AgreementModel>>() {
+                            }.getType());
+                            agreementModel= agreementModels.get(0);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
         }
     }
 }
