@@ -46,7 +46,7 @@
     <string name="acceptance">"By submitting the information you are "</string>
     <string name="acceptance2">accepting</string>
     <string name="tandc">Terms and Conditions</string>
-    <string name="my_profile_title">Profile</string>
+    <string name="my_profile_title">My Profile</string>
     <string name="edit_email">Email</string>
     <string name="submit_txt">Submit</string>
     <string name="profile_image">Profile Image</string>
@@ -96,6 +96,9 @@
     <string name="delete_chat">Delete Chat</string>
     <string name="block_user">Block User</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="logout_ques">Do you really want to Logout?</string>
+    <string name="no_str">No</string>
+    <string name="yes_str">Yes</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>

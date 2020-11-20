@@ -47,7 +47,7 @@
     <string name="acceptance">"By submitting the information you are "</string><!--By submitting the information you are -->
     <string name="acceptance2">accepting</string><!--accepting-->
     <string name="tandc">Terms and Conditions</string><!--Terms and Conditions-->
-    <string name="my_profile_title">Profile</string><!--Profile-->
+    <string name="my_profile_title">حسابي</string><!--My Profile-->
     <string name="edit_email">البريد الإلكتروني</string><!--Email-->
     <string name="submit_txt">Submit</string><!--Submit-->
     <string name="profile_image">Profile Image</string><!--Profile Image-->
@@ -65,8 +65,8 @@
     <string name="string_free">إعرضه بالمجان</string><!--Give it for free-->
     <string name="string_done">إتــمــام</string><!--Post-->
     <string name="string_name">"Name: "</string><!--Name-->
-    <string name="string_location">"Location: "</string><!--Location-->
-    <string name="string_area">"Area: "</string><!--Area-->
+    <string name="string_location">"Location"</string><!--Location-->
+    <string name="string_area">"Area"</string><!--Area-->
     <string name="string_condition_dashboard">"الحالة"</string><!--Condition-->
     <string name="string_send">تبدّل</string><!--Trade-->
     <string name="string_desctription_hint">مثال: تعمل بشكل ممتاز مع يوجد</string><!--Example: Used for 2 months, with no scratches-->
@@ -97,6 +97,9 @@
     <string name="delete_chat">حذف الدردشة</string><!--Delete Chat-->
     <string name="block_user">حظر المرسل</string><!--Block User-->
     <string name="forgot_password">هل نسيت كلمة المرور؟</string><!--Forgot Password?-->
+    <string name="logout_ques">Do you really want to Logout?</string><!--Do you really want to Logout?-->
+    <string name="no_str">إلغاء</string><!--No-->
+    <string name="yes_str">تأكيد</string><!--Yes-->
 
     <string-array name="menuList">
         <item>الرئيسية</item><!--Home-->
