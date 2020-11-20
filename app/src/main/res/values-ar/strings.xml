@@ -38,23 +38,23 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="registration_title">إنشاء حساب جديد</string><!--Registration-->
 
-    <string name="user_name">User name</string><!--User name-->
+    <string name="user_name">اسم المستخدم</string><!--User name-->
     <string name="password">كلمة المرور</string><!--Password-->
-    <string name="confirm_password">Confirm password</string><!--Confirm password-->
+    <string name="confirm_password">تأكيد كلمة المرور</string><!--Confirm password-->
     <string name="first_name">الإسم الأول</string><!--First Name-->
     <string name="last_name">الإسم الأخير</string><!--Last name-->
     <string name="register_button">إنشاء حساب جديد</string><!--Register-->
-    <string name="acceptance">"By submitting the information you are "</string><!--By submitting the information you are -->
-    <string name="acceptance2">accepting</string><!--accepting-->
-    <string name="tandc">Terms and Conditions</string><!--Terms and Conditions-->
+    <string name="acceptance">"من خلال تقديم المعلومات أنت "</string><!--By submitting the information you are -->
+    <string name="acceptance2">القبول</string><!--accepting-->
+    <string name="tandc">الأحكام والشروط</string><!--Terms and Conditions-->
     <string name="my_profile_title">حسابي</string><!--My Profile-->
     <string name="edit_email">البريد الإلكتروني</string><!--Email-->
-    <string name="submit_txt">Submit</string><!--Submit-->
-    <string name="profile_image">Profile Image</string><!--Profile Image-->
+    <string name="submit_txt">إرسال</string><!--Submit-->
+    <string name="profile_image">صوره المستخدم</string><!--Profile Image-->
     <string name="string_search">"بحث"</string><!--Search-->
-    <string name="string_neighbor">Neighbor</string><!--Neighbor-->
-    <string name="string_city">City</string><!--City-->
-    <string name="string_category">Category</string><!--Category-->
+    <string name="string_neighbor">الحي</string><!--Neighbor-->
+    <string name="string_city">المدينة</string><!--City-->
+    <string name="string_category">الفئة</string><!--Category-->
     <string name="string_item_name">ما الذي تود تبديلة؟</string> <!-- what are you trading?-->
     <string name="string_item_name_hint">مثال:(ساعة يد رجالية نوع كاسيو حجم M)</string><!--Example: Casio Men Hand Watch-->
     <string name="string_condition">الحالة</string> <!--Condition-->
@@ -65,28 +65,28 @@
     <string name="string_free">إعرضه بالمجان</string><!--Give it for free-->
     <string name="string_done">إتــمــام</string><!--Post-->
     <string name="string_name">"Name: "</string><!--Name-->
-    <string name="string_location">"Location"</string><!--Location-->
-    <string name="string_area">"Area"</string><!--Area-->
+    <string name="string_location">"الموقع"</string><!--Location-->
+    <string name="string_area">"المنطقة"</string><!--Area-->
     <string name="string_condition_dashboard">"الحالة"</string><!--Condition-->
     <string name="string_send">تبدّل</string><!--Trade-->
     <string name="string_desctription_hint">مثال: تعمل بشكل ممتاز مع يوجد</string><!--Example: Used for 2 months, with no scratches-->
     <string name="facebook_app_id">769384030578964</string>
     <string name="fb_login_protocol_scheme">fb769384030578964</string>
-    <string name="username_error_string">"Please enter user name "</string><!--Please enter user name-->
+    <string name="username_error_string">"الرجاء إدخال اسم المستخدم"</string><!--Please enter user name-->
 
-    <string name="password_error_string">Please enter password</string><!--Please enter password-->
+    <string name="password_error_string">أدخل كلمة المرور</string><!--Please enter password-->
     <string name="check_internet_error">لا يوجد اتصال بشبكة الإنترنت</string><!--Please check internet connection-->
-    <string name="server_unreachable_error">Server not reachable</string><!--Server not reachable-->
-    <string name="first_name_string_error">Please enter first name</string><!--Please enter first name-->
-    <string name="last_name_string_error">Please enter last name</string><!--Please enter last name-->
-    <string name="empty_emailid_error">Please enter email ID</string><!--Please enter email ID-->
-    <string name="valid_emailid_error">Please enter valid email ID</string><!--Please enter valid email ID-->
-    <string name="password_string_error">Please enter password</string><!--Please enter password-->
-    <string name="same_password_string_error">Please make sure your passwords match</string><!--Please make sure your passwords match-->
+    <string name="server_unreachable_error">لا يمكن الوصول للسيرفر</string><!--Server not reachable-->
+    <string name="first_name_string_error">أدخل الأسم الأول</string><!--Please enter first name-->
+    <string name="last_name_string_error">أدخل الأسم الأخير</string><!--Please enter last name-->
+    <string name="empty_emailid_error">أدخل البريد الإلكتروني</string><!--Please enter email ID-->
+    <string name="valid_emailid_error">أدخل بريد إلكتروني صحيح</string><!--Please enter valid email ID-->
+    <string name="password_string_error">أدخل كلمة المرور</string><!--Please enter password-->
+    <string name="same_password_string_error">تأكد أن كملتي المرور متطابقتين</string><!--Please make sure your passwords match-->
     <string name="notification_txt_string0">مهتم ب</string><!--is interested in-->
     <string name="notification_txt_string1">أضاف إعلان جديد</string><!--added new item-->
-    <string name="no_notifications">No notifications</string><!--No notifications-->
-    <string name="no_post_yet">No Posts Yet</string><!--No Posts Yet-->
+    <string name="no_notifications">لايوجد إشعارات</string><!--No notifications-->
+    <string name="no_post_yet">لا يوجد إعلانات حاليا</string><!--No Posts Yet-->
     <string name="send_trade_offer">إرسال عرض تبادل؟</string><!--Send Trade Offer?-->
     <string name="send_trade_offer_desc">مستقبل  هذا العرض سيقرر أي من اعلاناتك هو مهتم بالتبادل على</string><!--The receiver of this offer will let you know which of your item(s) they are interested to trade you for-->
     <string name="trade_success">تم إرسال عرض التبادل بنجاح</string><!--Trade Offer Successfully Sent-->
@@ -97,7 +97,7 @@
     <string name="delete_chat">حذف الدردشة</string><!--Delete Chat-->
     <string name="block_user">حظر المرسل</string><!--Block User-->
     <string name="forgot_password">هل نسيت كلمة المرور؟</string><!--Forgot Password?-->
-    <string name="logout_ques">Do you really want to Logout?</string><!--Do you really want to Logout?-->
+    <string name="logout_ques">؟تأكيد الخروج</string><!--Do you really want to Logout?-->
     <string name="no_str">إلغاء</string><!--No-->
     <string name="yes_str">تأكيد</string><!--Yes-->
 
@@ -109,7 +109,7 @@
         <item>إتفاقية الإستخدام</item><!--Service Agreement-->
         <item>سياسة الخصوصية</item><!--Privacy Agreement-->
         <item>تسجيل خروج</item>
-        <item>Switch to Arabic</item><!--Switch to Arabic-->
+        <item>تغيير إلى اللغة العربية</item><!--Switch to Arabic-->
 
     </string-array>
     <string-array name="categoryList">
