@@ -93,6 +93,9 @@
     <string name="all_messages">All Messages</string>
     <string name="unread_messages">Unread Messages</string>
     <string name="online_users_messages">Online Users</string>
+    <string name="delete_chat">Delete Chat</string>
+    <string name="block_user">Block User</string>
+    <string name="forgot_password">Forgot Password?</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>

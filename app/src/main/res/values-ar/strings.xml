@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EtBadel</string>
-    <string name="title_chat">Chat</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="item_decription">This is a Item description \n This is Item description</string>
+    <string name="title_chat">Chat</string><!--Chat-->
+    <string name="title_dashboard">Dashboard</string><!--Dashboard-->
+    <string name="title_notifications">Notifications</string><!--Notifications-->
+    <string name="item_decription">This is a Item description \n This is Item description</string><!--This is a Item description \n This is Item description-->
 
     <string name="title_activity_main2">MainActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -13,17 +13,17 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="menu_home">Home</string>
+    <string name="menu_home">الرئيسية</string><!--Home-->
 
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="login_title">Login Page</string>
-    <string name="login_button">Login</string>
-    <string name="login_using_fb">Login through facebook</string>
-    <string name="login_using_google">Login through google</string>
-    <string name="string_or">OR</string>
-    <string name="create_new_user_button">Create new account</string>
+    <string name="login_title">تسجيل دخول</string><!--Login-->
+    <string name="login_button">تسجيل دخول</string><!--Login-->
+    <string name="login_using_fb">دخول بواسطة حساب فيسبوك</string><!--Login through facebook-->
+    <string name="login_using_google">دخول بواسطة حساب جوجل</string><!--Login through google-->
+    <string name="string_or">أو</string><!--OR-->
+    <string name="create_new_user_button">إنشاء حساب جديد</string><!--Create new account-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_register">RegisterActivity</string>
 
@@ -31,75 +31,82 @@
 
     <string name="second_fragment_label">Second Fragment</string>
 
-    <string name="next">Next</string>
+    <string name="next">Next</string><!--Next-->
     <!-- Strings used for fragments for navigation -->
-    <string name="previous">Previous</string>
+    <string name="previous">Previous</string><!--Previous-->
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="registration_title">Registration</string>
+    <string name="registration_title">إنشاء حساب جديد</string><!--Registration-->
 
-    <string name="user_name">User name</string>
-    <string name="password">Password</string>
-    <string name="confirm_password">Confirm password</string>
-    <string name="first_name">First name</string>
-    <string name="last_name">Last name</string>
-    <string name="register_button">Register</string>
-    <string name="acceptance">"By submitting the information you are "</string>
-    <string name="acceptance2">accepting</string>
-    <string name="tandc">Terms and Conditions</string>
-    <string name="my_profile_title">Profile</string>
-    <string name="edit_email">Email</string>
-    <string name="submit_txt">Submit</string>
-    <string name="profile_image">Profile Image</string>
-    <string name="string_search">"Search"</string>
-    <string name="string_neighbor">Neighbor</string>
-    <string name="string_city">City</string>
-    <string name="string_category">Category</string>
-    <string name="string_item_name">What Are You Trading?</string>
-    <string name="string_item_name_hint">Example: Casio Men Hand Watch</string>
-    <string name="string_condition">Condition</string>
-    <string name="string_condition1">New</string>
-    <string name="string_condition2">Barely Used</string>
-    <string name="string_condition3">Used</string>
-    <string name="string_desctription">Describe the item</string>
-    <string name="string_free">Give it for free</string>
-    <string name="string_done">Post</string>
-    <string name="string_name">"Name: "</string>
-    <string name="string_location">"Location: "</string>
-    <string name="string_area">"Area: "</string>
-    <string name="string_condition_dashboard">"Condition: "</string>
-    <string name="string_send">Trade</string>
-    <string name="string_desctription_hint">Example: Used for 2 months, with no scratches</string>
+    <string name="user_name">User name</string><!--User name-->
+    <string name="password">كلمة المرور</string><!--Password-->
+    <string name="confirm_password">Confirm password</string><!--Confirm password-->
+    <string name="first_name">الإسم الأول</string><!--First Name-->
+    <string name="last_name">الإسم الأخير</string><!--Last name-->
+    <string name="register_button">إنشاء حساب جديد</string><!--Register-->
+    <string name="acceptance">"By submitting the information you are "</string><!--By submitting the information you are -->
+    <string name="acceptance2">accepting</string><!--accepting-->
+    <string name="tandc">Terms and Conditions</string><!--Terms and Conditions-->
+    <string name="my_profile_title">Profile</string><!--Profile-->
+    <string name="edit_email">البريد الإلكتروني</string><!--Email-->
+    <string name="submit_txt">Submit</string><!--Submit-->
+    <string name="profile_image">Profile Image</string><!--Profile Image-->
+    <string name="string_search">"بحث"</string><!--Search-->
+    <string name="string_neighbor">Neighbor</string><!--Neighbor-->
+    <string name="string_city">City</string><!--City-->
+    <string name="string_category">Category</string><!--Category-->
+    <string name="string_item_name">ما الذي تود تبديلة؟</string> <!-- what are you trading?-->
+    <string name="string_item_name_hint">مثال:(ساعة يد رجالية نوع كاسيو حجم M)</string><!--Example: Casio Men Hand Watch-->
+    <string name="string_condition">الحالة</string> <!--Condition-->
+    <string name="string_condition1">جديد</string> <!--new-->
+    <string name="string_condition2">استعمال خفيف</string> <!--Barely used-->
+    <string name="string_condition3">مستعمل</string> <!--used-->
+    <string name="string_desctription">وصف المنتج</string><!--Describe the item-->
+    <string name="string_free">إعرضه بالمجان</string><!--Give it for free-->
+    <string name="string_done">إتــمــام</string><!--Post-->
+    <string name="string_name">"Name: "</string><!--Name-->
+    <string name="string_location">"Location: "</string><!--Location-->
+    <string name="string_area">"Area: "</string><!--Area-->
+    <string name="string_condition_dashboard">"الحالة"</string><!--Condition-->
+    <string name="string_send">تبدّل</string><!--Trade-->
+    <string name="string_desctription_hint">مثال: تعمل بشكل ممتاز مع يوجد</string><!--Example: Used for 2 months, with no scratches-->
     <string name="facebook_app_id">769384030578964</string>
     <string name="fb_login_protocol_scheme">fb769384030578964</string>
-    <string name="username_error_string">"Please enter user name "</string>
+    <string name="username_error_string">"Please enter user name "</string><!--Please enter user name-->
 
-    <string name="password_error_string">Please enter password</string>
-    <string name="check_internet_error">Please check internet connection</string>
-    <string name="server_unreachable_error">Server not reachable</string>
-    <string name="first_name_string_error">Please enter first name</string>
-    <string name="last_name_string_error">Please enter last name</string>
-    <string name="empty_emailid_error">Please enter email ID</string>
-    <string name="valid_emailid_error">Please enter valid email ID</string>
-    <string name="password_string_error">Please enter password</string>
-    <string name="same_password_string_error">Please make sure your passwords match</string>
-    <string name="notification_txt_string0">is interested in</string>
-    <string name="notification_txt_string1">added new item</string>
-    <string name="no_notifications">No notifications</string>
-    <string name="no_post_yet">No Posts Yet</string>
-    <string name="send_trade_offer">Send Trade Offer?</string>
-    <string name="send_trade_offer_desc">The receiver of this offer will let you know which of your item(s) they are interested to trade you for</string>
-    <string name="trade_success">Trade Offer Successfully Sent</string>
-    <string name="no_internet">Please check internet connection</string>
+    <string name="password_error_string">Please enter password</string><!--Please enter password-->
+    <string name="check_internet_error">لا يوجد اتصال بشبكة الإنترنت</string><!--Please check internet connection-->
+    <string name="server_unreachable_error">Server not reachable</string><!--Server not reachable-->
+    <string name="first_name_string_error">Please enter first name</string><!--Please enter first name-->
+    <string name="last_name_string_error">Please enter last name</string><!--Please enter last name-->
+    <string name="empty_emailid_error">Please enter email ID</string><!--Please enter email ID-->
+    <string name="valid_emailid_error">Please enter valid email ID</string><!--Please enter valid email ID-->
+    <string name="password_string_error">Please enter password</string><!--Please enter password-->
+    <string name="same_password_string_error">Please make sure your passwords match</string><!--Please make sure your passwords match-->
+    <string name="notification_txt_string0">مهتم ب</string><!--is interested in-->
+    <string name="notification_txt_string1">أضاف إعلان جديد</string><!--added new item-->
+    <string name="no_notifications">No notifications</string><!--No notifications-->
+    <string name="no_post_yet">No Posts Yet</string><!--No Posts Yet-->
+    <string name="send_trade_offer">إرسال عرض تبادل؟</string><!--Send Trade Offer?-->
+    <string name="send_trade_offer_desc">مستقبل  هذا العرض سيقرر أي من اعلاناتك هو مهتم بالتبادل على</string><!--The receiver of this offer will let you know which of your item(s) they are interested to trade you for-->
+    <string name="trade_success">تم إرسال عرض التبادل بنجاح</string><!--Trade Offer Successfully Sent-->
+    <string name="no_internet">لا يوجد اتصال بشبكة الإنترنت</string><!--Please check internet connection-->
+    <string name="all_messages">كل دردشاتي</string><!--All Messages-->
+    <string name="unread_messages">غير مقروء</string><!--Unread Messages-->
+    <string name="online_users_messages">متصل حالياً</string><!--Online Users-->
+    <string name="delete_chat">حذف الدردشة</string><!--Delete Chat-->
+    <string name="block_user">حظر المرسل</string><!--Block User-->
+    <string name="forgot_password">هل نسيت كلمة المرور؟</string><!--Forgot Password?-->
+
     <string-array name="menuList">
-        <item>الرئيسية</item>
-        <item>Mute Notification</item>
-        <item>إعلاناتي</item>
-        <item>حسابي</item>
-        <item>Service Agreement</item>
-        <item>Privacy Agreement</item>
+        <item>الرئيسية</item><!--Home-->
+        <item>وضع التنبيهات</item><!--Mute Notification-->
+        <item>إعلاناتي</item><!--My Ads-->
+        <item>حسابي</item><!--My Profile-->
+        <item>إتفاقية الإستخدام</item><!--Service Agreement-->
+        <item>سياسة الخصوصية</item><!--Privacy Agreement-->
         <item>تسجيل خروج</item>
-        <item>Switch to Arabic</item>
+        <item>Switch to Arabic</item><!--Switch to Arabic-->
 
     </string-array>
     <string-array name="categoryList">
