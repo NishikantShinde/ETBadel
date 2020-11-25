@@ -83,7 +83,7 @@ public class LogoutFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences= getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
-                sharedPreferences.edit().clear().apply();
+                sharedPreferences.edit().putInt(AppConstants.SF_USER_ID,0).apply();
                 navigationInterface.NavigateFragment(0);
 //                Intent intent=new Intent(getActivity(), LoginActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
