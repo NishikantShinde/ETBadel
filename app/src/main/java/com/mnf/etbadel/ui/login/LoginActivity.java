@@ -86,22 +86,22 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         revokeAccess();
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.mnf.etbadel",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String key = Base64.encodeToString(md.digest(), Base64.DEFAULT);
-                Log.e("KeyHash:", key);
-                //Toast.makeText(this, key, Toast.LENGTH_LONG).show();
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "com.mnf.etbadel",
+//                    PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                String key = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+//                Log.e("KeyHash:", key);
+//                //Toast.makeText(this, key, Toast.LENGTH_LONG).show();
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//
+//        } catch (NoSuchAlgorithmException e) {
+//
+//        }
 
 
         login.setOnClickListener(new View.OnClickListener() {

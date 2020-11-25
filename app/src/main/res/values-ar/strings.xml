@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EtBadel</string>
-    <string name="title_chat">Chat</string><!--Chat-->
+    <string name="title_chat">دردشة</string><!--Chat-->
     <string name="title_dashboard">Dashboard</string><!--Dashboard-->
-    <string name="title_notifications">Notifications</string><!--Notifications-->
+    <string name="title_notifications">وضع التنبيهات</string><!--Notifications-->
     <string name="item_decription">This is a Item description \n This is Item description</string><!--This is a Item description \n This is Item description-->
 
     <string name="title_activity_main2">MainActivity</string>

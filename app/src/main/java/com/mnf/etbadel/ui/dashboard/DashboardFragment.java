@@ -287,6 +287,8 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             isItemModelServciecompleted = true;
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
+            dashboardRecyclerview.setVisibility(View.GONE);
+            noPost.setVisibility(View.VISIBLE);
             if (isCategoryServicecompleted) {
                 hideShowProgressView.hideProgress();
             }
