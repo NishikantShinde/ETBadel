@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AppConstants {
 
+//    public static final String SERVER_VAL = "https://api-dev-madpixel.azurewebsites.net/api/";
     public static final String SERVER_VAL = "https://appapi.puravtopiwala.com/api/";
     public static final String LOGIN_URL="User/login";
     public static final String REGISTER_URL="User/save";
@@ -47,11 +48,18 @@ public class AppConstants {
     public static final String NOTIFICATION_READ="Notification/readnotification";
     public static final String NOTIFICATION_SAVED="Notification/save";
     public static final String AGREEMENT_GET="Settings/get";
+    public static final String CHAT_SAVE="Chat/save";
 
     public static final String SHAREDPREFERENCES_NAME="EtBadel_SF";
     public static final String SF_USER_ID="user_id_sf";
 
     public static final String EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+    public static final String FIREBASE_PASSWORD="EtBadelFirebasePassword";
+    public static final String FIREBASE_CHAT_TABLE="Chats";
+    public static final String FIREBASE_MESSAGE_TABLE="Message";
+
+    public static final String CHAT_KEY="chatKey";
 
     public static final int FRAGMENT_DASHBOARD=1;
     public static final int FRAGMENT_NOTIFICATION=2;

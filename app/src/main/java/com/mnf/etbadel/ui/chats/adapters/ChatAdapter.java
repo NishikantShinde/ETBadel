@@ -13,8 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mnf.etbadel.R;
+import com.mnf.etbadel.model.ChatModel;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.ui.chats.MessageActivity;
+import com.mnf.etbadel.util.AppConstants;
 
 import java.util.ArrayList;
 
@@ -25,12 +27,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder> {
 
     Context context;
-    ArrayList<ItemModel> itemModels;
+    ArrayList<ChatModel> chatModels;
 
-
-    public ChatAdapter(Context context, ArrayList<ItemModel> itemModels) {
+    public ChatAdapter(Context context, ArrayList<ChatModel> chatModels) {
         this.context = context;
-        this.itemModels = itemModels;
+        this.chatModels = chatModels;
     }
 
     @NonNull
@@ -42,23 +43,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
+
         holder.chatHeadLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(context, MessageActivity.class);
+                intent.putExtra(AppConstants.CHAT_KEY,chatModels.get(position).getChatId());
                 context.startActivity(intent);
             }
         });
     }
 
-    public void updateList(ArrayList<ItemModel> ItemModels) {
-
+    public void updateList(ArrayList<ChatModel> chatModels) {
+        this.chatModels=chatModels;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return chatModels.size();
     }
 
     public class ItemHolder extends RecyclerView.ViewHolder {

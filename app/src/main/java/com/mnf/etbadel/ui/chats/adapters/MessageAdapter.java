@@ -1,6 +1,7 @@
 package com.mnf.etbadel.ui.chats.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mnf.etbadel.R;
+import com.mnf.etbadel.model.MessageModel;
+import com.mnf.etbadel.util.AppConstants;
 
 import java.util.ArrayList;
 
@@ -18,11 +21,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public static final int MSG_TYPE_LEFT=0;
     public static final int MSG_TYPE_RIGHT=1;
     private Context context;
-//    private ArrayList<ChatModel> chatModels;
+    private ArrayList<MessageModel> messageModels;
+    SharedPreferences sharedPreferences;
 //    FirebaseUser firebaseUser;
-    public MessageAdapter(Context context/*, ArrayList<ChatModel> chatModels*/){
+    public MessageAdapter(Context context, ArrayList<MessageModel> messageModels){
         this.context=context;
-//        this.chatModels=chatModels;
+        this.messageModels=messageModels;
+        sharedPreferences= context.getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME,Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -46,7 +51,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return 10;
+        return messageModels.size();
     }
 
 
@@ -61,16 +66,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if (position%2==0){
+        int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+        if (messageModels.get(position).getSenderId()==userId){
             return MSG_TYPE_RIGHT;
         }else {
             return MSG_TYPE_LEFT;
         }
-//        firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
-//        if (chatModels.get(position).getSender().equals(firebaseUser.getUid())){
-//            return MSG_TYPE_RIGHT;
-//        }else {
-//            return MSG_TYPE_LEFT;
-//        }
     }
 }

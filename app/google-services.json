@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "668845184397",
+    "firebase_url": "https://etbadel.firebaseio.com",
+    "project_id": "etbadel",
+    "storage_bucket": "etbadel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668845184397:android:1b43cd5793943da76b19c4",
+        "android_client_info": {
+          "package_name": "com.mnf.etbadel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "668845184397-ouem6tcm08dmktuv488lp950g2rnlkls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mnf.etbadel",
+            "certificate_hash": "50e99b208c1e1a5099302a6317d7186245735773"
+          }
+        },
+        {
+          "client_id": "668845184397-3t4jj93oa4srh9n9npe5qs1fdbsmk6sb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCUFp4tyWrUuy-8UofRNbdeIlNcCVrcjE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "668845184397-3t4jj93oa4srh9n9npe5qs1fdbsmk6sb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

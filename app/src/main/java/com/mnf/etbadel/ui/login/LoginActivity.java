@@ -34,6 +34,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
@@ -71,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     private SharedPreferences sharedPreferences;
     private int RC_SIGN_IN= 200;
+    FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        auth= FirebaseAuth.getInstance();
         revokeAccess();
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(
@@ -203,6 +207,7 @@ public class LoginActivity extends AppCompatActivity {
             progressLayout.setVisibility(View.VISIBLE);
             UserModel userModel = new UserModel();
             userModel.setIs_Gmail_Login(true);
+            userModel.setEmail(account.getEmail());
             userModel.setGmail_Token(account.getId());
             Controller.getInstance(LoginActivity.this).login(userModel, new LoginServiceCall());
         }
@@ -240,6 +245,9 @@ public class LoginActivity extends AppCompatActivity {
                                                 UserModel userModel = new UserModel();
                                                 userModel.setIs_FB_Login(true);
                                                 userModel.setFB_Token(str_id);
+                                                if (json.getString("email")!=null){
+                                                    userModel.setEmail(json.getString("email"));
+                                                }
                                                 Controller.getInstance(LoginActivity.this).login(userModel, new LoginServiceCall());
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -271,8 +279,7 @@ public class LoginActivity extends AppCompatActivity {
     private class LoginServiceCall implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-            progressBar.setVisibility(View.GONE);
-            progressLayout.setVisibility(View.GONE);
+
             if (response.isSuccessful()) {
                 if (response.body() != null) {
 
@@ -283,11 +290,7 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
                             UserModel userModel = gson.fromJson(model.toString(), UserModel.class);
-                            Log.e("status", "success");
-                            sharedPreferences.edit().putInt(AppConstants.SF_USER_ID, userModel.getId()).apply();
-                            /*Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);*/
-                            finish();
+                            loginFirebase(userModel,userModel.getEmail(),AppConstants.FIREBASE_PASSWORD);
                         } else {
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);
@@ -309,6 +312,22 @@ public class LoginActivity extends AppCompatActivity {
             progressLayout.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
+    }
+    public void loginFirebase(UserModel userModel,String email, String password){
+        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                progressBar.setVisibility(View.GONE);
+                progressLayout.setVisibility(View.GONE);
+                if (task.isSuccessful()){
+                    Log.e("status", "success");
+                    sharedPreferences.edit().putInt(AppConstants.SF_USER_ID, userModel.getId()).apply();
+                    finish();
+                }else {
+                    Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 //    private void showErroDIalog(String error) {

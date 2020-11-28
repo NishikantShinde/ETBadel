@@ -16,7 +16,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -87,6 +89,8 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
         dashboardAdapter = new DashboardAdapter((MainActivity) getActivity(), getContext(), itemsModelList, this);
         dashboardRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         dashboardRecyclerview.setAdapter(dashboardAdapter);
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(dashboardRecyclerview);
         init();
         return root;
     }
@@ -270,6 +274,8 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                         } else {
                             String error = jsonObject.getString("Message");
                             AppConstants.showErroDIalog(error, getActivity().getSupportFragmentManager());
+                            dashboardRecyclerview.setVisibility(View.GONE);
+                            noPost.setVisibility(View.VISIBLE);
                         }
 
                     } catch (JSONException e) {

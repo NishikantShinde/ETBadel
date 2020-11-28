@@ -5,11 +5,14 @@ import android.content.Context;
 import com.mnf.etbadel.controller.services.AgreementService;
 import com.mnf.etbadel.controller.services.AreaCityService;
 import com.mnf.etbadel.controller.services.CategoryService;
+import com.mnf.etbadel.controller.services.ChatService;
 import com.mnf.etbadel.controller.services.ItemService;
 import com.mnf.etbadel.controller.services.LoginService;
 import com.mnf.etbadel.controller.services.NotificationService;
 import com.mnf.etbadel.controller.services.ProfileService;
 import com.mnf.etbadel.controller.services.RegisterService;
+import com.mnf.etbadel.model.ChatModel;
+import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.NotificationModel;
 import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.util.AppConstants;
@@ -171,5 +174,12 @@ public class Controller {
         ItemService itemService= retrofit.create(ItemService.class);
         Call<ResponseBody> serviceResponse= itemService.delete(id);
         serviceResponse.enqueue(callback);
+    }
+
+    public void saveChat(ChatModel itemModel, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ChatService chatService= retrofit.create(ChatService.class);
+        Call<ResponseBody> userModelCall= chatService.saveChat(itemModel);
+        userModelCall.enqueue(callback);
     }
 }

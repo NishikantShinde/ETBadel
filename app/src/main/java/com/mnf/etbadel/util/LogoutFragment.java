@@ -13,6 +13,7 @@ import android.widget.Button;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.login.LoginActivity;
@@ -84,6 +85,7 @@ public class LogoutFragment extends DialogFragment {
             public void onClick(View v) {
                 SharedPreferences sharedPreferences= getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
                 sharedPreferences.edit().putInt(AppConstants.SF_USER_ID,0).apply();
+                FirebaseAuth.getInstance().signOut();
                 navigationInterface.NavigateFragment(0);
 //                Intent intent=new Intent(getActivity(), LoginActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

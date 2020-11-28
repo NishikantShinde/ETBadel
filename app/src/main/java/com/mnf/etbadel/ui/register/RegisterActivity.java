@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -26,7 +27,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
@@ -38,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,9 +82,11 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
     @BindView(R.id.progress_layout)
     LinearLayout progressLayout;
-    private int RC_SIGN_IN= 200;
+    private int RC_SIGN_IN = 200;
     private UserModel userModel;
     GoogleSignInClient mGoogleSignInClient;
+    FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        auth = FirebaseAuth.getInstance();
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,11 +129,12 @@ public class RegisterActivity extends AppCompatActivity {
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
-        }else {
+        } else {
             callbackmanager.onActivityResult(requestCode, resultCode, data);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -134,8 +144,9 @@ public class RegisterActivity extends AppCompatActivity {
             updateUI(null);
         }
     }
+
     private void updateUI(GoogleSignInAccount account) {
-        if (account!=null){
+        if (account != null) {
             progressBar.setVisibility(View.VISIBLE);
             progressLayout.setVisibility(View.VISIBLE);
             userModel = new UserModel();
@@ -147,6 +158,7 @@ public class RegisterActivity extends AppCompatActivity {
             controller.registerUser(userModel, new RegisterCallBack());
         }
     }
+
     private void Fblogin() {
         callbackmanager = CallbackManager.Factory.create();
 
@@ -173,7 +185,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             try {
                                                 String jsonresult = String.valueOf(json);
                                                 System.out.println("JSON Result" + jsonresult);
-                                                String str_email="";
+                                                String str_email = "";
                                                 if (json.has("email")) {
                                                     str_email = json.getString("email");
                                                 }
@@ -267,8 +279,7 @@ public class RegisterActivity extends AppCompatActivity {
     private class RegisterCallBack implements Callback<ResponseBody> {
         @Override
         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-            progressBar.setVisibility(View.GONE);
-            progressLayout.setVisibility(View.GONE);
+
             if (response.isSuccessful()) {
                 if (response.body() != null) {
                     Log.e("status", "success");
@@ -280,8 +291,7 @@ public class RegisterActivity extends AppCompatActivity {
                             Gson gson = new Gson();
                             UserModel userModel = gson.fromJson(model.toString(), UserModel.class);
                             Log.e("status", "success");
-                            Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                            finish();
+                            register(userModel.getEmail(), AppConstants.FIREBASE_PASSWORD);
                         } else {
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);
@@ -302,5 +312,26 @@ public class RegisterActivity extends AppCompatActivity {
             progressLayout.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
+
+
+
+    }
+
+    public void register(String email, String password) {
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressBar.setVisibility(View.GONE);
+                        progressLayout.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "You can't register with this email or password", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
     }
 }

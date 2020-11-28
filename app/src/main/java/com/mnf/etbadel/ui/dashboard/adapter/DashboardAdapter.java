@@ -11,17 +11,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
+import com.mnf.etbadel.model.ChatModel;
 import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.model.MessageModel;
 import com.mnf.etbadel.model.NotificationModel;
 import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.ui.login.LoginActivity;
@@ -35,6 +44,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -52,14 +62,17 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
     private int selectedImg = 0;
 
     HideShowProgress hideShowProgress;
+    DatabaseReference databaseReference;
 
-    public interface HideShowProgress{
+    public interface HideShowProgress {
         void showProgress();
+
         void hideProgress();
     }
+
     //    NavigationInterface navigationInterface;
     public DashboardAdapter(MainActivity activity, Context context, ArrayList<ItemModel> itemModels, HideShowProgress hideShowProgress) {
-        this.activity=activity;
+        this.activity = activity;
         this.context = context;
         this.itemModels = itemModels;
         this.hideShowProgress = hideShowProgress;
@@ -87,7 +100,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
             holder.subImg1.setVisibility(View.VISIBLE);
             imageList.add(itemModel.getImg2_url());
             Glide.with(context).load(itemModel.getImg2_url()).into(holder.subImg1);
-        }else {
+        } else {
             holder.cardSubImg1.setVisibility(View.INVISIBLE);
             holder.subImg1.setVisibility(View.INVISIBLE);
         }
@@ -96,19 +109,19 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
             holder.subImg2.setVisibility(View.VISIBLE);
             imageList.add(itemModel.getImg3_url());
             Glide.with(context).load(itemModel.getImg3_url()).into(holder.subImg2);
-        }else {
+        } else {
             holder.cardSubImg2.setVisibility(View.INVISIBLE);
             holder.subImg2.setVisibility(View.INVISIBLE);
         }
         holder.prevImgview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedImg==1 && imageList.get(0)!=null){
-                    selectedImg=0;
+                if (selectedImg == 1 && imageList.get(0) != null) {
+                    selectedImg = 0;
                     Glide.with(context).load(imageList.get(0)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
-                }else if (selectedImg==2 && imageList.get(1)!=null){
-                    selectedImg=1;
+                } else if (selectedImg == 2 && imageList.get(1) != null) {
+                    selectedImg = 1;
                     Glide.with(context).load(imageList.get(1)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
                 }
@@ -118,7 +131,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         holder.subImg1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (imageList.size()>2) {
+                if (imageList.size() > 2) {
                     if (selectedImg == 0) {
                         selectedImg = 1;
                         Glide.with(context).load(imageList.get(1)).into(holder.itemImg);
@@ -135,7 +148,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
                         Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
                         Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
                     }
-                }else {
+                } else {
                     if (selectedImg == 0) {
                         selectedImg = 1;
                         Glide.with(context).load(imageList.get(1)).into(holder.itemImg);
@@ -152,18 +165,18 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         holder.subImg2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedImg==0){
-                    selectedImg=2;
+                if (selectedImg == 0) {
+                    selectedImg = 2;
                     Glide.with(context).load(imageList.get(2)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
                     Glide.with(context).load(imageList.get(0)).into(holder.subImg2);
-                }else if (selectedImg==1){
-                    selectedImg=0;
+                } else if (selectedImg == 1) {
+                    selectedImg = 0;
                     Glide.with(context).load(imageList.get(0)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
                     Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
-                }else if (selectedImg==2){
-                    selectedImg=0;
+                } else if (selectedImg == 2) {
+                    selectedImg = 0;
                     Glide.with(context).load(imageList.get(0)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(1)).into(holder.subImg1);
                     Glide.with(context).load(imageList.get(2)).into(holder.subImg2);
@@ -174,12 +187,12 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         holder.nxtImgview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedImg==0 && imageList.size()>1){
-                    selectedImg=1;
+                if (selectedImg == 0 && imageList.size() > 1) {
+                    selectedImg = 1;
                     Glide.with(context).load(imageList.get(1)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(0)).into(holder.subImg1);
-                }else if (selectedImg==1 && imageList.size()>2){
-                    selectedImg=2;
+                } else if (selectedImg == 1 && imageList.size() > 2) {
+                    selectedImg = 2;
                     Glide.with(context).load(imageList.get(2)).into(holder.itemImg);
                     Glide.with(context).load(imageList.get(1)).into(holder.subImg2);
                 }
@@ -187,10 +200,10 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         });
         if (itemModel.getC_date() != null) {
             String dT;
-            if (itemModel.getC_date().length()>19) {
+            if (itemModel.getC_date().length() > 19) {
                 dT = itemModel.getC_date().substring(0, itemModel.getC_date().lastIndexOf("."));
-            }else {
-                dT=itemModel.getC_date();
+            } else {
+                dT = itemModel.getC_date();
             }
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
@@ -215,16 +228,16 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         holder.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences sharedPreferences= context.getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
-                int senderId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
-                if (senderId==0){
-                    Intent intent= new Intent(context, LoginActivity.class);
+                SharedPreferences sharedPreferences = context.getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+                int senderId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+                if (senderId == 0) {
+                    Intent intent = new Intent(context, LoginActivity.class);
                     context.startActivity(intent);
-                }else {
-                    TradeFragment.CallbackInterface callbackInterface=new TradeFragment.CallbackInterface() {
+                } else {
+                    TradeFragment.CallbackInterface callbackInterface = new TradeFragment.CallbackInterface() {
                         @Override
                         public void doCallbackOnClick() {
-                            NotificationModel notificationModel= new NotificationModel();
+                            NotificationModel notificationModel = new NotificationModel();
                             notificationModel.setUser_Id(itemModel.getUser_Id());
                             notificationModel.setSender_Id(senderId);
                             notificationModel.setItem_Id(itemModel.getId());
@@ -312,26 +325,197 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
                             NotificationModel notificationModel = gson.fromJson(model.toString(), NotificationModel.class);
-                            SucessDialogFragment sucessDialogFragment=new SucessDialogFragment();
-                            sucessDialogFragment.show(activity.getSupportFragmentManager(),"");
-                            Log.e("status", "success");
+                            findFirebase(notificationModel);
+
                         } else {
+                            hideShowProgress.hideProgress();
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);
-                            AppConstants.showErroDIalog(error,activity.getSupportFragmentManager());
+                            AppConstants.showErroDIalog(error, activity.getSupportFragmentManager());
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
-            hideShowProgress.hideProgress();
+
         }
 
         @Override
         public void onFailure(Call<ResponseBody> call, Throwable t) {
             hideShowProgress.hideProgress();
-            AppConstants.showErroDIalog(context.getResources().getString(R.string.server_unreachable_error),activity.getSupportFragmentManager());
+            AppConstants.showErroDIalog(context.getResources().getString(R.string.server_unreachable_error), activity.getSupportFragmentManager());
         }
     }
+
+    private void saveChat(NotificationModel notificationModel) {
+        ChatModel chatModel = new ChatModel();
+        chatModel.setUser1Id(notificationModel.getSender_Id());
+        chatModel.setUser2Id(notificationModel.getUser_Id());
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = df.format(c.getTime());
+        chatModel.setLastMessage("");
+        chatModel.setLastMessageDateTime(formattedDate);
+        databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
+        String id = databaseReference.push().getKey();
+        databaseReference.child(id).setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
+                String messageId = databaseReferenceMessage.push().getKey();
+                MessageModel messageModel = new MessageModel();
+                messageModel.setChatId(id);
+                messageModel.setMessageTxt("");
+                messageModel.setSenderId(notificationModel.getSender_Id());
+                messageModel.setReceiverId(notificationModel.getUser_Id());
+                messageModel.setItemId(notificationModel.getItem_Id());
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = df.format(c.getTime());
+                messageModel.setDateTime(formattedDate);
+                addMessageToFirebase(messageModel,messageId,databaseReferenceMessage);
+                hideShowProgress.hideProgress();
+            }
+        });
+        //Controller.getInstance(context).saveChat(chatModel, new SaveChatCallBack(notificationModel));
+    }
+
+    private class SaveChatCallBack implements Callback<ResponseBody> {
+        NotificationModel notificationModel;
+
+        public SaveChatCallBack(NotificationModel notificationModel) {
+            this.notificationModel = notificationModel;
+        }
+
+        @Override
+        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            if (response.isSuccessful()) {
+                if (response.body() != null) {
+                    try {
+                        JSONObject jsonObject = AppConstants.getJsonResponseFromRaw(response);
+                        String modelStr = jsonObject.getString("Model");
+                        if (!modelStr.equals("null")) {
+                            JSONObject model = jsonObject.getJSONObject("Model");
+                            Gson gson = new Gson();
+                            ChatModel chatModel = gson.fromJson(model.toString(), ChatModel.class);
+                            databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
+                            String id = databaseReference.push().getKey();
+                            databaseReference.child(id).setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
+                                    String messageId = databaseReferenceMessage.push().getKey();
+                                    MessageModel messageModel = new MessageModel();
+                                    messageModel.setChatId(id);
+                                    messageModel.setMessageTxt("");
+                                    messageModel.setSenderId(notificationModel.getSender_Id());
+                                    messageModel.setReceiverId(notificationModel.getUser_Id());
+                                    messageModel.setItemId(notificationModel.getItem_Id());
+                                    Calendar c = Calendar.getInstance();
+                                    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                                    String formattedDate = df.format(c.getTime());
+                                    messageModel.setDateTime(formattedDate);
+                                    addMessageToFirebase(messageModel,messageId,databaseReferenceMessage);
+                                }
+                            });
+
+                        } else {
+                            hideShowProgress.hideProgress();
+                            String error = jsonObject.getString("Message");
+                            Log.e("status", "error " + error);
+                            AppConstants.showErroDIalog(error, activity.getSupportFragmentManager());
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }
+
+        @Override
+        public void onFailure(Call<ResponseBody> call, Throwable t) {
+            hideShowProgress.hideProgress();
+            AppConstants.showErroDIalog(context.getResources().getString(R.string.server_unreachable_error), activity.getSupportFragmentManager());
+        }
+    }
+
+    private void findFirebase(NotificationModel notificationModel) {
+
+        DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
+        String messageId = databaseReferenceMessage.push().getKey();
+        MessageModel messageModel = new MessageModel();
+        messageModel.setMessageTxt("");
+        messageModel.setSenderId(notificationModel.getSender_Id());
+        messageModel.setReceiverId(notificationModel.getUser_Id());
+        messageModel.setItemId(notificationModel.getItem_Id());
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = df.format(c.getTime());
+        messageModel.setDateTime(formattedDate);
+        databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
+        databaseReference.orderByChild("user1Id").equalTo(notificationModel.getSender_Id()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<ChatModel> chatModels = new ArrayList<>();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    chatModels.add(ds.getValue(ChatModel.class));
+                }
+                if (chatModels.size() > 0) {
+                    for (ChatModel temp : chatModels) {
+                        if (temp.getUser2Id() == notificationModel.getUser_Id()) {
+                            messageModel.setChatId(temp.getChatId() + "");
+                            addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
+                            break;
+                        }
+                    }
+                } else {
+                    databaseReference.orderByChild("user2Id").equalTo(notificationModel.getSender_Id()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                chatModels.add(ds.getValue(ChatModel.class));
+                            }
+                            if (chatModels.size() > 0) {
+                                for (ChatModel temp : chatModels) {
+                                    if (temp.getUser1Id() == notificationModel.getUser_Id()) {
+                                        messageModel.setChatId(temp.getChatId() + "");
+                                        addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                saveChat(notificationModel);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void addMessageToFirebase(MessageModel messageModel, String messageId, DatabaseReference databaseReferenceMessage) {
+        databaseReferenceMessage.child(messageId).setValue(messageModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                hideShowProgress.hideProgress();
+                SucessDialogFragment sucessDialogFragment = new SucessDialogFragment();
+                sucessDialogFragment.show(activity.getSupportFragmentManager(), "");
+                Log.e("status", "success");
+            }
+        });
+    }
+
 }
