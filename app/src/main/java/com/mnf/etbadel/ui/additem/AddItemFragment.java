@@ -34,6 +34,8 @@ import com.google.gson.reflect.TypeToken;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.DropdownModel;
+import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.adapter.ViewPagerAdapter;
 import com.mnf.etbadel.ui.additem.interfaces.ClickListen;

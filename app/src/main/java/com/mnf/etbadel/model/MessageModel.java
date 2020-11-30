@@ -1,7 +1,7 @@
 package com.mnf.etbadel.model;
 
 public class MessageModel {
-    private int messageId;
+    private String messageId;
     private String chatId;
     private int senderId;
     private int receiverId;
@@ -10,11 +10,21 @@ public class MessageModel {
     private String ItemImageUrl1;
     private String dateTime;
 
-    public int getMessageId() {
+    private boolean isRead;
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    public String getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(int messageId) {
+    public void setMessageId(String messageId) {
         this.messageId = messageId;
     }
 

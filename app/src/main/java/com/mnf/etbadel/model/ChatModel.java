@@ -9,6 +9,8 @@ public class ChatModel {
     private String lastMessage;
     private String lastMessageDateTime;
 
+
+
     public String getChatId() {
         return chatId;
     }

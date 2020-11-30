@@ -2,6 +2,7 @@ package com.mnf.etbadel.ui.chats.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +44,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
-
+        ChatModel chatModel= chatModels.get(position);
+        SharedPreferences sharedPreferences= context.getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME,Context.MODE_PRIVATE);
+        int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
+        if (chatModel.getUser1Id()==userId){
+            holder.usernametxt.setText(chatModel.getUser2Name());
+        }else {
+            holder.usernametxt.setText(chatModel.getUser1Name());
+        }
+        holder.messageTxt.setText(chatModel.getLastMessage());
+        holder.dateTxt.setText(chatModel.getLastMessageDateTime());
         holder.chatHeadLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent= new Intent(context, MessageActivity.class);
-                intent.putExtra(AppConstants.CHAT_KEY,chatModels.get(position).getChatId());
+                intent.putExtra(AppConstants.CHAT_KEY,chatModel.getChatId());
                 context.startActivity(intent);
             }
         });

@@ -13,13 +13,22 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
+import com.mnf.etbadel.model.ChatModel;
 import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.model.MessageModel;
 import com.mnf.etbadel.model.NotificationModel;
 import com.mnf.etbadel.ui.dashboard.adapter.DashboardAdapter;
 import com.mnf.etbadel.util.AppConstants;
@@ -33,6 +42,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -87,7 +97,7 @@ public class ProfileSenderFragment extends Fragment {
     LinearLayout progressLayout;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
-
+    DatabaseReference databaseReference;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -360,9 +370,8 @@ public class ProfileSenderFragment extends Fragment {
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
                             NotificationModel notificationModel = gson.fromJson(model.toString(), NotificationModel.class);
-                            SucessDialogFragment sucessDialogFragment=new SucessDialogFragment();
-                            sucessDialogFragment.show(getActivity().getSupportFragmentManager(),"");
-                            Log.e("status", "success");
+                            findFirebase(notificationModel);
+
                         } else {
                             String error = jsonObject.getString("Message");
                             AppConstants.showErroDIalog(error,getActivity().getSupportFragmentManager());
@@ -383,5 +392,119 @@ public class ProfileSenderFragment extends Fragment {
             hideShowProgressView.hideProgress();
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error),getActivity().getSupportFragmentManager());
         }
+    }
+
+    private void findFirebase(NotificationModel notificationModel) {
+
+        DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
+        String messageId = databaseReferenceMessage.push().getKey();
+        MessageModel messageModel = new MessageModel();
+        messageModel.setMessageTxt("");
+        messageModel.setMessageId(messageId);
+        messageModel.setSenderId(notificationModel.getSender_Id());
+        messageModel.setReceiverId(notificationModel.getUser_Id());
+        messageModel.setItemId(notificationModel.getItem_Id());
+        messageModel.setRead(false);
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = df.format(c.getTime());
+        messageModel.setDateTime(formattedDate);
+        databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
+        databaseReference.orderByChild("user1Id").equalTo(notificationModel.getSender_Id()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                ArrayList<ChatModel> chatModels = new ArrayList<>();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    chatModels.add(ds.getValue(ChatModel.class));
+                }
+                if (chatModels.size() > 0) {
+                    for (ChatModel temp : chatModels) {
+                        if (temp.getUser2Id() == notificationModel.getUser_Id()) {
+                            messageModel.setChatId(temp.getChatId() + "");
+                            addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
+                            break;
+                        }
+                    }
+                } else {
+                    databaseReference.orderByChild("user2Id").equalTo(notificationModel.getSender_Id()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                chatModels.add(ds.getValue(ChatModel.class));
+                            }
+                            if (chatModels.size() > 0) {
+                                for (ChatModel temp : chatModels) {
+                                    if (temp.getUser1Id() == notificationModel.getUser_Id()) {
+                                        messageModel.setChatId(temp.getChatId() + "");
+                                        addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                saveChat(notificationModel);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void saveChat(NotificationModel notificationModel) {
+        ChatModel chatModel = new ChatModel();
+        chatModel.setUser1Id(notificationModel.getSender_Id());
+        chatModel.setUser1Name(notificationModel.getSenderName());
+        chatModel.setUser2Id(notificationModel.getUser_Id());
+        chatModel.setUser2Name(notificationModel.getUserName());
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = df.format(c.getTime());
+        chatModel.setLastMessage("");
+        chatModel.setLastMessageDateTime(formattedDate);
+        databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
+        String id = databaseReference.push().getKey();
+        chatModel.setChatId(id);
+        databaseReference.child(id).setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+//                DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
+//                String messageId = databaseReferenceMessage.push().getKey();
+//                MessageModel messageModel = new MessageModel();
+//                messageModel.setChatId(id);
+//                messageModel.setMessageTxt("");
+//                messageModel.setSenderId(notificationModel.getSender_Id());
+//                messageModel.setReceiverId(notificationModel.getUser_Id());
+//                messageModel.setItemId(notificationModel.getItem_Id());
+//                Calendar c = Calendar.getInstance();
+//                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//                String formattedDate = df.format(c.getTime());
+//                messageModel.setDateTime(formattedDate);
+//                addMessageToFirebase(messageModel,messageId,databaseReferenceMessage);
+//                hideShowProgress.hideProgress();
+            }
+        });
+        //Controller.getInstance(context).saveChat(chatModel, new SaveChatCallBack(notificationModel));
+    }
+
+    private void addMessageToFirebase(MessageModel messageModel, String messageId, DatabaseReference databaseReferenceMessage) {
+        databaseReferenceMessage.child(messageId).setValue(messageModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                SucessDialogFragment sucessDialogFragment=new SucessDialogFragment();
+                sucessDialogFragment.show(getActivity().getSupportFragmentManager(),"");
+                Log.e("status", "success");
+            }
+        });
     }
 }

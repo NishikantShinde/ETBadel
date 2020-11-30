@@ -43,6 +43,9 @@ public class AppConstants {
     public static final String ITEM_DELETE="Item/delete";
     public static final String PROFILE_UPDATE="User/update";
     public static final String PROFILE_GETBYID="User/getbyid";
+    public static final String BLOCK_USER="User/blockuser";
+    public static final String UNBLOCK_USER="User/unblockuser";
+    public static final String GET_BLOCK_USERS="User/getblockuser";
     public static final String NOTIFICATION_GETBYUSERID="Notification/getallbyuserid";
     public static final String NOTIFICATION_UNREADBYUSER="Notification/getunreadbyuserid";
     public static final String NOTIFICATION_READ="Notification/readnotification";

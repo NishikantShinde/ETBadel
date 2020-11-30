@@ -182,4 +182,25 @@ public class Controller {
         Call<ResponseBody> userModelCall= chatService.saveChat(itemModel);
         userModelCall.enqueue(callback);
     }
+
+    public void blockUser(int userId, int blockUserId, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ProfileService profileService= retrofit.create(ProfileService.class);
+        Call<ResponseBody> response= profileService.blockUser(userId,blockUserId);
+        response.enqueue(callback);
+    }
+
+    public void unblockUser(int userId, int blockUserId, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ProfileService profileService= retrofit.create(ProfileService.class);
+        Call<ResponseBody> response= profileService.unblockUser(userId,blockUserId);
+        response.enqueue(callback);
+    }
+
+    public void getBlockedUsers(int userId, Callback<ResponseBody> callback){
+        Retrofit retrofit = AppConstants.buildRetrofit(false);
+        ProfileService profileService= retrofit.create(ProfileService.class);
+        Call<ResponseBody> response= profileService.getBlockedUsers(userId);
+        response.enqueue(callback);
+    }
 }

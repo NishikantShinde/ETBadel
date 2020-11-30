@@ -99,6 +99,10 @@
     <string name="logout_ques">Do you really want to Logout?</string>
     <string name="no_str">No</string>
     <string name="yes_str">Yes</string>
+    <string name="no_chats">No Chats</string>
+    <string name="blocked_user">"This user is blocked by you "</string>
+    <string name="unblock">UNBLOCK</string>
+    <string name="you_blocked_user">Your are blocked by this user cannot send any new message</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>

@@ -80,5 +80,16 @@
         android:layout_below="@id/separator"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
+        android:visibility="visible"
         android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/no_chats_text"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="@string/no_chats"
+        android:layout_height="wrap_content"/>
 </RelativeLayout>

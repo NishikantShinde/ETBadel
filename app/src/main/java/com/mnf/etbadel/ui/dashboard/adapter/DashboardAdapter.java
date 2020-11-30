@@ -351,7 +351,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
     private void saveChat(NotificationModel notificationModel) {
         ChatModel chatModel = new ChatModel();
         chatModel.setUser1Id(notificationModel.getSender_Id());
+        chatModel.setUser1Name(notificationModel.getSenderName());
         chatModel.setUser2Id(notificationModel.getUser_Id());
+        chatModel.setUser2Name(notificationModel.getUserName());
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String formattedDate = df.format(c.getTime());
@@ -359,23 +361,24 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         chatModel.setLastMessageDateTime(formattedDate);
         databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
         String id = databaseReference.push().getKey();
+        chatModel.setChatId(id);
         databaseReference.child(id).setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
-                String messageId = databaseReferenceMessage.push().getKey();
-                MessageModel messageModel = new MessageModel();
-                messageModel.setChatId(id);
-                messageModel.setMessageTxt("");
-                messageModel.setSenderId(notificationModel.getSender_Id());
-                messageModel.setReceiverId(notificationModel.getUser_Id());
-                messageModel.setItemId(notificationModel.getItem_Id());
-                Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                String formattedDate = df.format(c.getTime());
-                messageModel.setDateTime(formattedDate);
-                addMessageToFirebase(messageModel,messageId,databaseReferenceMessage);
-                hideShowProgress.hideProgress();
+//                DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
+//                String messageId = databaseReferenceMessage.push().getKey();
+//                MessageModel messageModel = new MessageModel();
+//                messageModel.setChatId(id);
+//                messageModel.setMessageTxt("");
+//                messageModel.setSenderId(notificationModel.getSender_Id());
+//                messageModel.setReceiverId(notificationModel.getUser_Id());
+//                messageModel.setItemId(notificationModel.getItem_Id());
+//                Calendar c = Calendar.getInstance();
+//                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//                String formattedDate = df.format(c.getTime());
+//                messageModel.setDateTime(formattedDate);
+//                addMessageToFirebase(messageModel,messageId,databaseReferenceMessage);
+//                hideShowProgress.hideProgress();
             }
         });
         //Controller.getInstance(context).saveChat(chatModel, new SaveChatCallBack(notificationModel));
@@ -447,9 +450,11 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         String messageId = databaseReferenceMessage.push().getKey();
         MessageModel messageModel = new MessageModel();
         messageModel.setMessageTxt("");
+        messageModel.setMessageId(messageId);
         messageModel.setSenderId(notificationModel.getSender_Id());
         messageModel.setReceiverId(notificationModel.getUser_Id());
         messageModel.setItemId(notificationModel.getItem_Id());
+        messageModel.setRead(false);
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String formattedDate = df.format(c.getTime());

@@ -50,7 +50,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onProgressChanged(View view, float progress, boolean isPrimaryProgress, boolean isSecondaryProgress) {
                 if(progress>=100){
-                    Intent intent=new Intent(MainActivity2.this, LoginActivity.class);
+                    Intent intent=new Intent(MainActivity2.this, MainActivity.class);
                     startActivity(intent);
                 }
             }

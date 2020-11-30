@@ -22,4 +22,13 @@ public interface ProfileService {
 
     @GET(AppConstants.PROFILE_GETBYID)
     Call<ResponseBody> getById(@Query("Id") int id);
+
+    @GET(AppConstants.BLOCK_USER)
+    Call<ResponseBody> blockUser(@Query("userid") int id, @Query("blockuserid") int blockId);
+
+    @GET(AppConstants.UNBLOCK_USER)
+    Call<ResponseBody> unblockUser(@Query("userid") int id, @Query("blockuserid") int blockId);
+
+    @GET(AppConstants.GET_BLOCK_USERS)
+    Call<ResponseBody> getBlockedUsers(@Query("Ids") int id);
 }

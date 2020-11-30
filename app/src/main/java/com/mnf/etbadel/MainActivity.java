@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,6 +26,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
@@ -37,14 +43,18 @@ import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.AgreementModel;
+import com.mnf.etbadel.model.ChatModel;
 import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
+import com.mnf.etbadel.model.MessageModel;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.ads.AdsFragment;
 import com.mnf.etbadel.ui.agreement.AgreementFragment;
 import com.mnf.etbadel.ui.changelanguage.ChangeLanguage;
 import com.mnf.etbadel.ui.chats.ChatFragment;
+import com.mnf.etbadel.ui.chats.MessageActivity;
+import com.mnf.etbadel.ui.chats.adapters.MessageAdapter;
 import com.mnf.etbadel.ui.dashboard.DashboardFragment;
 import com.mnf.etbadel.ui.login.LoginActivity;
 import com.mnf.etbadel.ui.notifications.NotificationsFragment;
@@ -155,8 +165,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         drawableNotification = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null);
         drawableChat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_home_black_24dp, null);
         style = new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#FE0665"), Color.parseColor("#CC0548"), Color.parseColor("#EEEEEE"));
-        ibvIconNotification = findViewById(R.id.ibv_icon_notification);
-        ibvIconNotification.setOnClickListener(new View.OnClickListener() {
+        imageBadgeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFragmentToDisplay(FRAGMENT_NOTIFICATION_LIST, null, true);
@@ -213,6 +222,32 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         } else {
             imageBadgeView.clearBadge();
         }
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
+        databaseReference.orderByChild("receiverId").equalTo(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int newChat=0;
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    MessageModel messageModel=snapshot.getValue(MessageModel.class);
+                    if (messageModel!=null){
+                        if (!messageModel.isRead()){
+                            newChat++;
+                        }
+                    }
+                }
+                if (newChat!=0){
+                    ibvIconChat.setBadgeValue(newChat);
+                }else {
+                    ibvIconChat.clearBadge();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void setNavigationView(Toolbar toolbar, Bundle savedInstanceState) {
