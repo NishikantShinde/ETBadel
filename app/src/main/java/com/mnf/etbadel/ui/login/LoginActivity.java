@@ -292,6 +292,8 @@ public class LoginActivity extends AppCompatActivity {
                             UserModel userModel = gson.fromJson(model.toString(), UserModel.class);
                             loginFirebase(userModel,userModel.getEmail(),AppConstants.FIREBASE_PASSWORD);
                         } else {
+                            progressBar.setVisibility(View.GONE);
+                            progressLayout.setVisibility(View.GONE);
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);
                             AppConstants.showErroDIalog(error, getSupportFragmentManager());
@@ -322,6 +324,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()){
                     Log.e("status", "success");
                     sharedPreferences.edit().putInt(AppConstants.SF_USER_ID, userModel.getId()).apply();
+                    setResult(1000);
                     finish();
                 }else {
                     Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();

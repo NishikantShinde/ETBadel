@@ -115,17 +115,19 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     int itemId = 0;
     private String mLanguageCode = "en";
     private AgreementModel agreementModel;
+    PrimaryDrawerItem primaryDrawerItem;
+    DrawerBuilder drawerBuilder;
+    List<IDrawerItem> primaryDrawerItems;
+    int requestCode=1000;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==this.requestCode){
+            primaryDrawerItems.add(primaryDrawerItem);
+            drawerBuilder.withDrawerItems(primaryDrawerItems);
+        }
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
         fragment.onActivityResult(requestCode, resultCode, data);
-//        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-//            // or get a single image only
-//            Image image = ImagePicker.getFirstImageOrNull(data);
-////            images.add(position,image);
-////            setImageToFragment(position,image);
-//        }
     }
 
     @Override
@@ -159,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         floatingActionButton = findViewById(R.id.floating_button);
         imageBadgeView = findViewById(R.id.ibv_icon_notification);
         setSupportActionBar(toolbar);
-        setNavigationView(toolbar, savedInstanceState);
+        setNavigationView(toolbar,savedInstanceState);
 
         init();
         drawableNotification = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_notifications_black_24dp, null);
@@ -188,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     setFragmentToDisplay(FRAGMENT_ADD_PRODUCTS, null, true);
                 } else {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,requestCode);
                 }
 
             }
@@ -216,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     @Override
     protected void onResume() {
         super.onResume();
+
         int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
         if (userId != 0) {
             controller.unreadByUser(userId, new UnreadNotificationsCallback());
@@ -253,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     private void setNavigationView(Toolbar toolbar, Bundle savedInstanceState) {
 //        drawerHeaderView = new DrawerHeaderView(this);
         String[] menus = getResources().getStringArray(R.array.menuList);
-        DrawerBuilder drawerBuilder = new DrawerBuilder()
+        drawerBuilder = new DrawerBuilder()
                 .withActivity(this)
                 .withRootView(R.id.drawer_container)
                 .withToolbar(toolbar)
@@ -285,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 .withSavedInstance(savedInstanceState)
                 .withShowDrawerOnFirstLaunch(false);
 
-        List<IDrawerItem> primaryDrawerItems = new ArrayList<>();
+        primaryDrawerItems = new ArrayList<>();
 //        .withIcon(R.drawable.ic_home_black_24dp)
         primaryDrawerItems.add(new PrimaryDrawerItem().withSelectable(true).withName(menus[0]).withIcon(R.drawable.ic_icon05_home).withIdentifier(FRAGMENT_DASHBOARD));
         primaryDrawerItems.add(new SwitchDrawerItem().withName(menus[1]).withIcon(R.drawable.ic_icon05_notification).withIdentifier(AppConstants.FRAGMENT_NOTIFICATION));
@@ -294,7 +297,8 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[4]).withIcon(R.drawable.ic_icon05_terms).withIdentifier(AppConstants.FRAGMENT_SERVICE_AGREEMENT));
         primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[5]).withIcon(R.drawable.ic_icon05_privacy).withIdentifier(AppConstants.FRAGMENT_PRIVACY_AGREEMENT));
 //        primaryDrawerItems.add(new DividerDrawerItem());
-        primaryDrawerItems.add(new PrimaryDrawerItem().withName(menus[6]).withIcon(R.drawable.ic_icon05_logout).withIdentifier(AppConstants.FRAGMENT_LOGOUT));
+        int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
+
         mLanguageCode= sharedPreferences.getString(AppConstants.LANG,"en");
         if (mLanguageCode.equals("en")){
             SwitchDrawerItem item=new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC).withChecked(false).withOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -327,28 +331,14 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             });
             primaryDrawerItems.add(item);
         }
-
-
-
+        primaryDrawerItem=new PrimaryDrawerItem().withName(menus[6]).withIcon(R.drawable.ic_icon05_logout).withIdentifier(AppConstants.FRAGMENT_LOGOUT);
+        if (userId != 0) {
+            primaryDrawerItems.add(primaryDrawerItem);
+        }
         drawerBuilder.withDrawerItems(primaryDrawerItems);
         result = drawerBuilder.build();
-//        result.setGravity(View.LAYOUT_DIRECTION_RTL);
-//        result.getRecyclerView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-
-
-//        new RecyclerViewCacheUtil<IDrawerItem>().withCacheSize(2).apply(result.getRecyclerView(), result.getDrawerItems());
         result.setSelection(1, false);
-//        result.getDrawerLayout().getChildAt(0).setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-
         result.setSelectionAtPosition(0);
-//        if (savedInstanceState == null) {
-//            // set the selection to the item with the identifier 11
-//            result.setSelection(1, false);
-////            setFragmentToDisplay(1, null, false);
-//
-//            //set the active profile
-////            headerResult.setActiveProfile(profile3);
-//        }
     }
 
     private void updateIcon() {
@@ -395,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                         startActivity(i);
                     } else {
                         Intent intent = new Intent(this, LoginActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent,requestCode);
                     }
 
                     break;
@@ -410,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                         fragmentTag = "ads fragment";
                     } else {
                         Intent intent = new Intent(this, LoginActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent,requestCode);
                     }
 
                     break;
@@ -418,6 +408,8 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 case AppConstants.FRAGMENT_LOGOUT:
                     LogoutFragment alertDialog = new LogoutFragment(this);
                     alertDialog.show(getSupportFragmentManager(), "fragment_alert");
+                    primaryDrawerItems.remove(primaryDrawerItem);
+                    drawerBuilder.withDrawerItems(primaryDrawerItems);
                     break;
                 case AppConstants.FRAGMENT_SERVICE_AGREEMENT:
                     fragment = new AgreementFragment("s",agreementModel);
@@ -437,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     fragmentTag = "notification list";
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,requestCode);
                 }
             }
 
@@ -448,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     fragmentTag = "chat fragment";
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,requestCode);
                 }
             }
 
@@ -464,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     fragmentTag = "Add Item fragment";
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,requestCode);
                 }
 
             }

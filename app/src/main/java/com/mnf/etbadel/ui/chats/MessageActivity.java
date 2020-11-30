@@ -158,6 +158,11 @@ public class MessageActivity extends AppCompatActivity {
                     } else {
                         frontId = chatModel.getUser1Id();
                     }
+                    if (chatModel.isStarted()){
+                        bottom.setVisibility(View.VISIBLE);
+                    }else {
+                        bottom.setVisibility(View.GONE);
+                    }
                     getBlockedUsers();
                 }
             }

@@ -152,6 +152,7 @@ public class ChatFragment extends Fragment {
                             recyclerView.setVisibility(View.GONE);
                             noChatsText.setVisibility(View.VISIBLE);
                         }
+                        hideShowProgressView.hideProgress();
                     }
 
                     @Override

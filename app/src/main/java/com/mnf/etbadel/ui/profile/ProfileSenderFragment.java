@@ -106,6 +106,7 @@ public class ProfileSenderFragment extends Fragment {
     private int selectedImg = 0;
     ItemModel itemModel;
     HideShowProgressView hideShowProgressView;
+    boolean isMessageSent=false;
     
     public ProfileSenderFragment(int itemId, HideShowProgressView hideShowProgressView) {
         // Required empty public constructor
@@ -414,42 +415,45 @@ public class ProfileSenderFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<ChatModel> chatModels = new ArrayList<>();
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    chatModels.add(ds.getValue(ChatModel.class));
-                }
-                if (chatModels.size() > 0) {
-                    for (ChatModel temp : chatModels) {
-                        if (temp.getUser2Id() == notificationModel.getUser_Id()) {
-                            messageModel.setChatId(temp.getChatId() + "");
-                            addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
-                            break;
-                        }
+                if (!isMessageSent) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        chatModels.add(ds.getValue(ChatModel.class));
                     }
-                } else {
-                    databaseReference.orderByChild("user2Id").equalTo(notificationModel.getSender_Id()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                chatModels.add(ds.getValue(ChatModel.class));
+                    if (chatModels.size() > 0) {
+                        for (ChatModel temp : chatModels) {
+                            if (temp.getUser2Id() == notificationModel.getUser_Id()) {
+                                messageModel.setChatId(temp.getChatId() + "");
+
+                                addMessageToFirebase(messageModel, messageId, databaseReferenceMessage, databaseReference, temp);
+                                break;
                             }
-                            if (chatModels.size() > 0) {
-                                for (ChatModel temp : chatModels) {
-                                    if (temp.getUser1Id() == notificationModel.getUser_Id()) {
-                                        messageModel.setChatId(temp.getChatId() + "");
-                                        addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
-                                        break;
+                        }
+                    } else {
+                        databaseReference.orderByChild("user2Id").equalTo(notificationModel.getSender_Id()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (!isMessageSent) {
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        chatModels.add(ds.getValue(ChatModel.class));
+                                    }
+                                    if (chatModels.size() > 0) {
+                                        for (ChatModel temp : chatModels) {
+                                            if (temp.getUser1Id() == notificationModel.getUser_Id()) {
+                                                messageModel.setChatId(temp.getChatId() + "");
+                                                addMessageToFirebase(messageModel, messageId, databaseReferenceMessage, databaseReference, temp);
+                                                break;
+                                            }
+                                        }
                                     }
                                 }
-                            } else {
-                                saveChat(notificationModel);
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
             }
 
@@ -472,6 +476,7 @@ public class ProfileSenderFragment extends Fragment {
         String formattedDate = df.format(c.getTime());
         chatModel.setLastMessage("");
         chatModel.setLastMessageDateTime(formattedDate);
+
         databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
         String id = databaseReference.push().getKey();
         chatModel.setChatId(id);
@@ -497,10 +502,18 @@ public class ProfileSenderFragment extends Fragment {
         //Controller.getInstance(context).saveChat(chatModel, new SaveChatCallBack(notificationModel));
     }
 
-    private void addMessageToFirebase(MessageModel messageModel, String messageId, DatabaseReference databaseReferenceMessage) {
+    private void addMessageToFirebase(MessageModel messageModel, String messageId, DatabaseReference databaseReferenceMessage,DatabaseReference databaseReferencechat, ChatModel chatModel) {
         databaseReferenceMessage.child(messageId).setValue(messageModel).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                chatModel.setStarted(true);
+                databaseReference.child(chatModel.getChatId()).setValue(chatModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                });
+                isMessageSent=true;
                 SucessDialogFragment sucessDialogFragment=new SucessDialogFragment();
                 sucessDialogFragment.show(getActivity().getSupportFragmentManager(),"");
                 Log.e("status", "success");

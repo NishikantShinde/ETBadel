@@ -359,6 +359,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         String formattedDate = df.format(c.getTime());
         chatModel.setLastMessage("");
         chatModel.setLastMessageDateTime(formattedDate);
+        chatModel.setStarted(false);
         databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
         String id = databaseReference.push().getKey();
         chatModel.setChatId(id);

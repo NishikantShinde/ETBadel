@@ -9,7 +9,15 @@ public class ChatModel {
     private String lastMessage;
     private String lastMessageDateTime;
 
+    private boolean isStarted;
 
+    public boolean isStarted() {
+        return isStarted;
+    }
+
+    public void setStarted(boolean started) {
+        isStarted = started;
+    }
 
     public String getChatId() {
         return chatId;

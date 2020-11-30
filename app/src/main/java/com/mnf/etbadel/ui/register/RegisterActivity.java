@@ -293,6 +293,8 @@ public class RegisterActivity extends AppCompatActivity {
                             Log.e("status", "success");
                             register(userModel.getEmail(), AppConstants.FIREBASE_PASSWORD);
                         } else {
+                            progressBar.setVisibility(View.GONE);
+                            progressLayout.setVisibility(View.GONE);
                             String error = jsonObject.getString("Message");
                             Log.e("status", "error " + error);
                             AppConstants.showErroDIalog(error, getSupportFragmentManager());
