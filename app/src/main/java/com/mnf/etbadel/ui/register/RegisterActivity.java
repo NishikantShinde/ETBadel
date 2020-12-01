@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -31,19 +32,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.UserModel;
-import com.mnf.etbadel.ui.login.LoginActivity;
 import com.mnf.etbadel.util.AppConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,6 +80,8 @@ public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
     @BindView(R.id.progress_layout)
     LinearLayout progressLayout;
+    @BindView(R.id.back_img)
+    ImageView backImg;
     private int RC_SIGN_IN = 200;
     private UserModel userModel;
     GoogleSignInClient mGoogleSignInClient;
@@ -117,6 +117,12 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+        });
+        backImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
@@ -314,7 +320,6 @@ public class RegisterActivity extends AppCompatActivity {
             progressLayout.setVisibility(View.GONE);
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
-
 
 
     }

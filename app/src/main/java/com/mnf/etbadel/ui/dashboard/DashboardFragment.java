@@ -108,7 +108,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
         controller = Controller.getInstance(getContext());
         hideShowProgressView.showProgress();
         controller.getCategoriesDropdown(lang, new CategoriesCallback());
-        controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
+        //controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -162,6 +162,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
             categoriesLayoutClasses.add(categoriesLayoutClass);
             categoriesMainLayout.addView(categoriesLayoutClass);
         }
+        categoriesLayoutClasses.get(0).categoryCellLayout.performClick();
     }
 
     @Override
@@ -177,7 +178,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     public class CategoriesLayoutClass extends LinearLayout {
 
         TextView categoriesTxtview;
-        LinearLayout categoryCellLayout;
+        public LinearLayout categoryCellLayout;
         int index;
 
         public CategoriesLayoutClass(Context context, DropdownModel dropdownModel, int index) {

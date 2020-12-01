@@ -416,6 +416,7 @@ public class AddItemFragment extends Fragment implements ClickListen, Permission
                             for (int i = 0; i < dropdownModelCategoriesList.size(); i++) {
                                 categories.add(dropdownModelCategoriesList.get(i).getName());
                             }
+                            categories.remove(0);
                             ArrayAdapter aa2 = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, categories);
                             aa2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             spinnerCategory.setAdapter(aa2);

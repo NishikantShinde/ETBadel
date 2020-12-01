@@ -297,8 +297,8 @@ public class ProfileSenderFragment extends Fragment {
                                 itemCondition.setText(itemModel.getCondition());
                             else
                                 itemCondition.setText("");
-                            if (itemModel.getLocation() != null)
-                                itemLocationTxt.setText(itemModel.getLocation());
+                            if (itemModel.getCat_Name() != null)
+                                itemLocationTxt.setText(itemModel.getCity_Name());
                             else
                                 itemLocationTxt.setText("");
                             if (itemModel.getC_date() != null) {

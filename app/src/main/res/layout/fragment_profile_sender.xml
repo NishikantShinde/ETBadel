@@ -192,7 +192,7 @@
                     android:textSize="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name "
+                    android:text="@string/string_name"
                     android:textColor="#ffffff"/>
 
                 <TextView
@@ -213,7 +213,7 @@
                     android:textSize="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location "
+                    android:text="@string/string_location"
                     android:textColor="#ffffff"/>
 
                 <TextView
@@ -256,7 +256,7 @@
                     android:textSize="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Condition "
+                    android:text="@string/string_condition_dashboard"
                     android:textColor="#ffffff"/>
 
                 <TextView

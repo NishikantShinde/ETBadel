@@ -3,15 +3,12 @@ package com.mnf.etbadel.ui.login;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -37,7 +34,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
-import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.UserModel;
@@ -47,8 +43,6 @@ import com.mnf.etbadel.util.AppConstants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import butterknife.BindView;
@@ -71,9 +65,12 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.google_login)
     LinearLayout googleLogin;
     GoogleSignInClient mGoogleSignInClient;
+    @BindView(R.id.back_img)
+    ImageView backImg;
     private SharedPreferences sharedPreferences;
-    private int RC_SIGN_IN= 200;
+    private int RC_SIGN_IN = 200;
     FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        auth= FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         revokeAccess();
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(
@@ -140,6 +137,13 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
+
+        backImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private boolean validData() {
@@ -177,11 +181,12 @@ public class LoginActivity extends AppCompatActivity {
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
-        }else {
+        } else {
             callbackmanager.onActivityResult(requestCode, resultCode, data);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     private void revokeAccess() {
         mGoogleSignInClient.revokeAccess()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -191,6 +196,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
@@ -202,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(GoogleSignInAccount account) {
-        if (account!=null){
+        if (account != null) {
             progressBar.setVisibility(View.VISIBLE);
             progressLayout.setVisibility(View.VISIBLE);
             UserModel userModel = new UserModel();
@@ -245,7 +251,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 UserModel userModel = new UserModel();
                                                 userModel.setIs_FB_Login(true);
                                                 userModel.setFB_Token(str_id);
-                                                if (json.getString("email")!=null){
+                                                if (json.getString("email") != null) {
                                                     userModel.setEmail(json.getString("email"));
                                                 }
                                                 Controller.getInstance(LoginActivity.this).login(userModel, new LoginServiceCall());
@@ -290,7 +296,7 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject model = jsonObject.getJSONObject("Model");
                             Gson gson = new Gson();
                             UserModel userModel = gson.fromJson(model.toString(), UserModel.class);
-                            loginFirebase(userModel,userModel.getEmail(),AppConstants.FIREBASE_PASSWORD);
+                            loginFirebase(userModel, userModel.getEmail(), AppConstants.FIREBASE_PASSWORD);
                         } else {
                             progressBar.setVisibility(View.GONE);
                             progressLayout.setVisibility(View.GONE);
@@ -315,18 +321,19 @@ public class LoginActivity extends AppCompatActivity {
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getSupportFragmentManager());
         }
     }
-    public void loginFirebase(UserModel userModel,String email, String password){
-        auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+    public void loginFirebase(UserModel userModel, String email, String password) {
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 progressBar.setVisibility(View.GONE);
                 progressLayout.setVisibility(View.GONE);
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Log.e("status", "success");
                     sharedPreferences.edit().putInt(AppConstants.SF_USER_ID, userModel.getId()).apply();
                     setResult(1000);
                     finish();
-                }else {
+                } else {
                     Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
                 }
             }

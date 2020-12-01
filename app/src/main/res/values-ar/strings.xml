@@ -64,10 +64,10 @@
     <string name="string_desctription">وصف المنتج</string><!--Describe the item-->
     <string name="string_free">إعرضه بالمجان</string><!--Give it for free-->
     <string name="string_done">إتــمــام</string><!--Post-->
-    <string name="string_name">"اسم"</string><!--Name-->
-    <string name="string_location">"الموقع"</string><!--Location-->
-    <string name="string_area">"المنطقة"</string><!--Area-->
-    <string name="string_condition_dashboard">"الحالة"</string><!--Condition-->
+    <string name="string_name">"اسم: "</string><!--Name-->
+    <string name="string_location">"الموقع: "</string><!--Location-->
+    <string name="string_area">"المنطقة: "</string><!--Area-->
+    <string name="string_condition_dashboard">"الحالة: "</string><!--Condition-->
     <string name="string_send">تبدّل</string><!--Trade-->
     <string name="string_desctription_hint">مثال: تعمل بشكل ممتاز مع يوجد</string><!--Example: Used for 2 months, with no scratches-->
     <string name="facebook_app_id">769384030578964</string>

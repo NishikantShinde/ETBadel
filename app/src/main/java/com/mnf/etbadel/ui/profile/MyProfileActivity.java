@@ -83,6 +83,8 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
     ProgressBar progressBar;
     @BindView(R.id.progress_layout)
     LinearLayout progressLayout;
+    @BindView(R.id.back_img)
+    ImageView backImg;
     private SharedPreferences sharedPreferences;
     private int user_id;
     Sheriff sheriffPermission;
@@ -142,6 +144,13 @@ public class MyProfileActivity extends AppCompatActivity implements PermissionLi
         });
         progressBar.setVisibility(View.VISIBLE);
         progressLayout.setVisibility(View.VISIBLE);
+
+        backImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         Controller.getInstance(MyProfileActivity.this).getProfile(user_id, new GetProfileCallback());
     }
 

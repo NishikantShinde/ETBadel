@@ -224,7 +224,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         holder.itemNameTxtview.setText(itemModel.getTitle());
         holder.cndtTxtview.setText(itemModel.getCondition());
         holder.dscrTxtview.setText(itemModel.getDescription());
-        holder.locTxtview.setText(itemModel.getLocation());
+        holder.locTxtview.setText(itemModel.getCity_Name());
         holder.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
