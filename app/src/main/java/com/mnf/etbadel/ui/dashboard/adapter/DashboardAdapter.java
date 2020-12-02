@@ -354,10 +354,16 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         chatModel.setUser1Name(notificationModel.getSenderName());
         chatModel.setUser2Id(notificationModel.getUser_Id());
         chatModel.setUser2Name(notificationModel.getUserName());
+        if (notificationModel.getUserProfile()!=null){
+            chatModel.setUser1Profile(notificationModel.getUserProfile());
+        }
+        if (notificationModel.getSenderPorfile()!=null){
+            chatModel.setUser2Profile(notificationModel.getSenderPorfile());
+        }
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         String formattedDate = df.format(c.getTime());
-        chatModel.setLastMessage("");
+        chatModel.setLastMessage(notificationModel.getUserName()+" "+context.getResources().getString(R.string.notification_txt_string0)+" "+notificationModel.getItemName());
         chatModel.setLastMessageDateTime(formattedDate);
         chatModel.setStarted(false);
         databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_CHAT_TABLE);
@@ -450,8 +456,9 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
         String messageId = databaseReferenceMessage.push().getKey();
         MessageModel messageModel = new MessageModel();
-        messageModel.setMessageTxt("");
+        messageModel.setMessageTxt(notificationModel.getSenderName()+" "+context.getResources().getString(R.string.notification_txt_string0)+" "+notificationModel.getItemName());
         messageModel.setMessageId(messageId);
+        messageModel.setItemImageUrl1(notificationModel.getItemPorfile());
         messageModel.setSenderId(notificationModel.getSender_Id());
         messageModel.setReceiverId(notificationModel.getUser_Id());
         messageModel.setItemId(notificationModel.getItem_Id());

@@ -103,7 +103,8 @@
     <string name="no_chats">No Chats</string>
     <string name="blocked_user">"This user is blocked by you "</string>
     <string name="unblock">UNBLOCK</string>
-    <string name="you_blocked_user">Your are blocked by this user cannot send any new message</string><!--Yes-->
+    <string name="you_blocked_user">Your are blocked by this user cannot send any new message</string>
+    <string name="second_message">ببدلة على</string><!--Yes-->
 
     <string-array name="menuList">
         <item>الرئيسية</item><!--Home-->

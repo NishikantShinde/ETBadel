@@ -103,6 +103,7 @@
     <string name="blocked_user">"This user is blocked by you "</string>
     <string name="unblock">UNBLOCK</string>
     <string name="you_blocked_user">Your are blocked by this user cannot send any new message</string>
+    <string name="second_message">I will trade it for</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>

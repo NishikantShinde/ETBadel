@@ -5,6 +5,9 @@ public class NotificationModel {
     int Id;
     int User_Id;
     String UserName;
+    String UserProfile;
+    String SenderPorfile;
+    String ItemPorfile;
     int Sender_Id;
     String SenderName;
     int Item_Id;
@@ -118,5 +121,29 @@ public class NotificationModel {
 
     public void setIs_read(boolean is_read) {
         Is_read = is_read;
+    }
+
+    public String getUserProfile() {
+        return UserProfile;
+    }
+
+    public void setUserProfile(String userProfile) {
+        UserProfile = userProfile;
+    }
+
+    public String getSenderPorfile() {
+        return SenderPorfile;
+    }
+
+    public void setSenderPorfile(String senderPorfile) {
+        SenderPorfile = senderPorfile;
+    }
+
+    public String getItemPorfile() {
+        return ItemPorfile;
+    }
+
+    public void setItemPorfile(String itemPorfile) {
+        ItemPorfile = itemPorfile;
     }
 }

@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -111,6 +112,7 @@ public class MessageActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
         userid = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
         databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
+        getBlockedUsers();
         readChatData();
         readMessages();
 
@@ -155,15 +157,27 @@ public class MessageActivity extends AppCompatActivity {
                     assert chatModel != null;
                     if (chatModel.getUser1Id() == userid) {
                         frontId = chatModel.getUser2Id();
+                        if (chatModel.getUser2Name()!=null){
+                            username.setText(chatModel.getUser2Name());
+                        }
+                        if (chatModel.getUser2Profile()!=null){
+                            Glide.with(MessageActivity.this).load(chatModel.getUser2Profile()).placeholder(R.drawable.sample).into(profileImage);
+                        }
                     } else {
                         frontId = chatModel.getUser1Id();
+                        if (chatModel.getUser1Name()!=null){
+                            username.setText(chatModel.getUser1Name());
+                        }
+                        if (chatModel.getUser1Profile()!=null){
+                            Glide.with(MessageActivity.this).load(chatModel.getUser1Profile()).placeholder(R.drawable.sample).into(profileImage);
+                        }
                     }
                     if (chatModel.isStarted()){
                         bottom.setVisibility(View.VISIBLE);
                     }else {
                         bottom.setVisibility(View.GONE);
                     }
-                    getBlockedUsers();
+
                 }
             }
 

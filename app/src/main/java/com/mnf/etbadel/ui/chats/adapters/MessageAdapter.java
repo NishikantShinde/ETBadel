@@ -5,11 +5,13 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.model.MessageModel;
 import com.mnf.etbadel.util.AppConstants;
@@ -45,8 +47,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-//        ChatModel chatModel= chatModels.get(position);
-        holder.showMessage.setText(messageModels.get(position).getMessageTxt());
+        MessageModel messageModel= messageModels.get(position);
+        holder.showMessage.setText(messageModel.getMessageTxt());
+        if (messageModel.getItemImageUrl1()!=null){
+            holder.msgImage.setVisibility(View.VISIBLE);
+            Glide.with(context).load(messageModel.getItemImageUrl1()).placeholder(R.drawable.sample).into(holder.msgImage);
+        }else {
+            holder.msgImage.setVisibility(View.GONE);
+        }
+        if (messageModel.getDateTime()!=null){
+            holder.dateTxt.setText(messageModel.getDateTime());
+        }
     }
 
     @Override
@@ -56,11 +67,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView showMessage;
-
+        public TextView showMessage,dateTxt;
+        public ImageView msgImage;
         public ViewHolder(View itemView){
             super(itemView);
             showMessage= itemView.findViewById(R.id.show_message);
+            msgImage= itemView.findViewById(R.id.msg_image);
+            dateTxt= itemView.findViewById(R.id.date_txt);
         }
     }
 

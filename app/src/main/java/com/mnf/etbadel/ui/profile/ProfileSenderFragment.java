@@ -400,8 +400,9 @@ public class ProfileSenderFragment extends Fragment {
         DatabaseReference databaseReferenceMessage = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
         String messageId = databaseReferenceMessage.push().getKey();
         MessageModel messageModel = new MessageModel();
-        messageModel.setMessageTxt("");
+        messageModel.setMessageTxt(getResources().getString(R.string.second_message)+" "+notificationModel.getItemName());
         messageModel.setMessageId(messageId);
+        messageModel.setItemImageUrl1(notificationModel.getItemPorfile());
         messageModel.setSenderId(notificationModel.getSender_Id());
         messageModel.setReceiverId(notificationModel.getUser_Id());
         messageModel.setItemId(notificationModel.getItem_Id());

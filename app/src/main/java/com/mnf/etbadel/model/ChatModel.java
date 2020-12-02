@@ -5,7 +5,9 @@ public class ChatModel {
     private int user1Id;
     private int user2Id;
     private String user1Name;
+    private String user1Profile;
     private String user2Name;
+    private String user2Profile;
     private String lastMessage;
     private String lastMessageDateTime;
 
@@ -13,6 +15,22 @@ public class ChatModel {
 
     public boolean isStarted() {
         return isStarted;
+    }
+
+    public String getUser1Profile() {
+        return user1Profile;
+    }
+
+    public void setUser1Profile(String user1Profile) {
+        this.user1Profile = user1Profile;
+    }
+
+    public String getUser2Profile() {
+        return user2Profile;
+    }
+
+    public void setUser2Profile(String user2Profile) {
+        this.user2Profile = user2Profile;
     }
 
     public void setStarted(boolean started) {

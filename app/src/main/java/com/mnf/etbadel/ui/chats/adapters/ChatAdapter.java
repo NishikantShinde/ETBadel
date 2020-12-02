@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.model.ChatModel;
 import com.mnf.etbadel.model.ItemModel;
@@ -49,8 +50,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder> {
         int userId= sharedPreferences.getInt(AppConstants.SF_USER_ID,0);
         if (chatModel.getUser1Id()==userId){
             holder.usernametxt.setText(chatModel.getUser2Name());
+            if (chatModel.getUser2Profile()!=null){
+                Glide.with(context).load(chatModel.getUser2Profile()).placeholder(R.drawable.sample).into(holder.profileImage);
+            }
         }else {
             holder.usernametxt.setText(chatModel.getUser1Name());
+            if (chatModel.getUser1Profile()!=null){
+                Glide.with(context).load(chatModel.getUser1Profile()).placeholder(R.drawable.sample).into(holder.profileImage);
+            }
         }
         holder.messageTxt.setText(chatModel.getLastMessage());
         holder.dateTxt.setText(chatModel.getLastMessageDateTime());
@@ -81,8 +88,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ItemHolder> {
         CircleImageView profileImage;
         @BindView(R.id.usernametxt)
         TextView usernametxt;
-        @BindView(R.id.relativelayout)
-        RelativeLayout relativelayout;
         @BindView(R.id.message_txt)
         TextView messageTxt;
         @BindView(R.id.head)
