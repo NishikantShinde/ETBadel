@@ -42,6 +42,8 @@ public class AdsAdapter extends RecyclerView.Adapter<AdsAdapter.ItemHolder> {
     public void onBindViewHolder(@NonNull ItemHolder holder, int position) {
         if(position%2==0){
             holder.ItemListCellMainLayout.setBackgroundColor(context.getResources().getColor(R.color.notification_snd_row_color));
+        }else {
+            holder.ItemListCellMainLayout.setBackgroundColor(context.getResources().getColor(R.color.notification_fst_row_color));
         }
         ItemModel itemModel= itemModels.get(position);
         if (itemModel!=null){

@@ -4,34 +4,50 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.mnf.etbadel.MainActivity;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
+import com.mnf.etbadel.controller.services.NotificationSendService;
 import com.mnf.etbadel.model.ChatModel;
+import com.mnf.etbadel.model.Client;
+import com.mnf.etbadel.model.Data;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.MessageModel;
+import com.mnf.etbadel.model.MyResponse;
 import com.mnf.etbadel.model.NotificationModel;
+import com.mnf.etbadel.model.Sender;
+import com.mnf.etbadel.model.Token;
 import com.mnf.etbadel.model.UserModel;
 import com.mnf.etbadel.ui.login.LoginActivity;
 import com.mnf.etbadel.util.AppConstants;
@@ -60,7 +76,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
     MainActivity activity;
     ArrayList<ItemModel> itemModels;
     private int selectedImg = 0;
-
+    NotificationSendService notificationSendService;
     HideShowProgress hideShowProgress;
     DatabaseReference databaseReference;
 
@@ -76,6 +92,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         this.context = context;
         this.itemModels = itemModels;
         this.hideShowProgress = hideShowProgress;
+        notificationSendService= Client.getClient("https://fcm.googleapis.com/").create(NotificationSendService.class);
     }
 
     @NonNull
@@ -87,6 +104,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
 
     @Override
     public void onBindViewHolder(@NonNull NotificationHolder holder, int position) {
+
         ArrayList<String> imageList = new ArrayList<>();
         ItemModel itemModel = itemModels.get(position);
 
@@ -94,7 +112,10 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
             selectedImg = 0;
             imageList.add(itemModel.getImg1_url());
             Glide.with(context).load(itemModel.getImg1_url()).into(holder.itemImg);
+
         }
+//        int width= holder.itemImg.getWidth();
+//        holder.itemImg.setLayoutParams(new LinearLayout.LayoutParams(width,width));
         if (itemModel.getImg2_url() != null) {
             holder.cardSubImg1.setVisibility(View.VISIBLE);
             holder.subImg1.setVisibility(View.VISIBLE);
@@ -248,7 +269,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
                     };
 
 
-                    TradeFragment alertDialog = new TradeFragment();
+                    TradeFragment alertDialog = new TradeFragment(true);
                     alertDialog.setInterfaceInstance(callbackInterface);
                     alertDialog.show(activity.getSupportFragmentManager(), "fragment_alert");
 
@@ -306,10 +327,13 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
         CardView cardSubImg1;
         @BindView(R.id.card_sub_img_2)
         CardView cardSubImg2;
+        @BindView(R.id.card_view)
+        CardView cardView;
 
         public NotificationHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
         }
     }
 
@@ -326,7 +350,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
                             Gson gson = new Gson();
                             NotificationModel notificationModel = gson.fromJson(model.toString(), NotificationModel.class);
                             findFirebase(notificationModel);
-
+                            sendNotification(notificationModel);
                         } else {
                             hideShowProgress.hideProgress();
                             String error = jsonObject.getString("Message");
@@ -346,6 +370,45 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
             hideShowProgress.hideProgress();
             AppConstants.showErroDIalog(context.getResources().getString(R.string.server_unreachable_error), activity.getSupportFragmentManager());
         }
+    }
+
+    private void sendNotification(NotificationModel notificationModel) {
+        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query= databaseReference.orderByKey().equalTo(notificationModel.getUser_Id()+"");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                    Token token= dataSnapshot.getValue(Token.class);
+                    String message=notificationModel.getSenderName() + " " + context.getResources().getString(R.string.notification_txt_string0) + " " + notificationModel.getItemName();
+                    Data data= new Data(notificationModel.getSender_Id()+"", R.mipmap.ic_launcher, message, "Trade", notificationModel.getUser_Id()+"");
+                    Sender sender= new Sender(data, token.getToken());
+
+                    notificationSendService.sendNotification(sender).enqueue(
+                            new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if (response.isSuccessful()){
+                                        if (response.body().success!=1){
+
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+                                    Log.e("","");
+                                }
+                            }
+                    );
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void saveChat(NotificationModel notificationModel) {
@@ -472,6 +535,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<ChatModel> chatModels = new ArrayList<>();
+                boolean isFound=false;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     chatModels.add(ds.getValue(ChatModel.class));
                 }
@@ -479,14 +543,48 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
                     for (ChatModel temp : chatModels) {
                         if (temp.getUser2Id() == notificationModel.getUser_Id()) {
                             messageModel.setChatId(temp.getChatId() + "");
+                            isFound=true;
                             addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
                             break;
                         }
+                    }
+                    if (!isFound){
+                        databaseReference.orderByChild("user2Id").equalTo(notificationModel.getSender_Id()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                boolean isFound=false;
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    chatModels.add(ds.getValue(ChatModel.class));
+                                }
+                                if (chatModels.size() > 0) {
+                                    for (ChatModel temp : chatModels) {
+                                        if (temp.getUser1Id() == notificationModel.getUser_Id()) {
+                                            messageModel.setChatId(temp.getChatId() + "");
+                                            isFound=true;
+                                            addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
+                                            break;
+                                        }
+                                    }
+                                    if (!isFound){
+                                        saveChat(notificationModel);
+                                    }
+                                } else {
+                                    saveChat(notificationModel);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Log.e("","");
+                            }
+                        });
+
                     }
                 } else {
                     databaseReference.orderByChild("user2Id").equalTo(notificationModel.getSender_Id()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            boolean isFound=false;
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                 chatModels.add(ds.getValue(ChatModel.class));
                             }
@@ -494,9 +592,13 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
                                 for (ChatModel temp : chatModels) {
                                     if (temp.getUser1Id() == notificationModel.getUser_Id()) {
                                         messageModel.setChatId(temp.getChatId() + "");
+                                        isFound=true;
                                         addMessageToFirebase(messageModel, messageId, databaseReferenceMessage);
                                         break;
                                     }
+                                }
+                                if (!isFound){
+                                    saveChat(notificationModel);
                                 }
                             } else {
                                 saveChat(notificationModel);
@@ -505,7 +607,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            Log.e("","");
                         }
                     });
                 }
@@ -513,7 +615,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Noti
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.e("","");
             }
         });
 

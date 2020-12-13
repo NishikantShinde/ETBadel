@@ -67,13 +67,11 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_weight="1">
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/left_arrow"
@@ -83,11 +81,12 @@
                 android:layout_height="wrap_content"/>
 
             <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
+                android:id="@+id/card_view"
+                android:layout_width="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:layout_height="@dimen/frag_image_size"
+                app:layout_constraintDimensionRatio="1:1"
+                android:layout_height="0dp"
                 android:elevation="0dp"
                 app:cardCornerRadius="0dp">
                 <ImageView
@@ -104,7 +103,7 @@
                 android:src="@drawable/ic_outline_play_arrow_24"
                 android:layout_height="wrap_content"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -178,10 +177,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="#a3a3a3"
-            android:layout_marginLeft="30dp">
+            android:layout_marginLeft="10dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -199,6 +198,8 @@
                     android:id="@+id/item_name_txt"
                     android:textSize="10dp"
                     android:layout_width="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:text=":Item1"/>
@@ -220,6 +221,8 @@
                     android:id="@+id/item_location_txt"
                     android:textSize="10dp"
                     android:layout_width="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:text=":Location1"/>
@@ -239,6 +242,8 @@
 
                 <TextView
                     android:id="@+id/item_area_txt"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textSize="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -262,6 +267,8 @@
                 <TextView
                     android:id="@+id/item_condition"
                     android:textSize="10dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#000000"

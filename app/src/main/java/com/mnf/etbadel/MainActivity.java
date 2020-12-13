@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
@@ -47,6 +48,7 @@ import com.mnf.etbadel.model.ChatModel;
 import com.mnf.etbadel.model.DropdownModel;
 import com.mnf.etbadel.model.ItemModel;
 import com.mnf.etbadel.model.MessageModel;
+import com.mnf.etbadel.model.Token;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.additem.AddItemFragment;
 import com.mnf.etbadel.ui.ads.AdsFragment;
@@ -98,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     LinearLayout progressLayout;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.menu_layout_bottom)
+    LinearLayout menuLayoutBottom;
     private Drawer result = null;
     Toolbar toolbar;
     BadgeStyle style;
@@ -119,12 +123,16 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     DrawerBuilder drawerBuilder;
     List<IDrawerItem> primaryDrawerItems;
     int requestCode=1000;
+    String fragmentTag = "";
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==this.requestCode){
             primaryDrawerItems.add(primaryDrawerItem);
             drawerBuilder.withDrawerItems(primaryDrawerItems);
+            result.setSelection(1, false);
+            result.setSelectionAtPosition(0);
+//            setFragmentToDisplay(FRAGMENT_DASHBOARD, null, false);
         }
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_container);
         fragment.onActivityResult(requestCode, resultCode, data);
@@ -200,6 +208,9 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
+        if (fragmentTag.equals("profile sender fragment")){
+            setFragmentToDisplay(FRAGMENT_SENDER_PROFILE, null, false);
+        }
     }
 
     private void init() {
@@ -222,8 +233,12 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         int userId = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
         if (userId != 0) {
             controller.unreadByUser(userId, new UnreadNotificationsCallback());
+            DatabaseReference databaseReferenceToken= FirebaseDatabase.getInstance().getReference("Tokens");
+            Token tokenl= new Token(FirebaseInstanceId.getInstance().getToken());
+            databaseReferenceToken.child(userId+"").setValue(tokenl);
         } else {
             imageBadgeView.clearBadge();
+            ibvIconChat.clearBadge();
         }
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(AppConstants.FIREBASE_MESSAGE_TABLE);
@@ -301,13 +316,13 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
 
         mLanguageCode= sharedPreferences.getString(AppConstants.LANG,"en");
         if (mLanguageCode.equals("en")){
-            SwitchDrawerItem item=new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC).withChecked(false).withOnCheckedChangeListener(new OnCheckedChangeListener() {
+            SwitchDrawerItem item=new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC).withChecked(true).withOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
                     if (isChecked){
-                        sharedPreferences.edit().putString(AppConstants.LANG,"ar").apply();
-                    }else {
                         sharedPreferences.edit().putString(AppConstants.LANG,"en").apply();
+                    }else {
+                        sharedPreferences.edit().putString(AppConstants.LANG,"ar").apply();
                     }
                     Intent intent= new Intent(MainActivity.this, ChangeLanguage.class);
                     startActivity(intent);
@@ -316,13 +331,13 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             });
             primaryDrawerItems.add(item);
         }else {
-            SwitchDrawerItem item=new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC).withChecked(true).withOnCheckedChangeListener(new OnCheckedChangeListener() {
+            SwitchDrawerItem item=new SwitchDrawerItem().withName(menus[7]).withIdentifier(AppConstants.SWITCH_TO_ARABIC).withChecked(false).withOnCheckedChangeListener(new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(IDrawerItem drawerItem, CompoundButton buttonView, boolean isChecked) {
                     if (isChecked){
-                        sharedPreferences.edit().putString(AppConstants.LANG,"ar").apply();
-                    }else {
                         sharedPreferences.edit().putString(AppConstants.LANG,"en").apply();
+                    }else {
+                        sharedPreferences.edit().putString(AppConstants.LANG,"ar").apply();
                     }
                     Intent intent= new Intent(MainActivity.this, ChangeLanguage.class);
                     startActivity(intent);
@@ -370,12 +385,13 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        String fragmentTag = "";
+
         if (!isBottomMenu) {
             switch (index) {
                 case FRAGMENT_DASHBOARD:
                     fragment = new DashboardFragment(hideShowProgressView);
                     fragmentTag = "dashboardFragment";
+                    menuLayoutBottom.setVisibility(View.VISIBLE);
 //                title.setText(G7Constants.DASHBOARD_TITLE);
                     break;
                 case AppConstants.FRAGMENT_PROFILE:
@@ -392,12 +408,14 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 case FRAGMENT_SENDER_PROFILE:
                     fragment = new ProductsFragment(senderId,hideShowProgressView);
                     fragmentTag = "profileFragment";
+                    menuLayoutBottom.setVisibility(View.VISIBLE);
                     break;
                 case AppConstants.FRAGMENT_ADS:
                     int userid = sharedPreferences.getInt(AppConstants.SF_USER_ID, 0);
                     if (userid != 0) {
                         fragment = new AdsFragment(hideShowProgressView);
                         fragmentTag = "ads fragment";
+                        menuLayoutBottom.setVisibility(View.VISIBLE);
                     } else {
                         Intent intent = new Intent(this, LoginActivity.class);
                         startActivityForResult(intent,requestCode);
@@ -414,10 +432,12 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 case AppConstants.FRAGMENT_SERVICE_AGREEMENT:
                     fragment = new AgreementFragment("s",agreementModel);
                     fragmentTag = "service fragment";
+                    menuLayoutBottom.setVisibility(View.VISIBLE);
                     break;
                 case AppConstants.FRAGMENT_PRIVACY_AGREEMENT:
                     fragment = new AgreementFragment("p",agreementModel);
                     fragmentTag = "privacy fragment";
+                    menuLayoutBottom.setVisibility(View.VISIBLE);
                     break;
 
             }
@@ -427,6 +447,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 if (userId != 0) {
                     fragment = new NotificationsFragment(this,hideShowProgressView);
                     fragmentTag = "notification list";
+                    menuLayoutBottom.setVisibility(View.VISIBLE);
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivityForResult(intent,requestCode);
@@ -438,6 +459,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 if (userId != 0) {
                     fragment = new ChatFragment(this,hideShowProgressView);
                     fragmentTag = "chat fragment";
+                    menuLayoutBottom.setVisibility(View.VISIBLE);
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivityForResult(intent,requestCode);
@@ -447,6 +469,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
             if (index == FRAGMENT_PRODUCTS) {
                 fragment = new ProfileSenderFragment(itemId,hideShowProgressView);
                 fragmentTag = "profile sender fragment";
+                menuLayoutBottom.setVisibility(View.VISIBLE);
             }
 
             if (index == FRAGMENT_ADD_PRODUCTS) {
@@ -454,6 +477,7 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                 if (userId != 0) {
                     fragment = new AddItemFragment(this);
                     fragmentTag = "Add Item fragment";
+                    menuLayoutBottom.setVisibility(View.GONE);
                 } else {
                     Intent intent = new Intent(this, LoginActivity.class);
                     startActivityForResult(intent,requestCode);

@@ -1,6 +1,7 @@
 package com.mnf.etbadel.ui.chats;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,14 +15,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.model.ChatModel;
 import com.mnf.etbadel.model.MessageModel;
+import com.mnf.etbadel.model.Token;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.chats.adapters.ChatAdapter;
 import com.mnf.etbadel.util.AppConstants;
@@ -168,6 +173,7 @@ public class ChatFragment extends Fragment {
             }
         });
 
+        updateToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     private void sortToUnread(ArrayList<ChatModel> chatModels) {
@@ -204,5 +210,11 @@ public class ChatFragment extends Fragment {
             recyclerView.setVisibility(View.GONE);
             noChatsText.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void updateToken(String token){
+        DatabaseReference databaseReferenceToken= FirebaseDatabase.getInstance().getReference("Tokens");
+        Token tokenl= new Token(token);
+        databaseReferenceToken.child(userId+"").setValue(tokenl);
     }
 }

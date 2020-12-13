@@ -16,6 +16,7 @@ public class UserModel {
     private	boolean Is_active;
     private String C_date;
     private String U_date;
+    private String Device_Id;
 
     public int getId() {
         return Id;
@@ -135,5 +136,13 @@ public class UserModel {
 
     public void setU_date(String u_date) {
         U_date = u_date;
+    }
+
+    public String getDevice_Id() {
+        return Device_Id;
+    }
+
+    public void setDevice_Id(String device_Id) {
+        Device_Id = device_Id;
     }
 }

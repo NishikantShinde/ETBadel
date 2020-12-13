@@ -9,6 +9,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
         android:id="@+id/notification_recyclerview"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"/>

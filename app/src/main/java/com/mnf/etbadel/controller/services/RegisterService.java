@@ -9,9 +9,10 @@ import retrofit2.Call;
 import retrofit.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import retrofit2.http.Body;
+import retrofit2.http.Query;
 
 public interface RegisterService {
 
     @POST(AppConstants.REGISTER_URL)
-    Call<ResponseBody> registerUser(@Body UserModel userModel);
+    Call<ResponseBody> registerUser(@Body UserModel userModel, @Query("lang") int l);
 }

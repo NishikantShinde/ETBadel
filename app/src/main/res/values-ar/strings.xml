@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">EtBadel</string>
+    <string name="app_name">etBadel</string>
     <string name="title_chat">دردشة</string><!--Chat-->
     <string name="title_dashboard">Dashboard</string><!--Dashboard-->
     <string name="title_notifications">وضع التنبيهات</string><!--Notifications-->
@@ -99,12 +99,14 @@
     <string name="forgot_password">هل نسيت كلمة المرور؟</string><!--Forgot Password?-->
     <string name="logout_ques">؟تأكيد الخروج</string><!--Do you really want to Logout?-->
     <string name="no_str">إلغاء</string><!--No-->
-    <string name="yes_str">تأكيد</string>
-    <string name="no_chats">No Chats</string>
-    <string name="blocked_user">"This user is blocked by you "</string>
-    <string name="unblock">UNBLOCK</string>
-    <string name="you_blocked_user">Your are blocked by this user cannot send any new message</string>
-    <string name="second_message">ببدلة على</string><!--Yes-->
+    <string name="yes_str">تأكيد</string><!--Yes-->
+    <string name="no_chats">لا دردشات</string>
+    <string name="blocked_user">"تم حظر هذا المستخدم بواسطتك"</string>
+    <string name="unblock">رفع الحظر</string>
+    <string name="you_blocked_user">لا يمكن لهذا المستخدم المنعك إرسال أي رسالة جديدة</string>
+    <string name="second_message">ببدلة على</string>
+    <string name="take_picture">التقط صورة</string>
+    <string name="ok_txt">حسنا</string>
 
     <string-array name="menuList">
         <item>الرئيسية</item><!--Home-->
@@ -114,7 +116,7 @@
         <item>إتفاقية الإستخدام</item><!--Service Agreement-->
         <item>سياسة الخصوصية</item><!--Privacy Agreement-->
         <item>تسجيل خروج</item>
-        <item>تغيير إلى اللغة العربية</item><!--Switch to Arabic-->
+        <item>Switch to English</item><!--Switch to Arabic-->
 
     </string-array>
     <string-array name="categoryList">

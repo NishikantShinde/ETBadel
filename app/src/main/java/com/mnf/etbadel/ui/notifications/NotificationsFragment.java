@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -92,6 +93,7 @@ public class NotificationsFragment extends Fragment {
                                 notificationAdapter.updateList(notificationModels);
                                 recyclerViewNotification.setVisibility(View.VISIBLE);
                                 noNotifications.setVisibility(View.GONE);
+                                Collections.reverse(notificationModels);
                                 updateServer(notificationModels);
                             }else {
                                 recyclerViewNotification.setVisibility(View.GONE);

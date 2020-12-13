@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
+import com.mnf.etbadel.MainActivity2;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.controller.Controller;
 import com.mnf.etbadel.model.UserModel;
@@ -70,7 +72,8 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private int RC_SIGN_IN = 200;
     FirebaseAuth auth;
-
+    String android_id;
+    int lang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,11 +84,19 @@ public class LoginActivity extends AppCompatActivity {
         Button register = findViewById(R.id.register);
         LinearLayout fbLogin = findViewById(R.id.fb_login);
         sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+        String lcode= sharedPreferences.getString(AppConstants.LANG,"en");
+        if (lcode.equals("en")){
+            lang=0;
+        }else {
+            lang=1;
+        }
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         auth = FirebaseAuth.getInstance();
+        android_id = Settings.Secure.getString(LoginActivity.this.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
         revokeAccess();
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(
@@ -170,7 +181,8 @@ public class LoginActivity extends AppCompatActivity {
         UserModel userModel = new UserModel();
         userModel.setEmail(userName);
         userModel.setPassword(password);
-        Controller.getInstance(this).login(userModel, new LoginServiceCall());
+        userModel.setDevice_Id(android_id);
+        Controller.getInstance(this).login(userModel,lang, new LoginServiceCall());
     }
 
 
@@ -215,7 +227,8 @@ public class LoginActivity extends AppCompatActivity {
             userModel.setIs_Gmail_Login(true);
             userModel.setEmail(account.getEmail());
             userModel.setGmail_Token(account.getId());
-            Controller.getInstance(LoginActivity.this).login(userModel, new LoginServiceCall());
+            userModel.setDevice_Id(android_id);
+            Controller.getInstance(LoginActivity.this).login(userModel,lang, new LoginServiceCall());
         }
     }
 
@@ -251,10 +264,11 @@ public class LoginActivity extends AppCompatActivity {
                                                 UserModel userModel = new UserModel();
                                                 userModel.setIs_FB_Login(true);
                                                 userModel.setFB_Token(str_id);
+                                                userModel.setDevice_Id(android_id);
                                                 if (json.getString("email") != null) {
                                                     userModel.setEmail(json.getString("email"));
                                                 }
-                                                Controller.getInstance(LoginActivity.this).login(userModel, new LoginServiceCall());
+                                                Controller.getInstance(LoginActivity.this).login(userModel,lang, new LoginServiceCall());
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }

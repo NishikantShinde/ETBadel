@@ -26,8 +26,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AppConstants {
 
-//    public static final String SERVER_VAL = "https://api-dev-madpixel.azurewebsites.net/api/";
-    public static final String SERVER_VAL = "https://appapi.puravtopiwala.com/api/";
+    public static final String SERVER_VAL = "https://api-dev-madpixel.azurewebsites.net/api/";
+//    public static final String SERVER_VAL = "https://appapi.puravtopiwala.com/api/";
     public static final String LOGIN_URL="User/login";
     public static final String REGISTER_URL="User/save";
     public static final String CATEGORIES_ALL="Category/getall";
@@ -162,4 +162,15 @@ public class AppConstants {
     public static boolean isValidEmail(String emailId){
         return emailId.matches(EMAIL_PATTERN);
     }
+
+    // global topic to receive app wide push notifications
+    public static final String TOPIC_GLOBAL = "global";
+
+    // broadcast receiver intent filters
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String PUSH_NOTIFICATION = "pushNotification";
+
+    // id to handle the notification in the notification tray
+    public static final int NOTIFICATION_ID = 100;
+    public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 }

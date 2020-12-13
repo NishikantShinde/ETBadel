@@ -42,6 +42,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(@NonNull NotificationHolder holder, int position) {
         if(position%2==0){
             holder.notificationListCellMainLayout.setBackgroundColor(context.getResources().getColor(R.color.notification_snd_row_color));
+        }else {
+            holder.notificationListCellMainLayout.setBackgroundColor(context.getResources().getColor(R.color.notification_fst_row_color));
         }
         NotificationModel notificationModel= notificationModels.get(position);
         if (notificationModel.getType_Id()==0) {
@@ -49,17 +51,21 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }else if (notificationModel.getType_Id()==1){
             holder.notificationTxt.setText(notificationModel.getUserName() + " " + context.getResources().getString(R.string.notification_txt_string1));
         }
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.mmm");
-        SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = null;
-        String dateString="";
-        try {
-            date = dateFormat.parse(notificationModel.getC_date());
-            dateString=dateFormat1.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (notificationModel.getC_date()!=null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.mmm");
+            SimpleDateFormat dateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = null;
+            String dateString = "";
+            try {
+                date = dateFormat.parse(notificationModel.getC_date());
+                dateString = dateFormat1.format(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            holder.dateTxt.setText(dateString);
+        }else {
+            holder.dateTxt.setText("");
         }
-        holder.dateTxt.setText(dateString);
         holder.notificationListCellMainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +85,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public int getItemCount() {
         return notificationModels.size();
     }
+
 
     public class NotificationHolder extends RecyclerView.ViewHolder {
 

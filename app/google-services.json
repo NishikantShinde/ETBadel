@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "668845184397-bovh13723e7t8i4cb2lo3kfu9ss5f3fh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mnf.etbadel",
+            "certificate_hash": "db2baeda0e43f0f770de5cb5cef756c5be26e2c1"
+          }
+        },
+        {
           "client_id": "668845184397-ouem6tcm08dmktuv488lp950g2rnlkls.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

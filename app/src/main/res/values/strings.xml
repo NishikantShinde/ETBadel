@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EtBadel</string>
+    <string name="app_name">etBadel</string>
     <string name="title_chat">Chat</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -104,6 +104,8 @@
     <string name="unblock">UNBLOCK</string>
     <string name="you_blocked_user">Your are blocked by this user cannot send any new message</string>
     <string name="second_message">I will trade it for</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="ok_txt">OK</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>
@@ -112,7 +114,8 @@
         <item>Service Agreement</item>
         <item>Privacy Agreement</item>
         <item>Logout</item>
-        <item>Switch to Arabic</item>
+        <item>تغيير إلى اللغة العربية</item>
+
 
     </string-array>
     <string-array name="categoryList">

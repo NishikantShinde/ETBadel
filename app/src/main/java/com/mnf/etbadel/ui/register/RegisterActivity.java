@@ -1,6 +1,8 @@
 package com.mnf.etbadel.ui.register;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -86,7 +88,8 @@ public class RegisterActivity extends AppCompatActivity {
     private UserModel userModel;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth auth;
-
+    int lang;
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +97,13 @@ public class RegisterActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        sharedPreferences = getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, Context.MODE_PRIVATE);
+        String lcode= sharedPreferences.getString(AppConstants.LANG,"en");
+        if (lcode.equals("en")){
+            lang=0;
+        }else {
+            lang=1;
+        }
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -161,7 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
             userModel.setIs_Gmail_Login(true);
             userModel.setGmail_Token(account.getId());
             Controller controller = Controller.getInstance(RegisterActivity.this);
-            controller.registerUser(userModel, new RegisterCallBack());
+            controller.registerUser(userModel,lang, new RegisterCallBack());
         }
     }
 
@@ -205,7 +215,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 userModel.setIs_FB_Login(true);
                                                 userModel.setFB_Token(str_id);
                                                 Controller controller = Controller.getInstance(RegisterActivity.this);
-                                                controller.registerUser(userModel, new RegisterCallBack());
+                                                controller.registerUser(userModel,lang, new RegisterCallBack());
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
@@ -279,7 +289,7 @@ public class RegisterActivity extends AppCompatActivity {
         userModel.setEmail(etUserName.getText().toString());
         userModel.setPassword(etPassword.getText().toString());
         Controller controller = Controller.getInstance(this);
-        controller.registerUser(userModel, new RegisterCallBack());
+        controller.registerUser(userModel,lang, new RegisterCallBack());
     }
 
     private class RegisterCallBack implements Callback<ResponseBody> {

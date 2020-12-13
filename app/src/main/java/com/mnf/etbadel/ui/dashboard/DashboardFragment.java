@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class DashboardFragment extends Fragment implements DashboardAdapter.HideShowProgress {
 
     LinearLayout categoriesMainLayout;
+    HorizontalScrollView horizontalScrollView;
     ArrayList<CategoriesLayoutClass> categoriesLayoutClasses;
     @BindView(R.id.dashboard_recyclerview)
     RecyclerView dashboardRecyclerview;
@@ -65,6 +68,10 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     EditText etSearch;
     @BindView(R.id.no_post)
     LinearLayout noPost;
+    @BindView(R.id.prev_imgview)
+    ImageView prevImgview;
+    @BindView(R.id.nxt_imgview)
+    ImageView nxtImgview;
     private Controller controller;
     private int selectedCategory = 0;
     private String searchKeyword = "";
@@ -74,7 +81,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     List<DropdownModel> dropdownModelsList = new ArrayList<>();
     DashboardAdapter dashboardAdapter;
     HideShowProgressView hideShowProgressView;
-
+    int lang;
     public DashboardFragment(HideShowProgressView hideShowProgressView) {
         this.hideShowProgressView = hideShowProgressView;
     }
@@ -85,6 +92,7 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         ButterKnife.bind(this, root);
         categoriesMainLayout = root.findViewById(R.id.categories_main_layout);
+        horizontalScrollView = root.findViewById(R.id.hs_view);
         categoriesLayoutClasses = new ArrayList<>();
         dashboardAdapter = new DashboardAdapter((MainActivity) getActivity(), getContext(), itemsModelList, this);
         dashboardRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -96,12 +104,12 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
     }
 
     private void init() {
-        int lang = 0;
+        lang = 0;
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(AppConstants.SHAREDPREFERENCES_NAME, MODE_PRIVATE);
-        String mLanguageCode=sharedPreferences.getString(AppConstants.LANG,"en");
+        String mLanguageCode = sharedPreferences.getString(AppConstants.LANG, "en");
         assert mLanguageCode != null;
-        if (mLanguageCode.equals("ar")){
-            lang=1;
+        if (mLanguageCode.equals("ar")) {
+            lang = 1;
         }
         isCategoryServicecompleted = false;
         isItemModelServciecompleted = false;
@@ -117,8 +125,8 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (etSearch.getText().toString().length()==0){
-                    searchKeyword="";
+                if (etSearch.getText().toString().length() == 0) {
+                    searchKeyword = "";
                     hideShowProgressView.showProgress();
                     controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
                 }
@@ -199,11 +207,26 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                         }
                     }
                     selectedCategory = dropdownModel.getId();
+                    if (lang==1){
+                        categoriesMainLayout.setLayoutDirection(LAYOUT_DIRECTION_RTL);
+                        horizontalScrollView.postDelayed(new Runnable() {
+                            public void run() {
+                                horizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                            }
+                        }, 100L);
+                    }else{
+                        categoriesMainLayout.setLayoutDirection(LAYOUT_DIRECTION_LTR);
+                        horizontalScrollView.postDelayed(new Runnable() {
+                            public void run() {
+                                horizontalScrollView.fullScroll(HorizontalScrollView.FOCUS_LEFT);
+                            }
+                        }, 100L);
+                    }
                     hideShowProgressView.showProgress();
                     controller.getItems(searchKeyword, selectedCategory, new ItemsCallback());
                 }
             });
-            categoriesTxtview.setText(dropdownModel.getName());
+            categoriesTxtview.setText(dropdownModel.getName().trim());
         }
     }
 
@@ -262,20 +285,26 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
                             Gson gson = new Gson();
                             ArrayList<ItemModel> itemModelList = gson.fromJson(model.toString(), new TypeToken<List<ItemModel>>() {
                             }.getType());
-                            if (itemModelList.size()>0) {
+                            if (itemModelList.size() > 0) {
                                 dashboardRecyclerview.setVisibility(View.VISIBLE);
+                                nxtImgview.setVisibility(View.VISIBLE);
+                                prevImgview.setVisibility(View.VISIBLE);
                                 noPost.setVisibility(View.GONE);
                                 itemsModelList = itemModelList;
                                 dashboardAdapter.updateList(itemModelList);
                                 dashboardRecyclerview.scrollToPosition(0);
-                            }else {
+                            } else {
                                 dashboardRecyclerview.setVisibility(View.GONE);
+                                nxtImgview.setVisibility(View.GONE);
+                                prevImgview.setVisibility(View.GONE);
                                 noPost.setVisibility(View.VISIBLE);
                             }
                         } else {
                             String error = jsonObject.getString("Message");
                             AppConstants.showErroDIalog(error, getActivity().getSupportFragmentManager());
                             dashboardRecyclerview.setVisibility(View.GONE);
+                            nxtImgview.setVisibility(View.GONE);
+                            prevImgview.setVisibility(View.GONE);
                             noPost.setVisibility(View.VISIBLE);
                         }
 
@@ -295,6 +324,8 @@ public class DashboardFragment extends Fragment implements DashboardAdapter.Hide
             isItemModelServciecompleted = true;
             AppConstants.showErroDIalog(getResources().getString(R.string.server_unreachable_error), getActivity().getSupportFragmentManager());
             dashboardRecyclerview.setVisibility(View.GONE);
+            nxtImgview.setVisibility(View.GONE);
+            prevImgview.setVisibility(View.GONE);
             noPost.setVisibility(View.VISIBLE);
             if (isCategoryServicecompleted) {
                 hideShowProgressView.hideProgress();

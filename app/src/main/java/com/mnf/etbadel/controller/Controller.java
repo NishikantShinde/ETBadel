@@ -36,17 +36,17 @@ public class Controller {
         return instance;
     }
 
-    public void registerUser(UserModel userModel, Callback<ResponseBody> callback){
+    public void registerUser(UserModel userModel,int lang, Callback<ResponseBody> callback){
         Retrofit retrofit = AppConstants.buildRetrofit(false);
         RegisterService registerService= retrofit.create(RegisterService.class);
-        Call<ResponseBody> userModelCall= registerService.registerUser(userModel);
+        Call<ResponseBody> userModelCall= registerService.registerUser(userModel,lang);
         userModelCall.enqueue(callback);
     }
 
-    public void login(UserModel userModel, Callback<ResponseBody> callback){
+    public void login(UserModel userModel,int lang, Callback<ResponseBody> callback){
         Retrofit retrofit = AppConstants.buildRetrofit(false);
         LoginService loginService= retrofit.create(LoginService.class);
-        Call<ResponseBody> serviceResponse= loginService.login(userModel);
+        Call<ResponseBody> serviceResponse= loginService.login(userModel,lang);
         serviceResponse.enqueue(callback);
     }
 
