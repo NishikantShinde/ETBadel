@@ -14,9 +14,14 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mnf.etbadel.R;
 import com.mnf.etbadel.ui.NavigationInterface;
 import com.mnf.etbadel.ui.login.LoginActivity;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,9 +46,15 @@ public class LogoutFragment extends DialogFragment {
     private String mParam1;
     private String mParam2;
     private NavigationInterface navigationInterface;
-    public LogoutFragment(NavigationInterface navigationInterface) {
+    List<IDrawerItem> primaryDrawerItems;
+    PrimaryDrawerItem primaryDrawerItem;
+    DrawerBuilder drawerBuilder;
+    public LogoutFragment(NavigationInterface navigationInterface, List<IDrawerItem> primaryDrawerItems, PrimaryDrawerItem primaryDrawerItem, DrawerBuilder drawerBuilder) {
         // Required empty public constructor
         this.navigationInterface=navigationInterface;
+        this.primaryDrawerItem=primaryDrawerItem;
+        this.primaryDrawerItems=primaryDrawerItems;
+        this.drawerBuilder=drawerBuilder;
     }
 
     /**
@@ -56,7 +67,7 @@ public class LogoutFragment extends DialogFragment {
      */
     // TODO: Rename and change types and number of parameters
     public static LogoutFragment newInstance(String param1, String param2) {
-        LogoutFragment fragment = new LogoutFragment(null);
+        LogoutFragment fragment = new LogoutFragment(null,null,null,null);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -87,6 +98,8 @@ public class LogoutFragment extends DialogFragment {
                 sharedPreferences.edit().putInt(AppConstants.SF_USER_ID,0).apply();
                 FirebaseAuth.getInstance().signOut();
                 navigationInterface.NavigateFragment(0);
+                primaryDrawerItems.remove(primaryDrawerItem);
+                drawerBuilder.withDrawerItems(primaryDrawerItems);
 //                Intent intent=new Intent(getActivity(), LoginActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //                startActivity(intent);

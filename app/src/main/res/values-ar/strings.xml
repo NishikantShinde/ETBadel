@@ -51,7 +51,7 @@
     <string name="edit_email">البريد الإلكتروني</string><!--Email-->
     <string name="submit_txt">إرسال</string><!--Submit-->
     <string name="profile_image">صوره المستخدم</string><!--Profile Image-->
-    <string name="string_search">"بحث"</string><!--Search-->
+    <string name="string_search">بحث</string><!--Search-->
     <string name="string_neighbor">الحي</string><!--Neighbor-->
     <string name="string_city">المدينة</string><!--City-->
     <string name="string_category">الفئة</string><!--Category-->
@@ -64,10 +64,10 @@
     <string name="string_desctription">وصف المنتج</string><!--Describe the item-->
     <string name="string_free">إعرضه بالمجان</string><!--Give it for free-->
     <string name="string_done">إتــمــام</string><!--Post-->
-    <string name="string_name">"اسم: "</string><!--Name-->
-    <string name="string_location">"الموقع: "</string><!--Location-->
-    <string name="string_area">"المنطقة: "</string><!--Area-->
-    <string name="string_condition_dashboard">"الحالة: "</string><!--Condition-->
+    <string name="string_name">اسم: </string><!--Name-->
+    <string name="string_location">الموقع: </string><!--Location-->
+    <string name="string_area">المنطقة: </string><!--Area-->
+    <string name="string_condition_dashboard">الحالة: </string><!--Condition-->
     <string name="string_send">تبدّل</string><!--Trade-->
     <string name="string_desctription_hint">مثال: تعمل بشكل ممتاز مع يوجد</string><!--Example: Used for 2 months, with no scratches-->
     <string name="facebook_app_id">769384030578964</string>
@@ -97,16 +97,18 @@
     <string name="delete_chat">حذف الدردشة</string><!--Delete Chat-->
     <string name="block_user">حظر المرسل</string><!--Block User-->
     <string name="forgot_password">هل نسيت كلمة المرور؟</string><!--Forgot Password?-->
-    <string name="logout_ques">؟تأكيد الخروج</string><!--Do you really want to Logout?-->
+    <string name="logout_ques">تأكيد الخروج؟</string><!--Do you really want to Logout?-->
     <string name="no_str">إلغاء</string><!--No-->
     <string name="yes_str">تأكيد</string><!--Yes-->
     <string name="no_chats">لا دردشات</string>
     <string name="blocked_user">"تم حظر هذا المستخدم بواسطتك"</string>
     <string name="unblock">رفع الحظر</string>
-    <string name="you_blocked_user">لا يمكن لهذا المستخدم المنعك إرسال أي رسالة جديدة</string>
+    <string name="you_blocked_user">تستطيع الرد بعد الذهاب الى التنبيهات واختيار ما تريد التبديل علية</string>
     <string name="second_message">ببدلة على</string>
     <string name="take_picture">التقط صورة</string>
     <string name="ok_txt">حسنا</string>
+    <string name="check_again_str">تحقق مرة اخرى</string>
+    <string name="type_msg_str">اكتب رسالة</string>
 
     <string-array name="menuList">
         <item>الرئيسية</item><!--Home-->

@@ -24,7 +24,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notification name is here"
             android:textColor="#000000"
             android:textSize="16dp"
 
@@ -32,7 +31,6 @@
 
         <!---->
         <TextView
-            android:text="03/09/2020"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/date_txt"/>

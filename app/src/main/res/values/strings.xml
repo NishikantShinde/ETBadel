@@ -50,7 +50,7 @@
     <string name="edit_email">Email</string>
     <string name="submit_txt">Submit</string>
     <string name="profile_image">Profile Image</string>
-    <string name="string_search">"Search"</string>
+    <string name="string_search">Search</string>
     <string name="string_neighbor">Neighbor</string>
     <string name="string_city">City</string>
     <string name="string_category">Category</string>
@@ -102,10 +102,12 @@
     <string name="no_chats">No Chats</string>
     <string name="blocked_user">"This user is blocked by you "</string>
     <string name="unblock">UNBLOCK</string>
-    <string name="you_blocked_user">Your are blocked by this user cannot send any new message</string>
+    <string name="you_blocked_user">You can reply after picking an item to trade for from the Notifications button</string>
     <string name="second_message">I will trade it for</string>
     <string name="take_picture">Take Picture</string>
     <string name="ok_txt">OK</string>
+    <string name="check_again_str">Check Again</string>
+    <string name="type_msg_str">Type a message</string>
     <string-array name="menuList">
         <item>Home</item>
         <item>Mute Notification</item>

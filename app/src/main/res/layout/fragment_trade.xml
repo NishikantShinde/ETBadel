@@ -45,7 +45,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:textColor="#ffffff"
-            android:text="No"/>
+            android:text="@string/no_str"/>
 
         <Button
             android:id="@+id/yes_btn"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:background="@color/primary"
             android:textColor="#ffffff"
-            android:text="Yes"/>
+            android:text="@string/yes_str"/>
 
     </LinearLayout>
 

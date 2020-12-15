@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@drawable/rounded_view_black_color"
-            android:text="Check Again"
+            android:text="@string/check_again_str"
             android:textColor="@color/primary"
             android:includeFontPadding="false"
             android:textStyle="bold"

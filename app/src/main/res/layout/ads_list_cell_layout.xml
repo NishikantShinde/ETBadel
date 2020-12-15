@@ -24,7 +24,7 @@
 
         <!---->
         <TextView
-            android:text="03/09/2020"
+            android:text=""
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_width="wrap_content"

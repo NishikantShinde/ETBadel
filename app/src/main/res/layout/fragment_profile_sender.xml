@@ -157,7 +157,6 @@
                     android:layout_width="match_parent"
                     android:paddingRight="30dp"
                     android:layout_height="wrap_content"
-                    android:text="03/09/2020"
                     android:textSize="10dp"
                     android:gravity="right"/>
 
@@ -279,11 +278,11 @@
         <Button
             android:id="@+id/btn_trade"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_solid_primary_color_view"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:text="Trade"/>
+            android:background="@drawable/rounded_solid_primary_color_view"
+            android:text="@string/string_send" />
     </LinearLayout>
 
     <LinearLayout

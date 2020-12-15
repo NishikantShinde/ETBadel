@@ -30,6 +30,7 @@
         <ImageView
             android:id="@+id/msg_image"
             android:visibility="gone"
+            android:scaleType="centerCrop"
             android:src="@drawable/sample"
             android:layout_margin="5dp"
             android:layout_centerVertical="true"
@@ -42,8 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="20dp"
-            android:paddingStart="2dp"
-            android:textSize="18sp" />
+            android:paddingStart="2dp" />
     </RelativeLayout>
 
 

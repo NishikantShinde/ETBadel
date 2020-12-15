@@ -18,9 +18,9 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:drawableRight="@drawable/ic_baseline_search_24"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:hint="        Search"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:hint="@string/string_search"
             android:textColorHint="#e3e3e3"
             android:background="@drawable/rounded_edttxt"/>
 
@@ -31,7 +31,6 @@
             android:layout_marginTop="40dp"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@drawable/sample"
             app:civ_border_width="0dp"
             app:civ_border_color="#FF000000"/>
 
@@ -40,7 +39,7 @@
             android:layout_marginTop="15dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="FirstName LastName"
+            android:text=""
             android:textColor="#000000"/>
 
         <androidx.recyclerview.widget.RecyclerView

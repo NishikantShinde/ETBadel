@@ -424,10 +424,9 @@ public class MainActivity extends AppCompatActivity implements ReplaceFragmentIn
                     break;
 
                 case AppConstants.FRAGMENT_LOGOUT:
-                    LogoutFragment alertDialog = new LogoutFragment(this);
+                    LogoutFragment alertDialog = new LogoutFragment(this, primaryDrawerItems, primaryDrawerItem, drawerBuilder);
                     alertDialog.show(getSupportFragmentManager(), "fragment_alert");
-                    primaryDrawerItems.remove(primaryDrawerItem);
-                    drawerBuilder.withDrawerItems(primaryDrawerItems);
+
                     break;
                 case AppConstants.FRAGMENT_SERVICE_AGREEMENT:
                     fragment = new AgreementFragment("s",agreementModel);

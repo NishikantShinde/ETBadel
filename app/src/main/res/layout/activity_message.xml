@@ -29,7 +29,6 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/sample"
                 android:id="@+id/profile_image"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -60,7 +59,7 @@
             android:id="@+id/text_send"
             android:layout_toStartOf="@id/btn_send"
             android:background="@android:color/transparent"
-            android:hint="Type a message"
+            android:hint="@string/type_msg_str"
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"/>
         <ImageButton
